@@ -1,19 +1,33 @@
 # Node.js
 node_modules/
-dist/
-.env
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+logs/
+*.log
+*.log.*
 
-# IDE
+# Environment files
+.env
+.env.* # si tu utilises des fichiers d'environnement pour différentes configurations
+
+# OS files
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# IDE files
 .vscode/
 .idea/
 
-# Système
-.DS_Store
+# Angular
+/dist/
+.angular/
+
+# Build output
+build/
+
+# Temporary files
+tmp/
+temp/

@@ -6,7 +6,7 @@ const Utilisateur = require('../models/Utilisateur')
 const getAllUser = async (req, res) => {
     try {
         const utilisateurs = await Utilisateur.find();
-        
+
         res.json(utilisateurs);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -16,12 +16,29 @@ const getAllUser = async (req, res) => {
 // Ajoute un nouvel utilisateur
 const createUser = async (req, res) => {
     try {
-        const { nom, email, motDePasse, roles } = req.body;
+        const { nom, email, motDePasse, role } = req.body;
 
-        // Vérification et assignation du rôle par défaut
-        const newRoles = roles && Array.isArray(roles) ? roles : ['client'];
+        // Vérification du rôle
+        let roles = ['client']; // rôle par défaut
+        if (role && Array.isArray(role)) {
+            // Vérifie si les rôles fournis sont valides
+            const rolesValides = ['client', 'mecanicien', 'manager'];
+            const rolesValidesFournis = role.every(r => rolesValides.includes(r));
 
-        const utilisateur = new Utilisateur({ nom, email, motDePasse, roles: newRoles });
+            if (rolesValidesFournis) {
+                roles = role;
+            } else {
+                return res.status(400).json({ message: "Rôle invalide" });
+            }
+        }
+
+        const utilisateur = new Utilisateur({
+            nom,
+            email,
+            motDePasse,
+            role: roles // Utiliser le tableau de rôles
+        });
+
         await utilisateur.save();
         res.status(201).json(utilisateur);
     } catch (error) {

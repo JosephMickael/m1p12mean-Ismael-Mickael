@@ -1,0 +1,43 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="shadow p-5 rounded bg-white text-center" id="loginMax" style="min-width: 400px;">
+        <!-- Mettre logo ici -->
+        <!-- <img src="assets/images/logo-jouveTitle.png" alt="LOGO" width="110" height="110"> -->
+        <h2 class="fw-normal">GARAGE</h2>
+        <div class="mt-4">
+            <div id="input" style="width: 100%;">
+                @if (messageErreur) {
+                <div class="p-1 mb-3 text-white bg-danger rounded">{{messageErreur}}</div>
+                }
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+                    class="d-flex flex-column align-items-center w-100">
+                    <div class="input-group w-100">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-envelope-fill text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" formControlName="email"
+                            placeholder="E-mail">
+                    </div>
+                    @if (erreurEmail) {
+                    <div class="text-danger w-100 text-start small mt-1">{{erreurEmail}}</div>
+                    }
+
+                    <div class="input-group w-100 mt-3">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-lock-fill text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" formControlName="password"
+                            placeholder="Mot de passe">
+                    </div>
+                    @if (erreurPassword) {
+                    <div class="text-danger w-100 text-start small mt-1">{{erreurPassword}}</div>
+                    }
+
+                    <button type="submit" class="btn mt-4 w-50" id="btn_connexion">Connexion</button>
+                    <a href="?" class="text-decoration-none mt-3 d-block text-muted">
+                        <i class="bi bi-person-plus me-2"></i>Créer un compte
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

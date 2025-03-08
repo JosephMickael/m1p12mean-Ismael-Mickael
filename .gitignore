@@ -11,7 +11,7 @@ logs/
 
 # Environment files
 .env
-.env.* # si tu utilises des fichiers d'environnement pour différentes configurations
+.env.* 
 
 # OS files
 .DS_Store # macOS

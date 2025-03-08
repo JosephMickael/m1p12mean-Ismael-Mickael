@@ -6,6 +6,7 @@ const Utilisateur = require('../models/Utilisateur')
 const getAllUser = async (req, res) => {
     try {
         const utilisateurs = await Utilisateur.find();
+        
         res.json(utilisateurs);
     } catch (error) {
         res.status(500).json({ message: error.message });

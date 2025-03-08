@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
 const Utilisateur = require('../models/Utilisateur')
+
 
 // Authentificaiton
 const login = async (req, res) => {

@@ -1,12 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class AuthService {
 
   private apiUrl = "http://localhost:5001/garage_api"
+  private currentUser: any = null;
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +26,6 @@ export class LoginService {
     return roles ? JSON.parse(roles) : []
   }
 
-  // Méthode pour vérifier si l'utilisateur est connecté
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
@@ -43,8 +45,36 @@ export class LoginService {
     return localStorage.getItem('token');
   }
 
+  getCurrentUser(): Observable<any> {
+    const token = this.getToken();
+
+    if (token) {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      return this.http.get(`${this.apiUrl}/current-user`, { headers });
+    } else {
+      return new Observable(); // Retourne un observable vide si pas de token
+    }
+  }
+
+  getDecodedToken(): any {
+    const token = this.getToken();
+    if (token) {
+      try {
+        return jwtDecode(token);
+      } catch (error) {
+        console.error('Erreur de décodage du token', error);
+        return null;
+      }
+    }
+    return null;
+  }
+
   // Méthode pour déconnecter l'utilisateur
   logout(): void {
     localStorage.removeItem('token');
   }
 }
+

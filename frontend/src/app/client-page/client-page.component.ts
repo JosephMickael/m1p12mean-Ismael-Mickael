@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-client-page',
@@ -11,11 +11,11 @@ import { LoginService } from '../services/login.service';
 export class ClientPageComponent {
   constructor(
     private router: Router,
-    private loginService: LoginService
+    private authservice: AuthService
   ) { }
 
   logout() {
-    this.loginService.logout();
+    this.authservice.logout();
     this.router.navigate(['/login']);
   }
 }

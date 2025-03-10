@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoginService } from '../services/login.service';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   standalone: true
@@ -25,7 +25,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private loginService: LoginService
+    private authservice: AuthService
   ) { }
 
   ngOnInit() {
@@ -47,14 +47,14 @@ export class LoginComponent {
       const password = this.loginForm.get('password')?.value;
 
       if (email && password) {
-        this.loginService.login(email, password).subscribe({
+        this.authservice.login(email, password).subscribe({
           next: (response: any) => {
             console.log('Réponse du serveur:', response);
             if (response.token && response.user) {
               // Sauvegarde du token et des rôles
-              this.loginService.setUserData(response.token, response.user.role);
+              this.authservice.setUserData(response.token, response.user.role);
 
-              const userRole = this.loginService.getUserRole();
+              const userRole = this.authservice.getUserRole();
 
               // Redirection selon le rôle
               if (userRole.includes('manager')) {

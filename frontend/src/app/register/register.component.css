@@ -1,0 +1,13 @@
+#btn_inscription {
+    background: #59d88e;
+    color: whitesmoke;
+}
+
+.input-group-text {
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}

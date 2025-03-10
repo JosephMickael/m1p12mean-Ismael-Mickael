@@ -63,6 +63,15 @@ const updateUser = async (req, res) => {
     }
 }
 
+const getCurrentUser = async (req, res) => {
+    res.json({
+        userId: req.utilisateur._id,
+        email: req.utilisateur.email,
+        nom: req.utilisateur.name,
+        role: req.utilisateur.role
+    });
+}
+
 // Supprime un utilisateur
 const deleteUser = async (req, res) => {
     try {
@@ -73,4 +82,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUser, createUser, updateUser, deleteUser }
+module.exports = { getAllUser, createUser, updateUser, getCurrentUser, deleteUser }

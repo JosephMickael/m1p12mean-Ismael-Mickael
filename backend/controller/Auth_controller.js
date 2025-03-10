@@ -2,7 +2,6 @@ const express = require('express');
 const Utilisateur = require('../models/Utilisateur')
 const jwt = require('jsonwebtoken');
 
-
 // Authentificaiton
 const login = async (req, res) => {
     try {
@@ -13,13 +12,18 @@ const login = async (req, res) => {
             return res.status(401).json({ message: "Email ou mot de passe incorrect" });
         }
 
-        // Vérifiez que process.env.JWT_SECRET existe
+        // Vérifie que process.env.JWT_SECRET existe
         if (!process.env.JWT_SECRET) {
             throw new Error('JWT_SECRET non défini');
         }
 
         const token = jwt.sign(
-            { userId: utilisateur._id },
+            {
+                userId: utilisateur._id,
+                role: utilisateur.role,
+                nom: utilisateur.nom,
+                email: utilisateur.email
+            },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -28,6 +32,7 @@ const login = async (req, res) => {
             token,
             user: {
                 _id: utilisateur._id,
+                nom: utilisateur.nom,
                 email: utilisateur.email,
                 role: utilisateur.role
             }
@@ -38,7 +43,6 @@ const login = async (req, res) => {
     }
 };
 
-// Déconnexion (pas encore de session/token)
 const logout = async (req, res) => {
     try {
         res.status(200).json({ message: "Déconnexion réussie" });

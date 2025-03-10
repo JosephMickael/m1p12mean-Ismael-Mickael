@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user/user.service';
 
 @Component({
   selector: 'app-mecanicien-page',
@@ -9,13 +10,26 @@ import { LoginService } from '../services/login.service';
   styleUrl: './mecanicien-page.component.css'
 })
 export class MecanicienPageComponent {
+
+  private user: string[] = []
+
   constructor(
     private router: Router,
-    private loginService: LoginService
+    private authservice: AuthService,
+    private userservice: UserService
   ) { }
 
+  // ngOnInit() {
+  //   this.userservice.getCurrentUser().subscribe({
+  //     next: response => {
+  //       console.log('Ici response current user', response)
+  //       // this.user = response
+  //     }
+  //   })
+  // }
+
   logout() {
-    this.loginService.logout();
+    this.authservice.logout();
     this.router.navigate(['/login']);
   }
 }

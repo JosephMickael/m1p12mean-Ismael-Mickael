@@ -5,12 +5,15 @@ import { RoleGuard } from './guards/role.guard';
 import { ClientPageComponent } from './client-page/client-page.component';
 import { MecanicienPageComponent } from './mecanicien-page/mecanicien-page.component';
 import { AuthGuard } from './guards/auth.guard';
+import { RegisterComponent } from './register/register.component';
+import { ManagerPageComponent } from './manager-page/manager-page.component';
 
 export const routes: Routes = [
     { path: 'create-rendezvous', component: RendezvousComponent },
     // Lorsque l'URL est vide, rediriger vers 'login'
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
+    { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
     // Route pour les clients
     {
         path: 'client-page',
@@ -23,5 +26,11 @@ export const routes: Routes = [
         component: MecanicienPageComponent,
         canActivate: [RoleGuard],
         data: { role: 'mecanicien' }
+    },
+    {
+        path: 'manager-page',
+        component: ManagerPageComponent,
+        canActivate: [RoleGuard],
+        data: { role: 'manager' }
     }
 ];

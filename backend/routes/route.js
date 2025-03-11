@@ -6,17 +6,19 @@ const rendezVousController = require('../controller/rendezvous_controller');
 const verifierAuthentification = require('../middlewares/auth.middleware');
 
 // Utilisateur 
-
 router.get('/get-utilisateur', utilisateurController.getAllUser)
 router.post('/create-utilisateur', utilisateurController.createUser)
 router.put('/update-utilisateur/:id', utilisateurController.deleteUser)
-router.delete('/delete-utilisateur/:id', utilisateurController.getAllUser)
-// récupérer l'utilisateur connecté
+router.delete('/delete-utilisateur/:id', utilisateurController.getAllUser)// récupérer l'utilisateur connecté
 router.get('/current-user', verifierAuthentification, utilisateurController.getCurrentUser)
 
-// Rendezvous *
+// Rendezvous 
+router.post('/create-rendezVous', verifierAuthentification, rendezVousController.createRendezvous);
+router.get('/disponible-rendezVous', rendezVousController.listRendezVous);
+router.post('/reserve-rendezVous', verifierAuthentification, rendezVousController.reserveRendezVous);
+router.post('/assingn-mecanicien-disponibles-rendezVous', rendezVousController.assignAvailableMecanicien);// choisi par le Système et le client
+router.post('/assign-mecanicien', rendezVousController.assignRendezVous);// choisi par le manager
 
-router.post('/create-rendezvous', rendezVousController.createRendezvous);
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

@@ -1,0 +1,18 @@
+<form (ngSubmit)="createAutoRendevous(parseDate(datepicker.value), time.value)">
+    <!-- Champ de la date -->
+    <mat-form-field class="w-100">
+      <mat-label>Date du Rendez-vous</mat-label>
+      <input matInput [matDatepicker]="datepickerPicker" #datepicker required>
+      <mat-datepicker-toggle matSuffix [for]="datepickerPicker"></mat-datepicker-toggle>
+      <mat-datepicker #datepickerPicker></mat-datepicker>
+    </mat-form-field>
+  
+    <!-- Champ de l'heure -->
+    <div class="mb-3">
+      <label class="form-label">Heure</label>
+      <input type="time" class="form-control" #time required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Créer</button>
+  </form>
+  

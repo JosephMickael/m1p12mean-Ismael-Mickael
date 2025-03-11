@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { RendezvousComponent } from './components/rendezvous/rendezvous.component';
+import { RendezvousComponent } from './rendezvous/rendezvous.component';
 import { LoginComponent } from './login/login.component';
 import { RoleGuard } from './guards/role.guard';
 import { ClientPageComponent } from './client-page/client-page.component';
@@ -10,10 +10,12 @@ import { ManagerPageComponent } from './manager-page/manager-page.component';
 
 export const routes: Routes = [
     { path: 'create-rendezvous', component: RendezvousComponent },
+
     // Lorsque l'URL est vide, rediriger vers 'login'
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
     { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
+    
     // Route pour les clients
     {
         path: 'client-page',

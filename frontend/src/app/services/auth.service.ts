@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,9 @@ import { Observable } from 'rxjs/internal/Observable';
 export class AuthService {
 
   private apiUrl = "http://localhost:5001/garage_api"
-  private currentUser: any = null;
+
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
+  public isLoggedIn$: Observable<boolean> = this.loggedIn.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -18,7 +22,14 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, {
       email: email,
       motDePasse: password
-    });
+    }).pipe(
+      tap((response: any) => {
+        if (response && response.token) {
+          localStorage.setItem('token', response.token);
+          this.loggedIn.next(true);
+        }
+      })
+    );
   }
 
   getUserRole(): string[] {
@@ -75,6 +86,7 @@ export class AuthService {
   // Méthode pour déconnecter l'utilisateur
   logout(): void {
     localStorage.removeItem('token');
+    this.loggedIn.next(false);
   }
 }
 

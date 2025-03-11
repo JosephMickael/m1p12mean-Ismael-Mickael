@@ -1,1 +1,11 @@
 <router-outlet></router-outlet>
+
+<!-- S'affiche uniquement sur la page de login et registration  -->
+@if (!isLoggedIn) {
+<footer class="fixed-bottom bg-light py-3 border-top">
+    <div class="container text-center" style="font-size: smaller;">
+        <span class="text-muted">© 2025 IT University - Tous droits réservés</span> <br>
+        <span class="text-muted" style="font-size: 15px;">ANDRIANTSIFERANA Joseph Mickaël - Ismaël</span>
+    </div>
+</footer>
+}

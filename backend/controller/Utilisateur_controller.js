@@ -42,6 +42,9 @@ const createUser = async (req, res) => {
         await utilisateur.save();
         res.status(201).json(utilisateur);
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Email déjà utilisé' });
+        }
         res.status(400).json({ message: error.message });
     }
 }

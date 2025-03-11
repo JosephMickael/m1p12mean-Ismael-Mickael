@@ -1,3 +1,29 @@
 .sidebar {
     min-height: 100vh;
+    transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+    /* Largeur lorsque le menu est plié */
+}
+
+.sidebar.collapsed h3 {
+    display: none;
+    /* Masquer le titre lorsque le menu est plié */
+}
+
+.sidebar.collapsed .btn {
+    display: block;
+    /* Afficher le bouton pour basculer le menu */
+}
+
+main {
+    transition: margin-left 0.3s;
+    /* Transition pour le contenu principal */
+}
+
+.sidebar.collapsed+main {
+    margin-left: 60px;
+    /* Ajuster la marge à gauche lorsque la sidebar est réduite */
 }

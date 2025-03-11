@@ -1,34 +1,33 @@
-<!-- peux tu me créer une page ici avec un side bar intitulé Dashboard. sur la page principale, à la droite ajoute un profil (avec icone et nom) avec un bouton deconnexion caché dans une icone de flèche (en bas) -->
-<!-- <button class="btn btn-danger" (click)="logout()">
-    <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
-</button> -->
-
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar (fond gris) -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar"
-            style="background-color: rgb(213, 213, 213);  color: rgb(56, 56, 56);">
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}"
+            style="background-color: #34495E; color: white;">
             <div class="pt-3">
                 <h3 class="px-3">Dashboard</h3>
-                <!-- Vous pouvez ajouter ici d'autres liens ou éléments de navigation -->
+                <div *ngIf="!isSidebarCollapsed">
+                    <ul>
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                        <li>Item 3</li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
-        <!-- Contenu principal (fond blanc) -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="background-color: white; min-height: 100vh;">
             <!-- Barre de profil en haut à droite -->
-            <div class="d-flex justify-content-end align-items-center p-3">
+            <div class="d-flex justify-content-between align-items-center p-3">
+                <button (click)="toggleSidebar()" class="btn btn-light">Toggle</button>
                 <div class="dropdown">
-                    <!-- Zone profil cliquable avec image, nom et icône de flèche -->
                     <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark" href="#"
                         id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2"
                             style="width: 40px; height: 40px;">
                             <i class="bi bi-person-fill"></i>
                         </span>
-                        <span>{{ user.nom }}</span> <!-- Ajout d'un espace après le nom -->
+                        <span>{{ user.nom }}</span>
                     </a>
-                    <!-- Menu déroulant avec bouton déconnexion -->
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile"
                         style="cursor: pointer;">
                         <li><a class="dropdown-item" (click)="logout()">Déconnexion</a></li>

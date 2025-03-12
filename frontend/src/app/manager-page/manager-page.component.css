@@ -1,29 +1,74 @@
 .sidebar {
     min-height: 100vh;
-    transition: width 0.3s;
+    transition: all 0.3s ease;
+    /* Transition plus fluide */
+    width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    overflow-x: hidden;
+    /* Empêche le débordement pendant la transition */
 }
 
 .sidebar.collapsed {
     width: 60px;
-    /* Largeur lorsque le menu est plié */
 }
 
 .sidebar.collapsed h3 {
-    display: none;
-    /* Masquer le titre lorsque le menu est plié */
+    /* Transition pour le titre */
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
-.sidebar.collapsed .btn {
-    display: block;
-    /* Afficher le bouton pour basculer le menu */
+h3 {
+    /* texte Dashboard */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
 }
 
 main {
-    transition: margin-left 0.3s;
-    /* Transition pour le contenu principal */
+    /* Contenu principale */
+    transition: all 0.3s ease;
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    overflow-x: hidden;
 }
 
 .sidebar.collapsed+main {
     margin-left: 60px;
-    /* Ajuster la marge à gauche lorsque la sidebar est réduite */
+    width: calc(100% - 60px);
+}
+
+.sidebar .nav-link {
+    cursor: pointer;
+    position: relative;
+    z-index: 110;
+    /* supérieur au z-index de la sidebar */
+}
+
+/* Pour les écrans mobiles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease, width 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(0);
+        width: 60px;
+    }
+
+    main {
+        margin-left: 0;
+        width: 100%;
+        transition: margin-left 0.3s ease, width 0.3s ease;
+    }
+
+    .sidebar.collapsed+main {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
 }

@@ -6,20 +6,20 @@ import { NgModule } from '@angular/core';
 import { RendezvousComponent } from './rendezvous/rendezvous.component';
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
-
-
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        RendezvousComponent  
-      ],
+  declarations: [
+    AppComponent,
+    RendezvousComponent
+  ],
   imports: [
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    RouterModule.forRoot([]),
   ],
   providers: [MatDatepickerModule, MatNativeDateModule]
 })
-export class AppModule {}
+export class AppModule { }

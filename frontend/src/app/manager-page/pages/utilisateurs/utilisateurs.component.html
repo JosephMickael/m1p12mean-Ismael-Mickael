@@ -1,0 +1,34 @@
+<div class="container">
+    <h2>Liste des utilisateurs</h2>
+
+    <button class="btn mb-3 mt-3" id="reloadBtn" (click)="getAllUsers()"><i class="bi bi-arrow-repeat me-1"></i> Charger
+        les
+        utilisateurs</button>
+
+    <div *ngIf="!utilisateurs" class="alert alert-info">
+        Cliquez sur le bouton pour charger la liste des utilisateurs.
+    </div>
+
+    <table class="table table-borderless mt-4" *ngIf="utilisateurs">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let utilisateur of utilisateurs">
+                <td>{{ utilisateur.nom }}</td>
+                <td>{{ utilisateur.email }}</td>
+                <td>{{ utilisateur.role }}</td>
+                <td>
+                    <i class="bi bi-trash me-3" style="color: rgb(235, 72, 72);"></i>
+                    <i class="bi bi-pencil me-3" style="color: rgb(113, 110, 110)"></i>
+                    <i class="bi bi-card-text" style="color: rgb(242, 199, 80);"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

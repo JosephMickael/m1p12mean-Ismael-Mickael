@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user/user.service';
-import { User } from '../models/user.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-manager-page',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   templateUrl: './manager-page.component.html',
   styleUrl: './manager-page.component.css'
 })
@@ -19,7 +18,6 @@ export class ManagerPageComponent {
   constructor(
     private router: Router,
     private authservice: AuthService,
-    private userservice: UserService
   ) { }
 
   ngOnInit(): void {

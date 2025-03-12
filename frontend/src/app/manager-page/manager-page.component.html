@@ -1,24 +1,69 @@
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid p-0">
+    <div class="row g-0">
         <!-- Sidebar (fond gris) -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}"
+        <nav class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}"
             style="background-color: #34495E; color: white;">
             <div class="pt-3">
                 <h3 class="px-3">Dashboard</h3>
-                <div *ngIf="!isSidebarCollapsed">
-                    <ul>
-                        <li>Item 1</li>
-                        <li>Item 2</li>
-                        <li>Item 3</li>
+                <div class="menu-items" [ngClass]="{'d-none': isSidebarCollapsed}">
+                    <ul class="nav flex-column mt-4">
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex align-items-center" routerLink="/dashboard"
+                                routerLinkActive="active">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                <span>Acceuil</span>
+                            </a>
+                        </li>
+                        <!-- Fonctionnel -->
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex align-items-center"
+                                [routerLink]="['/manager-page/utilisateurs']" routerLinkActive="active">
+                                <i class="bi bi-people me-2"></i>
+                                <span>Utilisateurs</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex align-items-center" routerLink="/settings"
+                                routerLinkActive="active">
+                                <i class="bi bi-gear me-2"></i>
+                                <span>Gestion de stocks</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Version icônes pour sidebar repliée -->
+                <div class="icon-menu" *ngIf="isSidebarCollapsed">
+                    <ul class="nav flex-column mt-4">
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex justify-content-center" routerLink="/dashboard"
+                                routerLinkActive="active">
+                                <i class="bi bi-speedometer2"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex justify-content-center"
+                                routerLink="/manager-page/utilisateurs" routerLinkActive="active">
+                                <i class="bi bi-people"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex justify-content-center" routerLink="/settings"
+                                routerLinkActive="active">
+                                <i class="bi bi-gear"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="background-color: white; min-height: 100vh;">
+        <main style="background-color: white; min-height: 100vh;">
             <!-- Barre de profil en haut à droite -->
             <div class="d-flex justify-content-between align-items-center p-3">
-                <button (click)="toggleSidebar()" class="btn btn-light">Toggle</button>
+                <!-- <button (click)="toggleSidebar()" class="btn btn-light"> -->
+                <i class="bi" (click)="toggleSidebar()" [ngClass]="isSidebarCollapsed ? 'bi-layout-sidebar' : 'bi-x-lg'"
+                    style="cursor: pointer;"></i>
+                <!-- </button> -->
                 <div class="dropdown">
                     <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark" href="#"
                         id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
@@ -35,10 +80,9 @@
                 </div>
             </div>
 
-            <!-- Contenu principal -->
+            <!-- Contenu principal avec router-outlet -->
             <div class="container">
-                <h1>Bienvenue sur votre dashboard</h1>
-                <p>Ici se trouve le contenu principal de la page.</p>
+                <router-outlet></router-outlet>
             </div>
         </main>
     </div>

@@ -7,6 +7,7 @@ import { MecanicienPageComponent } from './mecanicien-page/mecanicien-page.compo
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { ManagerPageComponent } from './manager-page/manager-page.component';
+import { UtilisateursComponent } from './manager-page/pages/utilisateurs/utilisateurs.component';
 
 export const routes: Routes = [
     { path: 'create-rendezvous', component: RendezvousComponent },
@@ -15,7 +16,7 @@ export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
     { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
-    
+    // { path: '**', redirectTo: '/manager-page', canActivate: [RoleGuard], data: { role: 'manager' } },
     // Route pour les clients
     {
         path: 'client-page',
@@ -33,6 +34,15 @@ export const routes: Routes = [
         path: 'manager-page',
         component: ManagerPageComponent,
         canActivate: [RoleGuard],
-        data: { role: 'manager' }
-    }
+        data: { role: 'manager' },
+        children: [
+            {
+                path: 'utilisateurs',
+                component: UtilisateursComponent,
+                // canActivate: [RoleGuard],
+                data: { role: 'manager' }
+            }
+        ]
+    },
+
 ];

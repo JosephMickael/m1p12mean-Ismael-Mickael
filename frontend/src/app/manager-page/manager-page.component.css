@@ -15,17 +15,22 @@
     width: 60px;
 }
 
-.sidebar.collapsed h3 {
-    /* Transition pour le titre */
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
+/* Modifier la règle existante pour h3 */
 h3 {
-    /* texte Dashboard */
     opacity: 1;
     transition: opacity 0.3s ease;
     white-space: nowrap;
+}
+
+/* Affichage de la lettre G (sidebar réduite) */
+.sidebar.collapsed h3 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 main {
@@ -45,7 +50,36 @@ main {
     cursor: pointer;
     position: relative;
     z-index: 110;
-    /* supérieur au z-index de la sidebar */
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .nav-link.active {
+    background-color: #194360;
+    border-left: 4px solid #1ABC9C;
+}
+
+.sidebar .nav-link {
+    transition: all 0.2s ease;
+    padding-left: 15px;
+}
+
+.sidebar .nav-link.active {
+    padding-left: 11px;
+}
+
+/* Pour les icônes de la sidebar réduite */
+.sidebar.collapsed .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar.collapsed .nav-link.active {
+    background-color: #194360;
+    border-left: none;
+    border-bottom: 2px solid #1ABC9C;
 }
 
 /* Pour les écrans mobiles */

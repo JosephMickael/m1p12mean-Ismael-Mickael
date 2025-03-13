@@ -4,7 +4,11 @@
         <nav class="sidebar" [ngClass]="{'collapsed': isSidebarCollapsed}"
             style="background-color: #34495E; color: white;">
             <div class="pt-3">
-                <h3 class="px-3">Dashboard</h3>
+                <h3 class="px-3" [ngClass]="{'d-none': isSidebarCollapsed}">GARAGE</h3>
+                <div class="d-flex justify-content-center" *ngIf="isSidebarCollapsed">
+                    <h3 class="m-0 p-0">G</h3>
+                </div>
+                <!-- <h3 class="text-center" *ngIf="isSidebarCollapsed">G</h3> -->
                 <div class="menu-items" [ngClass]="{'d-none': isSidebarCollapsed}">
                     <ul class="nav flex-column mt-4">
                         <li class="nav-item">
@@ -75,7 +79,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile"
                         style="cursor: pointer;">
-                        <li><a class="dropdown-item" (click)="logout()">Déconnexion</a></li>
+                        <li>
+                            <a class="dropdown-item" (click)="logout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Déconnexion
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

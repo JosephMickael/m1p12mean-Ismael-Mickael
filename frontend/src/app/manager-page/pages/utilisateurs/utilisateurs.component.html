@@ -1,15 +1,24 @@
 <div class="container">
     <h2>Liste des utilisateurs</h2>
 
-    <button class="btn mb-3 mt-3" id="reloadBtn" (click)="getAllUsers()"><i class="bi bi-arrow-repeat me-1"></i> Charger
-        les
-        utilisateurs</button>
+    <div class="container d-flex justify-content-between">
+        <button class="btn mb-3 mt-3 btn-outline-secondary" id="reloadBtn" (click)="getAllUsers()"><i
+                class="bi bi-arrow-repeat me-1"></i>
+            Actualiser</button>
+        <button class="btn btn-sidebar mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#ajoutUtilisateurModal">
+            <i class="bi bi-plus-lg me-1"></i> Ajouter un utilisateur
+        </button>
+    </div>
 
     <div *ngIf="!utilisateurs" class="alert alert-info">
         Cliquez sur le bouton pour charger la liste des utilisateurs.
     </div>
 
-    <table class="table table-borderless mt-4" *ngIf="utilisateurs">
+    @if (deleteMessage) {
+    <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e; color:white">{{ deleteMessage
+        }}</div>
+    }
+    <table class="table mt-4" *ngIf="utilisateurs">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -24,11 +33,88 @@
                 <td>{{ utilisateur.email }}</td>
                 <td>{{ utilisateur.role }}</td>
                 <td>
-                    <i class="bi bi-trash me-3" style="color: rgb(235, 72, 72);"></i>
-                    <i class="bi bi-pencil me-3" style="color: rgb(113, 110, 110)"></i>
-                    <i class="bi bi-card-text" style="color: rgb(242, 199, 80);"></i>
+                    <i class="bi bi-trash me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer"
+                        style="color: rgb(235, 72, 72);" (click)="deleteUser(utilisateur._id)"></i>
+                    <i class="bi bi-pencil me-3" style="color: rgb(113, 110, 110)" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Modifier"></i>
+                    <i class="bi bi-card-text" style="color: rgb(242, 199, 80);" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Détails"></i>
                 </td>
             </tr>
         </tbody>
     </table>
+</div>
+
+<!-- Modal Ajout Utilisateur -->
+<div class="modal fade" id="ajoutUtilisateurModal" tabindex="-1" aria-labelledby="ajoutUtilisateurModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #34495E;">
+                <h5 class="modal-title text-white" id="ajoutUtilisateurModalLabel">Ajouter un
+                    nouvel utilisateur</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (errorMessage) {
+                <div class="p-1 mb-3 text-white text-center bg-danger rounded">{{errorMessage}}</div>
+                }
+                @if (successMessage) {
+                <div class="p-1 mb-3 text-white rounded" id="btn_success">{{successMessage}}</div>
+                }
+                <form [formGroup]="userForm" (ngSubmit)="createUser()">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom complet</label>
+                        <input type="text" class="form-control" id="nom" formControlName="nom"
+                            placeholder="Entrez le nom complet">
+                        <div *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched" class="text-danger">
+                            Le nom est requis
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" formControlName="email"
+                            placeholder="Entrez l'email">
+                        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                            class="text-danger">
+                            Un email valide est requis
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <div class="input-group">
+                            <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                                formControlName="motDePasse" placeholder="Entrez le mot de passe">
+                            <button class="btn" type="button" (click)="togglePasswordVisibility()"
+                                style="background-color: rgb(224, 224, 224);">
+                                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="userForm.get('motDePasse')?.invalid && userForm.get('motDePasse')?.touched"
+                            class="text-danger">
+                            Le mot de passe doit contenir au moins 8 caractères
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rôle</label>
+                        <select class="form-select" id="role" formControlName="role">
+                            <option value="">Sélectionnez un rôle</option>
+                            <option value="manager">Manager</option>
+                            <option value="client">Client</option>
+                            <option value="mecanicien">Mécanicen</option>
+                        </select>
+                        <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
+                            Le rôle est requis
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn px-4 text-white" [disabled]="userForm.invalid" (click)="createUser()"
+                    style="background-color: #34495E;">Enregistrer</button>
+            </div>
+        </div>
+    </div>
 </div>

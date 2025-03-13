@@ -19,7 +19,6 @@ export class RegisterComponent {
       nom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       motDePasse: ['', [Validators.required]],
-      role: [[]] // Par défaut vide, si non spécifié, le backend mettra "client"
     })
   }
 

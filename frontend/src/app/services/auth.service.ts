@@ -56,17 +56,18 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getCurrentUser(): Observable<any> {
-    const token = this.getToken();
+  getCurrentUser(): any {
+    const decodedToken = this.getDecodedToken()
 
-    if (token) {
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-      });
-
-      return this.http.get(`${this.apiUrl}/current-user`, { headers });
+    if (decodedToken) {
+      return {
+        userId: decodedToken.userId,
+        email: decodedToken.email,
+        nom: decodedToken.nom,
+        role: decodedToken.role,
+      };
     } else {
-      return new Observable(); // Retourne un observable vide si pas de token
+      console.log('Token invalide ou expiré');
     }
   }
 

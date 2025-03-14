@@ -12,9 +12,9 @@
                 <div class="menu-items" [ngClass]="{'d-none': isSidebarCollapsed}">
                     <ul class="nav flex-column mt-4">
                         <li class="nav-item">
-                            <a class="nav-link text-white d-flex align-items-center" routerLink="/dashboard"
-                                routerLinkActive="active">
-                                <i class="bi bi-speedometer2 me-2"></i>
+                            <a class="nav-link text-white d-flex align-items-center"
+                                [routerLink]="['/manager-page/acceuil']" routerLinkActive="active">
+                                <i class="bi bi-house me-2"></i>
                                 <span>Acceuil</span>
                             </a>
                         </li>
@@ -24,6 +24,13 @@
                                 [routerLink]="['/manager-page/utilisateurs']" routerLinkActive="active">
                                 <i class="bi bi-people me-2"></i>
                                 <span>Utilisateurs</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex align-items-center" routerLink="/settings"
+                                routerLinkActive="active">
+                                <i class="bi bi-calendar-range me-2"></i>
+                                <span>Rendez-vous</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -39,15 +46,21 @@
                 <div class="icon-menu" *ngIf="isSidebarCollapsed">
                     <ul class="nav flex-column mt-4">
                         <li class="nav-item">
-                            <a class="nav-link text-white d-flex justify-content-center" routerLink="/dashboard"
-                                routerLinkActive="active">
-                                <i class="bi bi-speedometer2"></i>
+                            <a class="nav-link text-white d-flex justify-content-center"
+                                [routerLink]="['/manager-page/acceuil']" routerLinkActive="active">
+                                <i class="bi bi-house"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white d-flex justify-content-center"
                                 routerLink="/manager-page/utilisateurs" routerLinkActive="active">
                                 <i class="bi bi-people"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white d-flex justify-content-center" routerLink="/settings"
+                                routerLinkActive="active">
+                                <i class="bi bi-calendar-range"></i>
                             </a>
                         </li>
                         <li class="nav-item">

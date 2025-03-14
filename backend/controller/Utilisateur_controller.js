@@ -13,6 +13,15 @@ const getAllUser = async (req, res) => {
     }
 }
 
+const getUserById = async (req, res) => {
+    try {
+        const utilisateur = Utilisateur.findById(req.params.id)
+        res.json(utilisateur)
+    } catch (err) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 // Ajoute un nouvel utilisateur
 const createUser = async (req, res) => {
     try {
@@ -52,11 +61,11 @@ const createUser = async (req, res) => {
 // Met à jour un utilisateur existant
 const updateUser = async (req, res) => {
     try {
-        const { nom, email, roles } = req.body;
+        const { nom, email, motDePasse, role } = req.body;
 
         const updatedUser = await Utilisateur.findByIdAndUpdate(
             req.params.id,
-            { nom, email, roles },
+            { nom, email, motDePasse, role },
             { new: true }
         );
 
@@ -85,4 +94,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUser, createUser, updateUser, getCurrentUser, deleteUser }
+module.exports = { getAllUser, createUser, getUserById, updateUser, getCurrentUser, deleteUser }

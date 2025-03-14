@@ -21,18 +21,7 @@ export class ManagerPageComponent {
   ) { }
 
   ngOnInit(): void {
-    const decodedToken = this.authservice.getDecodedToken();
-
-    if (decodedToken) {
-      this.user = {
-        userId: decodedToken.userId,
-        email: decodedToken.email,
-        nom: decodedToken.nom,
-        role: decodedToken.role,
-      };
-    } else {
-      console.log('Token invalide ou expiré');
-    }
+    this.user = this.authservice.getCurrentUser()
   }
 
   toggleSidebar() {

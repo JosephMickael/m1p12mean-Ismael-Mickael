@@ -2,10 +2,12 @@
     <h2>Liste des utilisateurs</h2>
 
     <div class="container d-flex justify-content-between">
-        <button class="btn mb-3 mt-3 btn-outline-secondary" id="reloadBtn" (click)="getAllUsers()"><i
-                class="bi bi-arrow-repeat me-1"></i>
-            Actualiser</button>
-        <button class="btn btn-sidebar mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#ajoutUtilisateurModal">
+        <button class="btn mb-3 mt-3 btn-outline-secondary" id="reloadBtn" (click)="getAllUsers()">
+            <i class="bi bi-arrow-repeat me-1"></i>
+            Actualiser
+        </button>
+        <button class="btn btn-sidebar mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#userModal"
+            (click)="prepareNewUser()">
             <i class="bi bi-plus-lg me-1"></i> Ajouter un utilisateur
         </button>
     </div>
@@ -15,8 +17,7 @@
     </div>
 
     @if (deleteMessage) {
-    <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e; color:white">{{ deleteMessage
-        }}</div>
+    <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">{{ deleteMessage }}</div>
     }
     <table class="table mt-4" *ngIf="utilisateurs">
         <thead>
@@ -35,24 +36,25 @@
                 <td>
                     <i class="bi bi-trash me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer"
                         style="color: rgb(235, 72, 72);" (click)="deleteUser(utilisateur._id)"></i>
-                    <i class="bi bi-pencil me-3" style="color: rgb(113, 110, 110)" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Modifier"></i>
-                    <i class="bi bi-card-text" style="color: rgb(242, 199, 80);" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Détails"></i>
+                    <i class="bi bi-pencil me-3" style="color: rgb(47, 228, 77)" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Modifier" data-bs-toggle="modal" data-bs-target="#userModal"
+                        (click)="prepareEditUser(utilisateur)"></i>
+                    <!-- <i class="bi bi-card-text" style="color: rgb(242, 199, 80);" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Détails"></i> -->
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<!-- Modal Ajout Utilisateur -->
-<div class="modal fade" id="ajoutUtilisateurModal" tabindex="-1" aria-labelledby="ajoutUtilisateurModalLabel"
-    aria-hidden="true">
+<!-- Modal Utilisateur (Ajout/Modification) -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #34495E;">
-                <h5 class="modal-title text-white" id="ajoutUtilisateurModalLabel">Ajouter un
-                    nouvel utilisateur</h5>
+                <h5 class="modal-title text-white" id="userModalLabel">
+                    {{ isEditMode ? 'Modifier l\'utilisateur' : 'Ajouter un nouvel utilisateur' }}
+                </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -61,9 +63,10 @@
                 <div class="p-1 mb-3 text-white text-center bg-danger rounded">{{errorMessage}}</div>
                 }
                 @if (successMessage) {
-                <div class="p-1 mb-3 text-white rounded" id="btn_success">{{successMessage}}</div>
+                <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                    {{successMessage}}</div>
                 }
-                <form [formGroup]="userForm" (ngSubmit)="createUser()">
+                <form [formGroup]="userForm">
                     <div class="mb-3">
                         <label for="nom" class="form-label">Nom complet</label>
                         <input type="text" class="form-control" id="nom" formControlName="nom"
@@ -81,7 +84,7 @@
                             Un email valide est requis
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" *ngIf="!isEditMode">
                         <label for="password" class="form-label">Mot de passe</label>
                         <div class="input-group">
                             <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
@@ -102,7 +105,7 @@
                             <option value="">Sélectionnez un rôle</option>
                             <option value="manager">Manager</option>
                             <option value="client">Client</option>
-                            <option value="mecanicien">Mécanicen</option>
+                            <option value="mecanicien">Mécanicien</option>
                         </select>
                         <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
                             Le rôle est requis
@@ -112,8 +115,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Annuler</button>
-                <button type="submit" class="btn px-4 text-white" [disabled]="userForm.invalid" (click)="createUser()"
-                    style="background-color: #34495E;">Enregistrer</button>
+                <button type="button" class="btn px-4 text-white" [disabled]="userForm.invalid"
+                    (click)="submitUserForm()" style="background-color: #34495E;">
+                    {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+                </button>
             </div>
         </div>
     </div>

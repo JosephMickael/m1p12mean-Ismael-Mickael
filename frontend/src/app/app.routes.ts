@@ -8,6 +8,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { ManagerPageComponent } from './manager-page/manager-page.component';
 import { UtilisateursComponent } from './manager-page/pages/utilisateurs/utilisateurs.component';
+import { AcceuilComponent } from './manager-page/pages/acceuil/acceuil.component';
 
 export const routes: Routes = [
     { path: 'create-rendezvous', component: RendezvousComponent },
@@ -37,9 +38,18 @@ export const routes: Routes = [
         data: { role: 'manager' },
         children: [
             {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'acceuil'
+            },
+            {
+                path: 'acceuil',
+                component: AcceuilComponent,
+                data: { role: 'manager' }
+            },
+            {
                 path: 'utilisateurs',
                 component: UtilisateursComponent,
-                // canActivate: [RoleGuard],
                 data: { role: 'manager' }
             }
         ]

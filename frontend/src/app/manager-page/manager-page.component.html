@@ -74,31 +74,35 @@
             </div>
         </nav>
 
+        <!-- Partie gauche -->
         <main style="background-color: white; min-height: 100vh;">
             <!-- Barre de profil en haut à droite -->
-            <div class="d-flex justify-content-between align-items-center p-3">
-                <!-- <button (click)="toggleSidebar()" class="btn btn-light"> -->
+            <div class="d-flex align-items-center p-3">
                 <i class="bi" (click)="toggleSidebar()" [ngClass]="isSidebarCollapsed ? 'bi-layout-sidebar' : 'bi-x-lg'"
                     style="cursor: pointer;"></i>
-                <!-- </button> -->
-                <div class="dropdown">
-                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark" href="#"
-                        id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2"
-                            style="width: 40px; height: 40px;">
-                            <i class="bi bi-person-fill"></i>
-                        </span>
-                        <span>{{ user.nom }}</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile"
-                        style="cursor: pointer;">
-                        <li>
-                            <a class="dropdown-item" (click)="logout()">
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                Déconnexion
-                            </a>
-                        </li>
-                    </ul>
+                <div class="d-flex justify-content-end ms-auto">
+                    <div class="d-flex align-items-center me-4">
+                        <i class="bi bi-bell"></i>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark" href="#"
+                            id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2"
+                                style="width: 40px; height: 40px;">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                            <span>{{ user.nom }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfile"
+                            style="cursor: pointer;">
+                            <li>
+                                <a class="dropdown-item" (click)="logout()">
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+                                    Déconnexion
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 

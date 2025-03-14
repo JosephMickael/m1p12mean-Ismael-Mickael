@@ -14,11 +14,15 @@ export class UserService {
 
   // Méthode pour enregistrer un nouvel utilisateur
   register(nom: string, email: string, motDePasse: string, role: string[]) {
-    const userData: any = { nom, email, motDePasse, role: [role] };
+    // Si role est indéfini ou vide, utilisez ['client'] par défaut
+    const roleToSend = (!role || role.length === 0) ? ['client'] : role;
 
-    if (role && role.length > 0) {
-      userData.role = role;
-    }
+    const userData = {
+      nom,
+      email,
+      motDePasse,
+      role: roleToSend
+    };
 
     return this.http.post(`${this.apiUrl}/create-utilisateur`, userData);
   }

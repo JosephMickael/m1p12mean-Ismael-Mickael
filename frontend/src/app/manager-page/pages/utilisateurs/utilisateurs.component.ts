@@ -52,7 +52,7 @@ export class UtilisateursComponent {
 
     const userData = {
       ...formValues,
-      role: formValues.role ? [formValues.role] : []  // Convertir en tableau ici
+      role: formValues.role ? [formValues.role] : []
     };
     console.log(this.userForm.value)
 

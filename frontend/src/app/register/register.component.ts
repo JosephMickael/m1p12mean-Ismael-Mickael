@@ -28,9 +28,9 @@ export class RegisterComponent {
       return
     }
 
-    const { nom, email, motDePasse, role } = this.registerForm.value
+    const { nom, email, motDePasse, role, specialite } = this.registerForm.value
 
-    this.userservice.register(nom, email, motDePasse, role).subscribe({
+    this.userservice.register(nom, email, motDePasse, role, specialite).subscribe({
       next: (response) => {
         console.log('Inscription réussie', response);
         this.successMessage = 'Inscription réussie !'

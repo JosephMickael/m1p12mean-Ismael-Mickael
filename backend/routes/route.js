@@ -7,6 +7,7 @@ const verifierAuthentification = require('../middlewares/auth.middleware');
 
 // Utilisateur 
 router.get('/get-utilisateur', utilisateurController.getAllUser)
+router.get('/users-details', utilisateurController.usersDetails)
 router.post('/create-utilisateur', utilisateurController.createUser)
 router.get('/:id', utilisateurController.getUserById)
 router.put('/update-utilisateur/:id', utilisateurController.updateUser)

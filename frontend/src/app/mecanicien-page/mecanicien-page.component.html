@@ -1,4 +1,135 @@
-<p>mecanicien-page works!</p>
-<button class="btn btn-danger" (click)="logout()">
-    <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
-</button>
+<!-- Barre de navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Garage - Espace Mécanicien</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Planning</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white btn btn-danger btn-sm" (click)="logout()">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Layout principal -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky pt-3">
+                <h5 class="text-center">Espace Mécanicien</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-house"></i> Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-calendar"></i> Planning
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-tools"></i> Interventions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-person"></i> Profil
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h2>Bienvenue, Mécanicien !</h2>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Rendez-vous aujourd'hui</h5>
+                            <p class="card-text fs-3">4</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Tâches complétées</h5>
+                            <p class="card-text fs-3">10</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Interventions en attente</h5>
+                            <p class="card-text fs-3">2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planning du jour -->
+            <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5>Planning du jour</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Heure</th>
+                                <th>Client</th>
+                                <th>Type d’intervention</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>08:30</td>
+                                <td>Jean Dupont</td>
+                                <td>Vidange</td>
+                                <td><span class="badge bg-primary">À venir</span></td>
+                            </tr>
+                            <tr>
+                                <td>10:00</td>
+                                <td>Marie Curie</td>
+                                <td>Changement de pneus</td>
+                                <td><span class="badge bg-success">Terminé</span></td>
+                            </tr>
+                            <tr>
+                                <td>14:30</td>
+                                <td>Paul Martin</td>
+                                <td>Diagnostic moteur</td>
+                                <td><span class="badge bg-warning">En attente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>

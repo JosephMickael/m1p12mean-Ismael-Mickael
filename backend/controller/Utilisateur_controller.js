@@ -15,9 +15,29 @@ const getAllUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        const utilisateur = Utilisateur.findById(req.params.id)
+        const utilisateur = await Utilisateur.findById(req.params.id)
         res.json(utilisateur)
-    } catch (err) {
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+const usersDetails = async (req, res) => {
+    try {
+        const lastClients = await Utilisateur.find({ role: 'client' }).sort({ createdAt: -1 }).limit(3)
+        const lastMecaniciens = await Utilisateur.find({ role: 'mecanicien' }).sort({ createdAt: -1 }).limit(3)
+        const totalClients = await Utilisateur.countDocuments({ role: 'client' })
+        const totalMecaniciens = await Utilisateur.countDocuments({ role: 'mecanicien' })
+
+        // console.log("Données récupérées :", { lastClients, lastMecaniciens, totalClients, totalMecaniciens })
+
+        res.json({
+            lastClients: lastClients,
+            lastMecaniciens: lastMecaniciens,
+            totalClients: totalClients,
+            totalMecaniciens: totalMecaniciens
+        })
+    } catch (error) {
         res.status(500).json({ message: error.message })
     }
 }
@@ -25,7 +45,7 @@ const getUserById = async (req, res) => {
 // Ajoute un nouvel utilisateur
 const createUser = async (req, res) => {
     try {
-        const { nom, email, motDePasse, role } = req.body;
+        const { nom, email, motDePasse, role, specialite } = req.body;
 
         // Vérification du rôle
         let roles = ['client']; // rôle par défaut
@@ -45,7 +65,8 @@ const createUser = async (req, res) => {
             nom,
             email,
             motDePasse,
-            role: roles // Utiliser le tableau de rôles
+            role: roles,
+            specialite
         });
 
         await utilisateur.save();
@@ -61,11 +82,11 @@ const createUser = async (req, res) => {
 // Met à jour un utilisateur existant
 const updateUser = async (req, res) => {
     try {
-        const { nom, email, motDePasse, role } = req.body;
+        const { nom, email, motDePasse, role, specialite } = req.body;
 
         const updatedUser = await Utilisateur.findByIdAndUpdate(
             req.params.id,
-            { nom, email, motDePasse, role },
+            { nom, email, motDePasse, role, specialite },
             { new: true }
         );
 
@@ -80,7 +101,8 @@ const getCurrentUser = async (req, res) => {
         userId: req.utilisateur._id,
         email: req.utilisateur.email,
         nom: req.utilisateur.name,
-        role: req.utilisateur.role
+        role: req.utilisateur.role,
+        specialite: req.utilisateur.specialite
     });
 }
 
@@ -94,4 +116,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUser, createUser, getUserById, updateUser, getCurrentUser, deleteUser }
+module.exports = { getAllUser, createUser, getUserById, updateUser, getCurrentUser, deleteUser, usersDetails }

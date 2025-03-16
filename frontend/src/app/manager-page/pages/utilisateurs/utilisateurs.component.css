@@ -47,20 +47,27 @@ i:hover {
 }
 
 .btn-sidebar {
-    background-color: #34495E;
+    background-color: #1ABC9C;
     color: white;
-    border-color: #34495E;
+    border-color: #1ABC9C;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .btn-sidebar:hover {
-    background-color: #2c3e50;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-sidebar:focus {
     box-shadow: 0 0 0 3px rgba(52, 73, 94, 0.25);
+}
+
+#editIcon {
+    color: #1ABC9C;
+}
+
+#deleteIcon {
+    color: red
 }

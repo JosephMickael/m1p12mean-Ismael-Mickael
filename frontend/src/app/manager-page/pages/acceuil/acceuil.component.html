@@ -1,1 +1,163 @@
-<h1>Bienvenue {{ currentUser.nom }}</h1>
+<!-- <h1>Bienvenue {{ currentUser.nom }}</h1> -->
+
+<main class="container-fluid px-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Tableau de bord - {{ currentUser.nom }}</h2>
+    </div>
+
+    <!-- Statistiques générales -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Clients</h5>
+                    <p class="card-text fs-3">{{ totalClients }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Mécaniciens</h5>
+                    <p class="card-text fs-3">{{ totalMecaniciens }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Rendez-vous en attente</h5>
+                    <p class="card-text fs-3">5</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Rendez-vous annulés</h5>
+                    <p class="card-text fs-3">2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activité récente -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5>Derniers clients inscrits</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Inscription</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let client of lastClients">
+                                    <td>{{ client.nom }}</td>
+                                    <td>{{ client.email }}</td>
+                                    <td>{{ formatDate(client.createdAt) }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5>Derniers mécaniciens ajoutés</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Spécialité</th>
+                                    <th>Date Embauche</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Luc Garnier</td>
+                                    <td>Électricité</td>
+                                    <td>10 Mars 2025</td>
+                                </tr>
+                                <tr>
+                                    <td>Sophie Bernard</td>
+                                    <td>Carrosserie</td>
+                                    <td>08 Mars 2025</td>
+                                </tr>
+                                <tr>
+                                    <td>Marc Leblanc</td>
+                                    <td>Mécanique Générale</td>
+                                    <td>05 Mars 2025</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prochains rendez-vous -->
+    <div class="card mt-4">
+        <div class="card-header bg-secondary text-white">
+            <h5>Prochains rendez-vous</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Client</th>
+                            <th>Mécanicien</th>
+                            <th>Service</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>20 Mars 2025</td>
+                            <td>10:00</td>
+                            <td>Jean Dupont</td>
+                            <td>Luc Garnier</td>
+                            <td>Vidange</td>
+                            <td><span class="badge bg-primary">À venir</span></td>
+                        </tr>
+                        <tr>
+                            <td>21 Mars 2025</td>
+                            <td>14:30</td>
+                            <td>Marie Curie</td>
+                            <td>Sophie Bernard</td>
+                            <td>Réparation Carrosserie</td>
+                            <td><span class="badge bg-success">Confirmé</span></td>
+                        </tr>
+                        <tr>
+                            <td>22 Mars 2025</td>
+                            <td>09:00</td>
+                            <td>Paul Martin</td>
+                            <td>Marc Leblanc</td>
+                            <td>Diagnostic moteur</td>
+                            <td><span class="badge bg-warning">En attente</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>

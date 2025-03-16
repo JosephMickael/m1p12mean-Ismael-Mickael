@@ -1,50 +1,91 @@
 <div class="container">
-    <h2>Liste des utilisateurs</h2>
-
-    <div class="container d-flex justify-content-between">
-        <button class="btn mb-3 mt-3 btn-outline-secondary" id="reloadBtn" (click)="getAllUsers()">
-            <i class="bi bi-arrow-repeat me-1"></i>
-            Actualiser
-        </button>
-        <button class="btn btn-sidebar mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#userModal"
-            (click)="prepareNewUser()">
-            <i class="bi bi-plus-lg me-1"></i> Ajouter un utilisateur
-        </button>
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Gestion des utilisateurs</h2>
     </div>
 
     <div *ngIf="!utilisateurs" class="alert alert-info">
         Cliquez sur le bouton pour charger la liste des utilisateurs.
     </div>
 
+    <!-- Filtre et bar de recherche -->
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-3 mb-sm-3">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" placeholder="Rechercher..."
+                    [(ngModel)]="searchText" (ngModelChange)="onSearchChange()">
+            </div>
+        </div>
+        <div class="col-md-3 mb-sm-3">
+            <select class="form-select" [(ngModel)]="selectedRole" (ngModelChange)="onRoleChange()">
+                <option value="">Tous les rôles</option>
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+        </div>
+        <!-- Bouton actualiser (pas affiché) -->
+        <div class="col-md-3 mb-sm-3 d-flex justify-content-end">
+            <button class="btn btn-outline-secondary d-flex align-items-center d-none" (click)="getAllUsers()">
+                <i class="bi bi-arrow-repeat me-1"></i>
+                <span>Actualiser</span>
+            </button>
+        </div>
+        <div class="col-md-3 mb-sm-3 d-flex justify-content-end">
+            <button class="btn btn-sidebar d-flex align-items-center" style="margin-left: 0;" data-bs-toggle="modal"
+                data-bs-target="#userModal" (click)="prepareNewUser()">
+                <i class="bi bi-plus-lg me-1"></i>
+                <span>Ajouter un utilisateur</span>
+            </button>
+        </div>
+    </div>
+
     @if (deleteMessage) {
     <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">{{ deleteMessage }}</div>
     }
-    <table class="table mt-4" *ngIf="utilisateurs">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let utilisateur of utilisateurs">
-                <td>{{ utilisateur.nom }}</td>
-                <td>{{ utilisateur.email }}</td>
-                <td>{{ utilisateur.role }}</td>
-                <td>
-                    <i class="bi bi-trash me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer"
-                        style="color: rgb(235, 72, 72);" (click)="deleteUser(utilisateur._id)"></i>
-                    <i class="bi bi-pencil me-3" style="color: rgb(47, 228, 77)" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Modifier" data-bs-toggle="modal" data-bs-target="#userModal"
-                        (click)="prepareEditUser(utilisateur)"></i>
-                    <!-- <i class="bi bi-card-text" style="color: rgb(242, 199, 80);" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Détails"></i> -->
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div class="card mt-4">
+        <div class="card-header text-white" style="background-color: #4e657c; border-color: #34495E;">
+            <h5>Utilisateurs</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" *ngIf="filteredUsers.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th class="text-center">Spécialité</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor=" let utilisateur of filteredUsers">
+                            <td>{{ utilisateur.nom }}</td>
+                            <td>{{ utilisateur.email }}</td>
+                            <td>{{ utilisateur.role }}</td>
+                            <td class="text-center">{{ utilisateur.specialite || '-' }}</td>
+                            <td class="icons">
+                                <i class="bi bi-trash me-3" id="deleteIcon" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" title="Supprimer"
+                                    (click)="deleteUser(utilisateur._id)"></i>
+                                <i class="bi bi-pencil me-3" id="editIcon" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" title="Modifier" data-bs-toggle="modal"
+                                    data-bs-target="#userModal" (click)="prepareEditUser(utilisateur)"></i>
+                                <!-- <i class="bi bi-card-text" style="color: rgb(242, 199, 80);" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" title="Détails"></i> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="filteredUsers.length === 0" class="alert alert-warning text-center">
+                    Aucun utilisateur trouvé.
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal Utilisateur (Ajout/Modification) -->
@@ -110,6 +151,12 @@
                         <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
                             Le rôle est requis
                         </div>
+                    </div>
+                    <div class="mb-3" *ngIf="userForm.get('role')?.value === 'mecanicien'">
+                        <label for="specialite" class="form-label">Spécialité</label>
+                        <input type="text" class="form-control" id="specialite" formControlName="specialite"
+                            placeholder="">
+                        <small class="form-text text-muted">Exemples: moteur, transmission, freinage, etc.</small>
                     </div>
                 </form>
             </div>

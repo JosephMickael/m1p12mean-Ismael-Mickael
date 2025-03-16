@@ -5,8 +5,9 @@ const UtilisateurSchema = new mongoose.Schema({
     nom: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     motDePasse: { type: String, required: true },
-    disponible: { type: Boolean, default: true},
-    role: { type: [String], default: ['client'], enum: ['client', 'mecanicien', 'manager'] }
+    disponible: { type: Boolean, default: true },
+    role: { type: [String], default: ['client'], enum: ['client', 'mecanicien', 'manager'] },
+    specialite: { type: String, default: '' }
 }, { timestamps: true })
 
 // Hachage du mot de passe avant de sauvegarder l'utilisateur

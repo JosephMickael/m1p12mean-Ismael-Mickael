@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-utilisateurs',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './utilisateurs.component.html',
   styleUrl: './utilisateurs.component.css'
 })
@@ -18,18 +18,58 @@ export class UtilisateursComponent implements OnInit {
   showPassword: boolean = false;
   selectedUser: any = null;
   isEditMode: boolean = false;
+  // filtres
+  filteredUsers: any[] = []
+  searchText: string = ''
+  selectedRole: string = ''
+  roles: string[] = ['client', 'mecanicien', 'manager']
 
   constructor(private userService: UserService, private formBuilder: FormBuilder) {
     this.userForm = this.formBuilder.group({
       nom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       motDePasse: ['', [Validators.required]],
-      role: [[], Validators.required]
+      role: [[], Validators.required],
+      specialite: ['']
     });
   }
 
   ngOnInit() {
     this.getAllUsers();
+
+    this.userForm.get('role')?.valueChanges.subscribe(role => {
+      if (role !== 'mecanicien') {
+        this.userForm.get('specialite')?.setValue('');
+      }
+    });
+  }
+
+  onSearchChange() {
+    this.filterUsers();
+  }
+
+  onRoleChange() {
+    this.filterUsers();
+  }
+
+  filterUsers() {
+    this.filteredUsers = this.utilisateurs.filter(user => {
+      // Filtre par recherche (texte)
+      const matchesSearch = user.nom?.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        user.email?.toLowerCase().includes(this.searchText.toLowerCase());
+
+      // Filtre par role
+      let matchesRole = true;
+      if (this.selectedRole) {
+        if (Array.isArray(user.role)) {
+          matchesRole = user.role.includes(this.selectedRole);
+        } else {
+          matchesRole = user.role === this.selectedRole;
+        }
+      }
+
+      return matchesSearch && matchesRole;
+    });
   }
 
   getAllUsers() {
@@ -39,6 +79,7 @@ export class UtilisateursComponent implements OnInit {
         this.utilisateurs = response.sort((a: any, b: any) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
+        this.filteredUsers = [...this.utilisateurs];
       },
       error: (error) => {
         console.error('Erreur lors du chargement des utilisateurs:', error);
@@ -50,26 +91,24 @@ export class UtilisateursComponent implements OnInit {
     this.resetForm();
     this.isEditMode = false;
     this.selectedUser = null;
-
-    // // Réinitialiser les validateurs pour le mode création
-    // this.userForm.get('motDePasse')?.setValidators([Validators.required]);
-    // this.userForm.get('motDePasse')?.updateValueAndValidity();
   }
 
+  // Remplissage du modal avec les informations de l'utilisateur
   prepareEditUser(user: any) {
     this.resetForm();
     this.isEditMode = true;
     this.selectedUser = user;
 
-    // // Ajuster les validateurs pour le mode édition (mot de passe non requis)
-    // this.userForm.get('motDePasse')?.clearValidators();
-    // this.userForm.get('motDePasse')?.updateValueAndValidity();
+    //  Afficher le champ specialité si role mecanicien
+    const isMecanicien = user.role === 'mecanicien' || (Array.isArray(user.role) && user.role.includes('mecanicien'));
+
+    this.userForm.get('role')?.setValue(Array.isArray(user.role) ? user.role[0] : user.role);
 
     this.userForm.patchValue({
       nom: user.nom,
       email: user.email,
       motDePasse: user.motDePasse,
-      role: user.role
+      specialite: isMecanicien ? (user.specialite || '') : ''
     });
   }
 
@@ -98,13 +137,19 @@ export class UtilisateursComponent implements OnInit {
       role: formValues.role ? [formValues.role] : []
     };
 
-    this.userService.register(userData.nom, userData.email, userData.motDePasse, userData.role).subscribe({
+    this.userService.register(userData.nom, userData.email, userData.motDePasse, userData.role, userData.specialite).subscribe({
       next: (response) => {
+
+        const formData = { ...this.userForm.value };
+
+        if (formData.role === 'mecanicien' && formData.specialite) {
+          formData.specialite = formData.specialite.split(',').map((item: string) => item.trim()).filter((item: string) => item);
+        } else {
+          formData.specialite = [];
+        }
+
         this.successMessage = 'Utilisateur enregistré !';
-        setTimeout(() => {
-          this.successMessage = '';
-          // Le modal sera fermé via le bouton "Annuler" avec data-bs-dismiss
-        }, 2000);
+        setTimeout(() => this.successMessage = '', 2000);
         this.getAllUsers();
       },
       error: (err) => {
@@ -123,19 +168,21 @@ export class UtilisateursComponent implements OnInit {
       const userData = {
         nom: formValues.nom,
         email: formValues.email,
-        // motDePasse: formValues.motDePasse,
-        role: formValues.role
+        role: formValues.role,
+        specialite: formValues.specialite
       };
-
-      // // Ajouter le mot de passe seulement s'il est fourni
-      // if (formValues.motDePasse) {
-      //   userData['motDePasse'] = formValues.motDePasse;
-      // }
-
-      console.log('RETURN', userData)
 
       this.userService.updateUser(this.selectedUser._id, userData).subscribe({
         next: (response) => {
+
+          const formData = { ...this.userForm.value };
+
+          if (formData.role === 'mecanicien' && formData.specialite) {
+            formData.specialite = formData.specialite.split(',').map((item: string) => item.trim()).filter((item: string) => item);
+          } else {
+            formData.specialite = [];
+          }
+
           this.successMessage = 'Mise à jour effectuée';
           setTimeout(() => this.successMessage = '', 2000);
           this.getAllUsers();

@@ -13,13 +13,14 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // Méthode pour enregistrer un nouvel utilisateur
-  register(nom: string, email: string, motDePasse: string, role: string[]) {
-    // Si role est indéfini ou vide, utilisez ['client'] par défaut
+  register(nom: string, email: string, motDePasse: string, role: string[], specialite: string[],) {
+    // Si role est indéfini ou vide, on met ['client'] par défaut
     const roleToSend = (!role || role.length === 0) ? ['client'] : role;
 
     const userData = {
       nom,
       email,
+      specialite,
       motDePasse,
       role: roleToSend
     };
@@ -29,6 +30,10 @@ export class UserService {
 
   getAllUsers() {
     return this.http.get<string[]>(`${this.apiUrl}/get-utilisateur`);
+  }
+
+  getUsersDetails(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users-details`);
   }
 
   updateUser(id: string, userData: any) {

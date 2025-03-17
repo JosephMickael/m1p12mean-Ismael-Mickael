@@ -65,6 +65,8 @@ export class AuthService {
         email: decodedToken.email,
         nom: decodedToken.nom,
         role: decodedToken.role,
+        specialite: decodedToken.specialite,
+        dateCreation: decodedToken.dateCreation
       };
     } else {
       console.log('Token invalide ou expiré');

@@ -102,7 +102,8 @@ const getCurrentUser = async (req, res) => {
         email: req.utilisateur.email,
         nom: req.utilisateur.name,
         role: req.utilisateur.role,
-        specialite: req.utilisateur.specialite
+        specialite: req.utilisateur.specialite,
+        dateCreation: req.utilisateur.createdAt
     });
 }
 

@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { ManagerPageComponent } from './manager-page/manager-page.component';
 import { UtilisateursComponent } from './manager-page/pages/utilisateurs/utilisateurs.component';
 import { AcceuilComponent } from './manager-page/pages/acceuil/acceuil.component';
+import { ProfilComponent } from './manager-page/pages/profil/profil.component';
 
 export const routes: Routes = [
     { path: 'create-rendezvous', component: RendezvousComponent },
@@ -41,6 +42,11 @@ export const routes: Routes = [
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'acceuil'
+            },
+            {
+                path: 'profil',
+                component: ProfilComponent,
+                data: { role: 'manager' }
             },
             {
                 path: 'acceuil',

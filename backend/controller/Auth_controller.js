@@ -22,7 +22,9 @@ const login = async (req, res) => {
                 userId: utilisateur._id,
                 role: utilisateur.role,
                 nom: utilisateur.nom,
-                email: utilisateur.email
+                email: utilisateur.email,
+                specialite: utilisateur.specialite,
+                dateCreation: utilisateur.createdAt
             },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
@@ -34,7 +36,9 @@ const login = async (req, res) => {
                 _id: utilisateur._id,
                 nom: utilisateur.nom,
                 email: utilisateur.email,
-                role: utilisateur.role
+                role: utilisateur.role,
+                specialite: utilisateur.specialite,
+                dateCreation: utilisateur.createdAt
             }
         });
     } catch (error) {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-utilisateurs',
@@ -23,8 +24,9 @@ export class UtilisateursComponent implements OnInit {
   searchText: string = ''
   selectedRole: string = ''
   roles: string[] = ['client', 'mecanicien', 'manager']
+  currentUser: any
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private authservice: AuthService) {
     this.userForm = this.formBuilder.group({
       nom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -35,6 +37,8 @@ export class UtilisateursComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.currentUser = this.authservice.getCurrentUser()
+
     this.getAllUsers();
 
     this.userForm.get('role')?.valueChanges.subscribe(role => {
@@ -73,13 +77,18 @@ export class UtilisateursComponent implements OnInit {
   }
 
   getAllUsers() {
+    const currentUserId = this.currentUser.userId
+
     this.userService.getAllUsers().subscribe({
       next: (response: any) => {
+
+        const newUsers = response.filter((user: any) => user._id !== currentUserId)
+
         // Tri par ordre décroissant
-        this.utilisateurs = response.sort((a: any, b: any) => {
+        this.utilisateurs = newUsers.sort((a: any, b: any) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        });
-        console.log(this.utilisateurs[0])
+        })
+
         this.filteredUsers = [...this.utilisateurs];
       },
       error: (error) => {

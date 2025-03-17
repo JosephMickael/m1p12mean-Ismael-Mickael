@@ -1,0 +1,206 @@
+<div class="container py-5">
+    <!-- En-tête du profil -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-placeholder bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
+                            style="width: 80px; height: 80px; font-size: 2rem;color: rgb(112, 112, 112)">
+                            {{ getFirstLetterUpperCase(currentUser.nom) }}
+                        </div>
+                        <div>
+                            <h2 class="mb-1">{{ currentUser.nom }}</h2>
+                            <p class="text-muted mb-0">
+                                <span class="badge me-2" style="background-color: var(--main-rouge);">{{
+                                    currentUser.role }}</span>
+                                <span *ngIf="currentUser.specialite" class="badge bg-secondary">{{
+                                    currentUser.specialite
+                                    }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informations de l'utilisateur -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0">Informations personnelles</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <!-- Nom -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small text-muted">Nom complet</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input type="text" class="form-control bg-light border-0"
+                                        value="{{ currentUser.nom }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small text-muted">Adresse email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control bg-light border-0"
+                                        value="{{ currentUser.email }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rôle -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small text-muted">Rôle</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-shield-lock"></i>
+                                    </span>
+                                    <input type="text" class="form-control bg-light border-0"
+                                        value="{{ capitalizeFirstLetter(currentUser.role[0]) }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Spécialité -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small text-muted">Spécialité</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-tools"></i>
+                                    </span>
+                                    <input type="text" class="form-control bg-light border-0"
+                                        value="{{ currentUser.specialite || 'Aucun' }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date d'inscription -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small text-muted">Date d'inscription</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-calendar"></i>
+                                    </span>
+                                    <input type="text" class="form-control bg-light border-0"
+                                        value="{{ formatDate(currentUser.dateCreation) }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte de sécurité -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0">Sécurité</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-lock-fill me-2 fs-5" style="color: var(--main-vert);"></i>
+                            <h6 class="mb-0">Mot de passe</h6>
+                        </div>
+                        <p class="small text-muted mb-3">Votre mot de passe doit être sécurisé et changé régulièrement.
+                        </p>
+                        <button class="btn w-100 text-white" data-bs-toggle="modal" data-bs-target="#passwordModal"
+                            style="background-color: var(--main-vert);">
+                            <i class="bi bi-key me-2"></i>Modifier le mot de passe
+                        </button>
+                    </div>
+
+                    <!-- Dernière connexion -->
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-clock-history me-2 fs-5" style="color: var(--main-bleu);"></i>
+                            <h6 class="mb-0">Dernière connexion</h6>
+                        </div>
+                        <p class="small text-muted">{{ formatLastLogin(currentUser.lastLogin) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour changer le mot de passe -->
+<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 text-white" style="background-color: var(--main-bleu-deep);">
+                <h5 class="modal-title" id="passwordModalLabel">Modifier votre mot de passe</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form>
+                    <!-- Ancien mot de passe -->
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Mot de passe actuel</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="currentPassword">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Nouveau mot de passe -->
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">Nouveau mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="newPassword">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Confirmation du nouveau mot de passe -->
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirmer le nouveau mot de passe</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="confirmPassword">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Message d'erreur (exemple) -->
+                    <div class="alert alert-danger d-none">
+                        Les mots de passe ne correspondent pas.
+                    </div>
+
+                    <!-- Message de succès (exemple) -->
+                    <div class="alert alert-success d-none">
+                        Votre mot de passe a été modifié avec succès.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn text-white"
+                    style="background-color: var(--main-bleu-deep);">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>

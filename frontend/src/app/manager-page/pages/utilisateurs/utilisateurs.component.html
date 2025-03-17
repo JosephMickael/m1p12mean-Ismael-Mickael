@@ -58,6 +58,7 @@
                             <th>Email</th>
                             <th>Role</th>
                             <th class="text-center">Spécialité</th>
+                            <th class="text-center">Date d'embauche</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -67,6 +68,8 @@
                             <td>{{ utilisateur.email }}</td>
                             <td>{{ utilisateur.role }}</td>
                             <td class="text-center">{{ utilisateur.specialite || '-' }}</td>
+                            <td class="text-center">{{ utilisateur.role == 'mecanicien' ?
+                                formatDate(utilisateur.createdAt) : '-' }}</td>
                             <td class="icons">
                                 <i class="bi bi-trash me-3" id="deleteIcon" data-bs-toggle="tooltip"
                                     data-bs-placement="bottom" title="Supprimer"

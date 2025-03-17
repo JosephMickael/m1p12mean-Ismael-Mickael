@@ -9,7 +9,7 @@
     <!-- Statistiques générales -->
     <div class="row">
         <div class="col-md-3">
-            <div class="card text-white bg-primary mb-3">
+            <div class="card text-white mb-3" id="total-client">
                 <div class="card-body">
                     <h5 class="card-title">Total Clients</h5>
                     <p class="card-text fs-3">{{ totalClients }}</p>
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-success mb-3">
+            <div class="card text-white mb-3" id="total-mecanicien">
                 <div class="card-body">
                     <h5 class="card-title">Total Mécaniciens</h5>
                     <p class="card-text fs-3">{{ totalMecaniciens }}</p>
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-warning mb-3">
+            <div class="card text-white mb-3" id="rdv-attente">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous en attente</h5>
                     <p class="card-text fs-3">5</p>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-danger mb-3">
+            <div class="card text-white mb-3" id="rdv-annule">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous annulés</h5>
                     <p class="card-text fs-3">2</p>
@@ -46,7 +46,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card mt-4">
-                <div class="card-header bg-secondary text-white">
+                <div class="card-header text-white">
                     <h5>Derniers clients inscrits</h5>
                 </div>
                 <div class="card-body">
@@ -56,14 +56,14 @@
                                 <tr>
                                     <th>Nom</th>
                                     <th>Email</th>
-                                    <th>Inscription</th>
+                                    <th class="text-center">Inscription</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let client of lastClients">
                                     <td>{{ client.nom }}</td>
                                     <td>{{ client.email }}</td>
-                                    <td>{{ formatDate(client.createdAt) }} </td>
+                                    <td class="text-center">{{ formatDate(client.createdAt) }} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -74,7 +74,7 @@
 
         <div class="col-md-6">
             <div class="card mt-4">
-                <div class="card-header bg-secondary text-white">
+                <div class="card-header text-white">
                     <h5>Derniers mécaniciens ajoutés</h5>
                 </div>
                 <div class="card-body">
@@ -83,25 +83,15 @@
                             <thead>
                                 <tr>
                                     <th>Nom</th>
-                                    <th>Spécialité</th>
-                                    <th>Date Embauche</th>
+                                    <th class="text-center">Spécialité</th>
+                                    <th class="text-center">Date Embauche</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Luc Garnier</td>
-                                    <td>Électricité</td>
-                                    <td>10 Mars 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>Sophie Bernard</td>
-                                    <td>Carrosserie</td>
-                                    <td>08 Mars 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>Marc Leblanc</td>
-                                    <td>Mécanique Générale</td>
-                                    <td>05 Mars 2025</td>
+                                <tr *ngFor="let mecanicien of lastMecaniciens">
+                                    <td>{{ mecanicien.nom }}</td>
+                                    <td class="text-center">{{ mecanicien.specialite || '-' }}</td>
+                                    <td class="text-center">{{ formatDate(mecanicien.createdAt) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -113,7 +103,7 @@
 
     <!-- Prochains rendez-vous -->
     <div class="card mt-4">
-        <div class="card-header bg-secondary text-white">
+        <div class="card-header text-white">
             <h5>Prochains rendez-vous</h5>
         </div>
         <div class="card-body">

@@ -79,6 +79,7 @@ export class UtilisateursComponent implements OnInit {
         this.utilisateurs = response.sort((a: any, b: any) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
+        console.log(this.utilisateurs[0])
         this.filteredUsers = [...this.utilisateurs];
       },
       error: (error) => {
@@ -150,7 +151,7 @@ export class UtilisateursComponent implements OnInit {
 
         this.successMessage = 'Utilisateur enregistré !';
         setTimeout(() => this.successMessage = '', 2000);
-        this.getAllUsers();
+        this.getAllUsers()
       },
       error: (err) => {
         if (err.error?.message && err.error.message.includes('Utilisateur validation failed')) {
@@ -185,7 +186,9 @@ export class UtilisateursComponent implements OnInit {
 
           this.successMessage = 'Mise à jour effectuée';
           setTimeout(() => this.successMessage = '', 2000);
-          this.getAllUsers();
+          this.getAllUsers()
+          this.selectedRole = ''
+          this.searchText = ''
         },
         error: (err) => {
           if (err.error?.message && err.error.message.includes('Utilisateur validation failed')) {
@@ -207,7 +210,9 @@ export class UtilisateursComponent implements OnInit {
       this.userService.deleteUser(userId).subscribe({
         next: (response: any) => {
           this.deleteMessage = 'Utilisateur supprimé avec succès';
-          this.getAllUsers();
+          this.getAllUsers()
+          this.selectedRole = ''
+          this.searchText = ''
           setTimeout(() => this.deleteMessage = '', 3000);
         },
         error: (err) => {
@@ -217,5 +222,22 @@ export class UtilisateursComponent implements OnInit {
         }
       });
     }
+  }
+
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    };
+    const formattedDate = new Date(date).toLocaleDateString('fr-FR', options);
+
+    const parts = formattedDate.split(' ');
+
+    if (parts.length >= 2) {
+      parts[1] = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+    }
+
+    return parts.join(' ');
   }
 }

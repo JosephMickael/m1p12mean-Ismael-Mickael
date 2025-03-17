@@ -38,6 +38,7 @@ export class AcceuilComponent {
     })
   }
 
+  // format => 14 Mars 2025
   formatDate(date: string): string {
     const options: Intl.DateTimeFormatOptions = {
       day: 'numeric',

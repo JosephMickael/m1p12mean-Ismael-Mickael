@@ -1,0 +1,9 @@
+.hover-text-effect {
+    background-color: #f7f7f7
+        /* color: black; */
+}
+
+.hover-text-effect:hover {
+    background-color: #efefef;
+    cursor: pointer;
+}

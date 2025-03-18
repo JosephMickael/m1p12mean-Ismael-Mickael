@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Utilisateur = require('../models/Utilisateur')
+const bcrypt = require('bcrypt')
 
 // recupere tout les utilisateurs
 const getAllUser = async (req, res) => {
@@ -96,6 +97,43 @@ const updateUser = async (req, res) => {
     }
 }
 
+const updatePassword = async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    try {
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            return res.status(400).json({ message: "Tous les champs sont requis." });
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: "Le nouveau mot de passe et la confirmation ne correspondent pas." });
+        }
+
+        // Récupérer l'utilisateur par son ID
+        const utilisateur = await Utilisateur.findById(req.utilisateur._id);
+
+        if (!utilisateur) {
+            return res.status(404).json({ message: "Utilisateur non trouvé." });
+        }
+
+        // Vérifier si le mot de passe actuel est correct
+        const isMatch = await utilisateur.compareMotDePasse(currentPassword);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Le mot de passe actuel est incorrect." });
+        }
+
+        // Mettre à jour le mot de passe
+        // Le hachage est pris en charge dans le model (pre)
+        utilisateur.motDePasse = newPassword;
+        await utilisateur.save();
+
+        res.status(200).json({ message: "Mot de passe modifié avec succès." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erreur du serveur." });
+    }
+};
+
 const getCurrentUser = async (req, res) => {
     res.json({
         userId: req.utilisateur._id,
@@ -117,4 +155,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUser, createUser, getUserById, updateUser, getCurrentUser, deleteUser, usersDetails }
+module.exports = { getAllUser, createUser, getUserById, updateUser, updatePassword, getCurrentUser, deleteUser, usersDetails }

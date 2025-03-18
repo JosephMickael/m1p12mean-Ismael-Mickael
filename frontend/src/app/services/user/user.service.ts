@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { User } from '../../models/user.model';
@@ -26,6 +26,20 @@ export class UserService {
     };
 
     return this.http.post(`${this.apiUrl}/create-utilisateur`, userData);
+  }
+
+  updatePassword(currentPassword: string, newPassword: string, confirmPassword: string): Observable<any> {
+    const body = {
+      currentPassword,
+      newPassword,
+      confirmPassword
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}` // Récupère le token JWT de l'utilisateur (stocké dans localStorage ou sessionStorage)
+    });
+
+    return this.http.put(`${this.apiUrl}/update-password`, body, { headers });
   }
 
   getAllUsers() {

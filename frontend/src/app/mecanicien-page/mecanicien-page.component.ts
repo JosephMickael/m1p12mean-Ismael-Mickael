@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user/user.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-mecanicien-page',
-  imports: [],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   templateUrl: './mecanicien-page.component.html',
   styleUrl: './mecanicien-page.component.css'
 })

@@ -50,6 +50,8 @@ export class LoginComponent {
         this.authservice.login(email, password).subscribe({
           next: (response: any) => {
             console.log('Réponse du serveur:', response);
+            const lastLogin = new Date().toISOString(); // Date au format ISO
+            localStorage.setItem('lastLogin', lastLogin);
             if (response.token && response.user) {
               // Sauvegarde du token et des rôles
               this.authservice.setUserData(response.token, response.user.role);

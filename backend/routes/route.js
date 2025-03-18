@@ -9,10 +9,11 @@ const verifierAuthentification = require('../middlewares/auth.middleware');
 router.get('/get-utilisateur', utilisateurController.getAllUser)
 router.get('/users-details', utilisateurController.usersDetails)
 router.post('/create-utilisateur', utilisateurController.createUser)
-router.get('/:id', utilisateurController.getUserById)
 router.put('/update-utilisateur/:id', utilisateurController.updateUser)
 router.delete('/delete-utilisateur/:id', utilisateurController.deleteUser)
 router.get('/current-user', verifierAuthentification, utilisateurController.getCurrentUser)
+router.put('/update-password', verifierAuthentification, utilisateurController.updatePassword);
+// router.get('/user/:id', utilisateurController.getUserById)
 
 // Rendezvous 
 router.post('/create-rendezVous', verifierAuthentification, rendezVousController.createRendezvous);

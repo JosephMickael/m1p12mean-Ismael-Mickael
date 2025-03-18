@@ -14,7 +14,7 @@
                     <a class="nav-link" href="#">Mes Rendez-vous</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Profil</a>
+                    <a class="nav-link" [routerLink]="['/client-page/profil']" routerLinkActive="active">Profil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white btn btn-danger btn-sm" (click)="logout()">Déconnexion</a>
@@ -57,6 +57,8 @@
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h2>Bienvenue, Client !</h2>
             </div>
+
+            <router-outlet></router-outlet>
 
             <!-- Section résumé -->
             <div class="row">

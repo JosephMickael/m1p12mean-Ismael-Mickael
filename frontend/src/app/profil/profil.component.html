@@ -29,8 +29,18 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="card-title mb-0">Informations personnelles</h5>
+                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-0">Informations personnelles</h5>
+                    </div>
+                    <div>
+                        <button type="button" class="btn border-0 hover-text-effect" data-toggle="tooltip"
+                            data-placement="bottom" title="Modifier les informations" data-bs-toggle="modal"
+                            data-bs-target="#userModal" (click)="prepareEditUser(currentUser)">
+                            <i class="bi bi-pen"></i>
+                            <!-- <span class="hover-text"></span> -->
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body p-4">
                     <div class="row g-4">
@@ -75,6 +85,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <!-- Spécialité -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -128,12 +139,12 @@
                     </div>
 
                     <!-- Dernière connexion -->
-                    <div class="mt-4">
-                        <div class="d-flex align-items-center mb-2">
+                    <div class="mt-5">
+                        <div class="d-flex align-items-center mb-1">
                             <i class="bi bi-clock-history me-2 fs-5" style="color: var(--main-bleu);"></i>
                             <h6 class="mb-0">Dernière connexion</h6>
                         </div>
-                        <p class="small text-muted">{{ formatLastLogin(currentUser.lastLogin) }}</p>
+                        <p class="small text-muted">{{ formatLastLogin() }}</p>
                     </div>
                 </div>
             </div>
@@ -151,55 +162,140 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-                <form>
+                @if (errorMessage) {
+                <div class="p-1 mb-3 text-white text-center bg-danger rounded">{{errorMessage}}</div>
+                }
+                @if (successMessage) {
+                <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                    {{successMessage}}</div>
+                }
+                <form [formGroup]="passwordForm">
                     <!-- Ancien mot de passe -->
                     <div class="mb-3">
                         <label for="currentPassword" class="form-label">Mot de passe actuel</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="currentPassword">
-                            <button class="btn btn-outline-secondary" type="button">
-                                <i class="bi bi-eye"></i>
-                            </button>
+                            <input [type]="showCurrentPassword ? 'text' : 'password'" class="form-control"
+                                id="currentPassword" formControlName="currentPassword" required>
+                            <span class="input-group-text bg-transparent border-start-0 pointer"
+                                (click)="toggleCurrentPasswordVisibility()">
+                                <i class="bi" [ngClass]="showCurrentPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
+                                    style="opacity: 0.6;"></i>
+                            </span>
                         </div>
+                        @if (passwordForm.get('currentPassword')?.invalid &&
+                        passwordForm.get('currentPassword')?.touched) {
+                        <div class="text-danger">
+                            Saisir le mot de passe actuel
+                        </div>
+                        }
                     </div>
 
                     <!-- Nouveau mot de passe -->
                     <div class="mb-3">
                         <label for="newPassword" class="form-label">Nouveau mot de passe</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="newPassword">
-                            <button class="btn btn-outline-secondary" type="button">
-                                <i class="bi bi-eye"></i>
-                            </button>
+                            <input [type]="showNewPassword ? 'text' : 'password'" class="form-control" id="newPassword"
+                                formControlName="newPassword" required>
+                            <span class="input-group-text bg-transparent border-start-0 pointer"
+                                (click)="toggleNewPasswordVisibility()">
+                                <i class="bi" [ngClass]="showNewPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
+                                    style="opacity: 0.6;"></i>
+                            </span>
                         </div>
+                        @if (passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched) {
+                        <div class="text-danger">
+                            Saisir le nouveau mot de passe
+                        </div>
+                        }
                     </div>
 
                     <!-- Confirmation du nouveau mot de passe -->
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">Confirmer le nouveau mot de passe</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="confirmPassword">
-                            <button class="btn btn-outline-secondary" type="button">
-                                <i class="bi bi-eye"></i>
-                            </button>
+                            <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
+                                id="confirmPassword" formControlName="confirmPassword" required>
+                            <span class="input-group-text bg-transparent border-start-0 pointer"
+                                (click)="toggleConfirmPasswordVisibility()">
+                                <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
+                                    style="opacity: 0.6;"></i>
+                            </span>
                         </div>
-                    </div>
-
-                    <!-- Message d'erreur (exemple) -->
-                    <div class="alert alert-danger d-none">
-                        Les mots de passe ne correspondent pas.
-                    </div>
-
-                    <!-- Message de succès (exemple) -->
-                    <div class="alert alert-success d-none">
-                        Votre mot de passe a été modifié avec succès.
+                        @if (passwordForm.get('confirmPassword')?.invalid &&
+                        passwordForm.get('confirmPassword')?.touched) {
+                        <div class="text-danger">
+                            Confirmer le mot de passe
+                        </div>
+                        }
+                        @if (passwordForm.get('confirmPassword')?.valid && passwordForm.hasError('passwordMismatch')) {
+                        <div class="text-danger">
+                            Les mots de passe ne correspondent pas
+                        </div>
+                        }
                     </div>
                 </form>
             </div>
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn text-white"
+                <button type="submit" class="btn text-white"
+                    [disabled]="passwordForm.invalid || passwordForm.hasError('passwordMismatch')" (click)="onSubmit()"
                     style="background-color: var(--main-bleu-deep);">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #34495E;">
+                <h5 class="modal-title text-white" id="userModalLabel">
+                    Modifier les informations
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (errorMessage) {
+                <div class="p-1 mb-3 text-white text-center bg-danger rounded">{{errorMessage}}</div>
+                }
+                @if (successMessage) {
+                <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                    {{successMessage}}</div>
+                }
+                <form [formGroup]="userForm">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label small text-muted">Nom complet</label>
+                        <input type="text" class="form-control" id="nom" formControlName="nom"
+                            placeholder="Entrez le nom complet">
+                        <div *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched" class="text-danger">
+                            Le nom est requis
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label small text-muted">Email</label>
+                        <input type="email" class="form-control" id="email" formControlName="email"
+                            placeholder="Entrez l'email">
+                        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                            class="text-danger">
+                            Un email valide est requis
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        @if (currentUser.role[0] !== 'client') {
+                        <label for="specialite" class="form-label small text-muted">Entrer une spécialité</label>
+                        <input type="specialite" class="form-control" id="specialite" formControlName="specialite"
+                            placeholder="Spécialité">
+                        }
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn px-4 text-white" [disabled]="userForm.invalid"
+                    (click)="updateInformations()" style="background-color: #34495E;">
+                    Enregistrer
+                </button>
             </div>
         </div>
     </div>

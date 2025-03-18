@@ -82,6 +82,11 @@ main {
     border-bottom: 2px solid #1ABC9C;
 }
 
+/* dropdown list */
+.dropdown-item.active {
+    background-color: var(--main-gray);
+}
+
 /* Pour les écrans mobiles */
 @media (max-width: 768px) {
     .sidebar {

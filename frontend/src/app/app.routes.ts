@@ -9,7 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { ManagerPageComponent } from './manager-page/manager-page.component';
 import { UtilisateursComponent } from './manager-page/pages/utilisateurs/utilisateurs.component';
 import { AcceuilComponent } from './manager-page/pages/acceuil/acceuil.component';
-import { ProfilComponent } from './manager-page/pages/profil/profil.component';
+import { ProfilComponent } from './profil/profil.component';
 
 export const routes: Routes = [
     { path: 'create-rendezvous', component: RendezvousComponent },
@@ -24,13 +24,25 @@ export const routes: Routes = [
         path: 'client-page',
         component: ClientPageComponent,
         canActivate: [RoleGuard],
-        data: { role: 'client' }
+        data: { role: 'client' },
+        children: [
+            {
+                path: 'profil',
+                component: ProfilComponent,
+            }
+        ]
     },
     {
         path: 'mecanicien-page',
         component: MecanicienPageComponent,
         canActivate: [RoleGuard],
-        data: { role: 'mecanicien' }
+        data: { role: 'mecanicien' },
+        children: [
+            {
+                path: 'profil',
+                component: ProfilComponent,
+            }
+        ]
     },
     {
         path: 'manager-page',
@@ -44,11 +56,6 @@ export const routes: Routes = [
                 redirectTo: 'acceuil'
             },
             {
-                path: 'profil',
-                component: ProfilComponent,
-                data: { role: 'manager' }
-            },
-            {
                 path: 'acceuil',
                 component: AcceuilComponent,
                 data: { role: 'manager' }
@@ -57,8 +64,11 @@ export const routes: Routes = [
                 path: 'utilisateurs',
                 component: UtilisateursComponent,
                 data: { role: 'manager' }
-            }
+            },
+            {
+                path: 'profil',
+                component: ProfilComponent,
+            },
         ]
     },
-
 ];

@@ -1,22 +1,24 @@
- const mongoose = require('mongoose'); 
+const mongoose = require('mongoose'); 
 const Utilisateur = require('../models/Utilisateur'); 
 
 const RendezVousSchema = new mongoose.Schema({
     heure : { type: String, required: true}, 
     date : { type: Date, required: true}, 
-    status : { type: String, required: true}, 
+    status : { type: String, 
+      default: "disponible",   
+      enum: ["en attente", "confirmé", "assigné", "annulé", "disponible", "réservé"]
+    },
+    services : { type: String, required: true, default: ''},
     client : {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref:'Utilisateur'
         }, 
     mecanicien : [{ 
         type: mongoose.Schema.Types.ObjectId,
         required: true, 
-        ref:'Utilsateur'
+        ref:'Utilisateur'
     }]
 }, {timestamps: true}); 
 
-const RendezVous = mongoose.model('RendezVous', RendezVousSchema); 
+module.exports = mongoose.model('RendezVous', RendezVousSchema); 
 
-module.exports = RendezVous; 

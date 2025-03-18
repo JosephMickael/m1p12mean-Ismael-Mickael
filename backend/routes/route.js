@@ -5,6 +5,18 @@ const utilisateurController = require('../controller/Utilisateur_controller');
 const rendezVousController = require('../controller/rendezvous_controller');
 const verifierAuthentification = require('../middlewares/auth.middleware');
 
+// Rendezvous 
+router.post('/create-rendezVous', verifierAuthentification, rendezVousController.createRendezvous);//OK
+router.get('/disponible-rendezVous', verifierAuthentification, rendezVousController.listRendezVousDisponible);//OK
+router.post('/reserve-rendezVous', verifierAuthentification, rendezVousController.reserveRendezVous);
+router.post('/assingn-mecanicien-disponibles-rendezVous', verifierAuthentification, rendezVousController.assignAvailableMecanicien);//OK
+router.post('/assign-mecanicien-rendezVous', verifierAuthentification, rendezVousController.assignRendezVous);//OK
+router.get('/list-assignedrendezVous', verifierAuthentification, rendezVousController.assignedRendezVous); //OK
+router.get('/listMecaniciens', verifierAuthentification, rendezVousController.recupererMecanicien); //OK
+router.get('/listSatus', verifierAuthentification, rendezVousController.recupererStatusRendezVous);
+router.get('/listRendezVous', verifierAuthentification, rendezVousController.listRendezVous);
+
+
 // Utilisateur 
 router.get('/get-utilisateur', utilisateurController.getAllUser)
 router.get('/users-details', utilisateurController.usersDetails)

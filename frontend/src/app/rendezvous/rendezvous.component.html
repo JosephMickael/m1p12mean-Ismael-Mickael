@@ -1,157 +1,193 @@
-<div class="container mt-4">
-  <h2>Gestion des Rendez-vous</h2>
+<div class="container mt-5">
+  <h1 class="mb-4 fw-bold">Gestion des Rendez-vous</h1>
 
   <!-- Section Client -->
-  <div *ngIf="userRole == 'client'">
-    <p>Bienvenue, cher client !</p>
+  <div *ngIf="userRole == 'client'" class="py-3">
+    <div class="mb-4">
+      <p class="fs-5 text-muted">Bienvenue dans votre espace personnel</p>
 
-    <!-- Comptage des rendez-vous -->
-    <div *ngFor="let status of statusRendezVous; let i = index">
-      <div *ngIf="status.status === 'En attente'" class="alert alert-info">
-        <p>Rendez-vous en attente</p>
-        {{ status.count }}
-      </div>
-    
-      <div *ngIf="status.status === 'Confirmé'" class="alert alert-success">
-        <p>Rendez-vous confirmés</p>
-        {{ status.count }}
-      </div>
-    
-      <div *ngIf="status.status === 'Annulé'" class="alert alert-danger">
-        <p>Rendez-vous annulés</p>
-        {{ status.count }}
-      </div>
-    </div>
-
-    <!-- Liste des rendez-vous disponibles -->
-    <h4>Liste des rendez-vous disponibles</h4>
-    <div class="card">
-      <div class="card-body">
-        <ul class="list-group">
-          <li *ngFor="let rdv of availableRendezvous" class="list-group-item d-flex justify-content-between align-items-center">
-            {{ formatDate(rdv.date) }} à {{ rdv.heure }}
-            <button class="btn btn-primary btn-sm" (click)="reserveavailableRendezvous(rdv._id)">Réserver</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div *ngIf="successReservation" class="alert alert-success mt-3" role="alert">
-      {{ successReservation }}
-    </div>
-
-    <!-- Création d'un rendez-vous -->
-    <h4>Créer un rendez-vous</h4>
-    <div class="card">
-      <div class="card-body">
-          <div class="mb-3">
-            <mat-form-field appearance="outline">
-              <mat-label>Date</mat-label>
-              <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="Sélectionner une date" />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+      <!-- Statistiques des rendez-vous -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4" *ngFor="let status of statusRendezVous">
+          <div class="card shadow-sm h-100" [ngClass]="{'border-info': status.status === 'En attente', 
+                          'border-success': status.status === 'Confirmé', 
+                          'border-danger': status.status === 'Annulé'}">
+            <div class="card-body text-center">
+              <h3 class="mb-2">{{ status.count }}</h3>
+              <p class="mb-0 text-muted">Rendez-vous {{ status.status.toLowerCase() }}</p>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div class="mb-3">
-            <mat-form-field appearance="outline">
-              <mat-label>Heure</mat-label>
-              <input matInput [ngxMatTimepicker]="timepicker" [(ngModel)]="selectedTime">
-              <ngx-mat-timepicker #timepicker></ngx-mat-timepicker>
-            </mat-form-field>
+      <!-- Liste des rendez-vous disponibles -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Rendez-vous disponibles</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <div *ngFor="let rdv of availableRendezvous"
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-top">
+              <div>
+                <i class="bi bi-calendar-check me-2 text-primary"></i>
+                <span class="fw-medium">{{ formatDate(rdv.date) }}</span> à <span class="fw-medium">{{ rdv.heure
+                  }}</span>
+              </div>
+              <button class="btn btn-sm btn-outline-primary"
+                (click)="reserveavailableRendezvous(rdv._id)">Réserver</button>
+            </div>
           </div>
-
-        <!-- Services demandés -->
-        <div class="mb-3">
-          <label for="serviceSelect" class="form-label">Sélectionner un service</label>
-          <select class="form-select" id="serviceSelect" [(ngModel)]="selectedService" name="serviceSelect" required>
-            <option value="">-- Sélectionnez un service --</option>
-            <option value="vidange">Vidange</option>
-            <option value="diagnostic">Diagnostic moteur</option>
-            <option value="reparation">Réparation mécanique</option>
-            <option value="carrosserie">Réparation carrosserie</option>
-            <option value="autre">Autre</option>
-          </select>
+          <div *ngIf="!availableRendezvous || availableRendezvous.length === 0" class="text-center py-3 text-muted">
+            Aucun rendez-vous disponible pour le moment
+          </div>
         </div>
-
-        <div *ngIf="selectedService === 'autre'" class="mb-3">
-          <label for="serviceDetails" class="form-label">Commentaires ou problème spécifique</label>
-          <textarea class="form-control"  [(ngModel)]="autresServices" rows="3" placeholder="Décrivez le problème ou ajoutez des commentaires" required></textarea>
-        </div>
-
-      <div *ngIf="selectedService === 'autre' && !autresServices" class="alert alert-danger">
-        Veuillez préciser les détails du service.
       </div>
 
-      <button *ngIf="selectedService === 'autre'; else elseBlock" type="button" class="btn btn-success" (click)="createAutoRendezVous(selectedDate, selectedTime, autresServices)">Créer</button>
-      <ng-template #elseBlock>
-        <button type="button" class="btn btn-success" (click)="createAutoRendezVous(selectedDate, selectedTime, selectedService)">Créer</button>
-      </ng-template>
-      
+      <div *ngIf="successReservation" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>{{ successReservation }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
-    </div>
 
-    <div *ngIf="errorMessageDate" class="alert alert-danger mt-3" role="alert">
-      {{ errorMessageDate }}
-    </div>    
+      <!-- Création d'un rendez-vous -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Nouveau rendez-vous</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row g-3">
+              <div class="form-floating col-md-6">
+                <input type="date" class="form-control" [(ngModel)]="selectedDate" name="date"
+                  placeholder="Sélectionner une date" />
+              </div>
 
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
-      {{ errorMessage }}
-    </div>
+              <div class="form-floating col-md-6">
+                <input type="time" class="form-control" [(ngModel)]="selectedTime" name="time">
+              </div>
 
-    <div *ngIf="success" class="alert alert-success mt-3" role="alert">
-      {{ success }}
+              <div class="form-floating mb-1">
+                <select class="form-select" id="floatingSelect" [(ngModel)]="selectedService" name="serviceSelect">
+                  <option value="">-- Sélectionnez un service --</option>
+                  <option value="vidange">Vidange</option>
+                  <option value="diagnostic">Diagnostic moteur</option>
+                  <option value="reparation">Réparation mécanique</option>
+                  <option value="carrosserie">Réparation carrosserie</option>
+                  <option value="autre">Autre</option>
+                </select>
+                <label class="ms-1" for="floatingSelect">Description</label>
+              </div>
+              <div *ngIf="selectedService === 'autre'">
+                <label for="serviceDetails" class="form-label ms-1">Commentaires ou problème spécifique*</label>
+                <textarea class="form-control" [(ngModel)]="autresServices" rows="3"
+                  placeholder="Décrivez le problème ou ajoutez des commentaires" required></textarea>
+                <div *ngIf="selectedService === 'autre' && !autresServices" class="mt-3 alert alert-danger">
+                  Veuillez préciser les détails du service.
+                </div>
+              </div>
+
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+              <button type="button" class="btn text-white"
+                (click)="createAutoRendezVous(selectedDate, selectedTime, selectedService)"
+                style="background-color: var(--main-vert);">
+                <i class="bi bi-calendar-plus me-2"></i>Créer le rendez-vous
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessageDate || errorMessage" class="alert alert-danger alert-dismissible fade show mt-3"
+        role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ errorMessageDate || errorMessage }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      <div *ngIf="success" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-check-circle me-2"></i>{{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     </div>
   </div>
 
   <!-- Section Mécanicien -->
-  <div *ngIf="userRole == 'mecanicien'">
-    <h3>Espace Mécanicien</h3>
-    <p>Bienvenue, cher mécanicien !</p>
+  <div *ngIf="userRole == 'mecanicien'" class="py-3">
+    <div class="mb-4">
+      <p class="fs-5 text-muted">Bienvenue dans votre espace mécanicien</p>
 
-    <!-- Liste des rendez-vous assignés -->
-    <h4>Rendez-vous assignés</h4>
-    <div class="card">
-      <div class="card-body">
-        <ul class="list-group">
-          <li *ngFor="let rdv of assignedRendezvous" class="list-group-item">
-            {{ formatDate(rdv.date) }} à {{ rdv.heure }} - Client: 
-            <span *ngIf="rdv.client">{{ rdv.client.nom }}</span>
-            <span *ngIf="!rdv.client">Client non disponible</span>
-          </li>
-        </ul>
+      <!-- Liste des rendez-vous assignés -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Rendez-vous assignés</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <div *ngFor="let rdv of assignedRendezvous"
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-top">
+              <div>
+                <div class="fw-medium">{{ formatDate(rdv.date) }} à {{ rdv.heure }}</div>
+                <div class="text-muted">
+                  <span *ngIf="rdv.client" class="me-2">Client: {{ rdv.client.nom }}</span>
+                  <span *ngIf="rdv.service" class="badge bg-light text-dark">{{ rdv.service }}</span>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary">Détails</button>
+            </div>
+          </div>
+          <div *ngIf="!assignedRendezvous || assignedRendezvous.length === 0" class="text-center py-3 text-muted">
+            Aucun rendez-vous assigné pour le moment
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Section Manager -->
-  <div *ngIf="userRole == 'manager'">
-    <h3>Espace Manager</h3>
-    <p>Bienvenue, cher manager !</p>
+  <div *ngIf="userRole == 'manager'" class="py-3">
+    <div class="mb-4">
+      <p class="fs-5 text-muted">Bienvenue dans votre espace manager</p>
 
-    <!-- Assigner un mécanicien à un rendez-vous -->
-    <h4>Assigner un mécanicien à un rendez-vous</h4>
-    <div class="card">
-      <div class="card-body">
-          <div class="mb-3">
-            <label for="selectedRendezVous" class="form-label">Sélectionner un rendez-vous :</label>
-            <select class="form-select" [(ngModel)]="selectedRendezVous" id="selectedRendezVous" required>
-              <option *ngFor="let rdv of availableRendezvous" [value]="rdv._id">
-                {{ formatDate(rdv.date) }} à {{ rdv.heure }}
-              </option>
-            </select>
-          </div>
+      <!-- Assigner un mécanicien à un rendez-vous -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Assigner un mécanicien</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Rendez-vous</mat-label>
+                  <mat-select [(ngModel)]="selectedRendezVous" name="selectedRendezVous" required>
+                    <mat-option *ngFor="let rdv of availableRendezvous" [value]="rdv._id">
+                      {{ formatDate(rdv.date) }} à {{ rdv.heure }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-          <div class="mb-3">
-            <label for="selectedMecanicien" class="form-label">Sélectionner un mécanicien :</label>
-            <select class="form-select" [(ngModel)]="selectedMecanicien" id="selectedMecanicien" required>
-              <option *ngFor="let mec of mecaniciens" [value]="mec._id">
-                {{ mec.nom }}
-              </option>
-            </select>
-          </div>
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Mécanicien</mat-label>
+                  <mat-select [(ngModel)]="selectedMecanicien" name="selectedMecanicien" required>
+                    <mat-option *ngFor="let mec of mecaniciens" [value]="mec._id">
+                      {{ mec.nom }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
 
-          <button type="button" class="btn btn-primary" (click)="assignRendezVous(selectedRendezVous, selectedMecanicien)">Assigner</button>
+            <div class="d-grid gap-2 mt-3">
+              <button type="button" class="btn btn-primary"
+                (click)="assignRendezVous(selectedRendezVous, selectedMecanicien)">
+                <i class="bi bi-person-check me-2"></i>Assigner
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

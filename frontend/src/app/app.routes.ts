@@ -10,15 +10,13 @@ import { ManagerPageComponent } from './manager-page/manager-page.component';
 import { UtilisateursComponent } from './manager-page/pages/utilisateurs/utilisateurs.component';
 import { AcceuilComponent } from './manager-page/pages/acceuil/acceuil.component';
 import { ProfilComponent } from './profil/profil.component';
+import { AcceuilClientComponent } from './client-page/pages/acceuil-client/acceuil-client.component';
 
 export const routes: Routes = [
-    { path: 'create-rendezvous', component: RendezvousComponent },
-
     // Lorsque l'URL est vide, rediriger vers 'login'
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
     { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
-    // { path: '**', redirectTo: '/manager-page', canActivate: [RoleGuard], data: { role: 'manager' } },
     // Route pour les clients
     {
         path: 'client-page',
@@ -27,8 +25,24 @@ export const routes: Routes = [
         data: { role: 'client' },
         children: [
             {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'acceuil'
+            },
+            {
+                path: 'acceuil',
+                component: AcceuilClientComponent,
+                data: { role: 'client' }
+            },
+            {
                 path: 'profil',
                 component: ProfilComponent,
+            },
+            {
+                path: 'create-rendezvous',
+                component: RendezvousComponent,
+                canActivate: [RoleGuard],
+                data: { role: 'client' }
             }
         ]
     },

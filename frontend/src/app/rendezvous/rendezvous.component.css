@@ -1,0 +1,8 @@
+.form-select {
+    width: 100%;
+    min-width: 200px;
+}
+
+.form-select option {
+    white-space: normal;
+}

@@ -10,10 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './client-page.component.css'
 })
 export class ClientPageComponent {
-  constructor(
-    private router: Router,
-    private authservice: AuthService
-  ) { }
+  constructor(private router: Router, private authservice: AuthService) { }
 
   logout() {
     this.authservice.logout();

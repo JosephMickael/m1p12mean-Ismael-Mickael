@@ -1,4 +1,3 @@
 #btn_connexion {
-    background: #59d88e;
-    color: whitesmoke;
+    background: var(--main-vert);
 }

@@ -1,5 +1,5 @@
 #btn_inscription {
-    background: #59d88e;
+    background: var(--main-vert);
     color: whitesmoke;
 }
 

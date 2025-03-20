@@ -41,7 +41,7 @@ import { DatePipe } from '@angular/common';
 })
 export class RendezvousComponent implements OnInit {
 
-  listRendezVous: string = "";
+  listRendezVous: any[] = [];
   availableRendezvous: any[] = [];
   mecaniciens: any[] = [];
   userRole: any = [];
@@ -58,6 +58,8 @@ export class RendezvousComponent implements OnInit {
   statusRendezVous: any[] = [];
   selectedService: string = "";
   autresServices: string = "";
+  statistics: any = {}; 
+  confirmation: string = ""; 
 
 
 
@@ -68,6 +70,7 @@ export class RendezvousComponent implements OnInit {
     this.listAvailableRendezvous();
     this.listMecaniciens();
     this.getStatusRendezVous();
+    this.getRendezVous(); 
     if (this.userRole == 'mecanicien') {
       this.listAssignedRendezvous();
     }
@@ -78,11 +81,25 @@ export class RendezvousComponent implements OnInit {
     return this.datePipe.transform(date, 'dd MMMM yyyy') || '';
   }
 
-  // Liste de rendezVous du client et du mecanicien 
+  // Liste de rendezVous proche et du jour selon le role de user
   getRendezVous(): void {
-    this.rendezVous.listRendezVous().subscribe((data) => {
-      this.listRendezVous = data;
-    })
+    this.rendezVous.listRendezVous().subscribe(
+      (response) => {
+        if (response.appointments) {
+          this.listRendezVous = response.appointments;
+          this.statistics = {
+            total: response.total || 0,
+            confirmes: response.confirmes || 0,
+            annules: response.annules || 0
+          };
+        } else {
+          this.listRendezVous = response;
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des rendez-vous', error);
+      }
+    );
   }
 
   // Comtage des status rendezVous 
@@ -192,10 +209,28 @@ export class RendezvousComponent implements OnInit {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);  // Mois commence à 0 en JavaScript
   }
-
+  //confirmer un rendezVous 
+  confirmerRendezVous(rendezVousId: string): void {
+    this.confirmation = ""; 
+    this.rendezVous.confirmerRendezVous(rendezVousId).subscribe(
+      () => {
+      this.getRendezVous();
+      this.confirmation = "Rendez-vous confirmé avec succés";
+      setTimeout(()=> {
+        this.confirmation=""; 
+      }, 5000)
+      }
+    );
+  }
   //annulerRendezVous 
   annulerRendezVous(rendezVousId: string): void {
-    this.rendezVous.annulerRendezVous(rendezVousId).subscribe(() =>
-      this.listAvailableRendezvous());
+    this.confirmation = ""; 
+    this.rendezVous.annulerRendezVous(rendezVousId).subscribe(
+      () => {
+      this.getRendezVous();
+      this.confirmation = "Rendez-vous annulé avec succés";
+      setTimeout(()=> {
+        this.confirmation=""; 
+      }, 5000)})
   }
 }

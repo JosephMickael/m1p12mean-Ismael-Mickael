@@ -84,10 +84,16 @@ export class RendezVous {
     return this.http.post<any>(`${environment.apiUrl}/assign-mecanicien-rendezVous`, { rendezVousId, mecanicienId} , { headers });
   }
 
+  //Confirmer un rendezVous
+  confirmerRendezVous(rendezVousId: string): Observable<any> {
+    const headers = this.createHeader();
+    return this.http.put<any>(`${environment.apiUrl}/confirmerRendezVous`, { rendezVousId } , { headers });
+  }
+
   // Annulation rendezVous 
   annulerRendezVous(rendezVousId: string): Observable<any> {
     const headers = this.createHeader(); 
-    return this.http.post<any>(`${environment.apiUrl}/annulerRendezVous`, { rendezVousId }, { headers }); 
+    return this.http.put<any>(`${environment.apiUrl}/annulerRendezVous`, { rendezVousId }, { headers }); 
   }
 
 

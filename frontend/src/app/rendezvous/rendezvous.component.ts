@@ -1,38 +1,20 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RendezVous } from '../services/rendezvous.service';
 import { Router } from '@angular/router';
-import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDateSelectionModel } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
-import { MatListItem, MatListModule } from '@angular/material/list';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
-import { DatePipe } from '@angular/common';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
+
 
 @Component({
   selector: 'app-rendezvous',
   imports: [
     FormsModule,
     CommonModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatCardModule,
-    MatNativeDateModule,
-    MatTableModule,
-    MatDatepickerModule,
-    MatListModule,
-    MatIconModule,
-    NgxMatTimepickerModule,
     ReactiveFormsModule
   ],
   templateUrl: './rendezvous.component.html',
@@ -41,7 +23,7 @@ import { DatePipe } from '@angular/common';
 })
 export class RendezvousComponent implements OnInit {
 
-  listRendezVous: string = "";
+  listRendezVous: any[] = [];
   availableRendezvous: any[] = [];
   mecaniciens: any[] = [];
   userRole: any = [];
@@ -58,6 +40,8 @@ export class RendezvousComponent implements OnInit {
   statusRendezVous: any[] = [];
   selectedService: string = "";
   autresServices: string = "";
+  statistics: any = {}; 
+  confirmation: string = ""; 
 
 
 
@@ -68,21 +52,36 @@ export class RendezvousComponent implements OnInit {
     this.listAvailableRendezvous();
     this.listMecaniciens();
     this.getStatusRendezVous();
+    this.getRendezVous(); 
     if (this.userRole == 'mecanicien') {
       this.listAssignedRendezvous();
     }
   }
 
   // Formatage date 
-  formatDate(date: string): string {
-    return this.datePipe.transform(date, 'dd MMMM yyyy') || '';
+  formatDate(date: string | Date): string | null {
+    return this.datePipe.transform(new Date(date), 'dd/MM/yyyy', 'fr-FR');
   }
 
-  // Liste de rendezVous du client et du mecanicien 
+  // Liste de rendezVous proche et du jour selon le role de user
   getRendezVous(): void {
-    this.rendezVous.listRendezVous().subscribe((data) => {
-      this.listRendezVous = data;
-    })
+    this.rendezVous.listRendezVous().subscribe(
+      (response) => {
+        if (response.appointments) {
+          this.listRendezVous = response.appointments;
+          this.statistics = {
+            total: response.total || 0,
+            confirmes: response.confirmes || 0,
+            annules: response.annules || 0
+          };
+        } else {
+          this.listRendezVous = response;
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des rendez-vous', error);
+      }
+    );
   }
 
   // Comtage des status rendezVous 
@@ -192,10 +191,28 @@ export class RendezvousComponent implements OnInit {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);  // Mois commence à 0 en JavaScript
   }
-
+  //confirmer un rendezVous 
+  confirmerRendezVous(rendezVousId: string): void {
+    this.confirmation = ""; 
+    this.rendezVous.confirmerRendezVous(rendezVousId).subscribe(
+      () => {
+      this.getRendezVous();
+      this.confirmation = "Rendez-vous confirmé avec succés";
+      setTimeout(()=> {
+        this.confirmation=""; 
+      }, 5000)
+      }
+    );
+  }
   //annulerRendezVous 
   annulerRendezVous(rendezVousId: string): void {
-    this.rendezVous.annulerRendezVous(rendezVousId).subscribe(() =>
-      this.listAvailableRendezvous());
+    this.confirmation = ""; 
+    this.rendezVous.annulerRendezVous(rendezVousId).subscribe(
+      () => {
+      this.getRendezVous();
+      this.confirmation = "Rendez-vous annulé avec succés";
+      setTimeout(()=> {
+        this.confirmation=""; 
+      }, 5000)})
   }
 }

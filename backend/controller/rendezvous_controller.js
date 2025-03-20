@@ -2,39 +2,135 @@ const express = require ('express');
 const  RendezVous = require('../models/Rendezvous'); 
 const Utilisateur = require('../models/Utilisateur');
 
-    // Récupérer status rendezVous 
+    // Récupérer status rendezVous aujourd'hui
     const recupererStatusRendezVous = async (req, res) => {
+            const now = new Date();
+            const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+            const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
 
             const userId = req.utilisateur._id; 
+
+            if (req.utilisateur.role == 'client') {
             const enAttente = await RendezVous.find({ status: { $in: ["en attente", "réservé", "assigné"] }, client: userId });
+            const confirme = await RendezVous.find({ status: "confirmé", client: userId }); 
+            const annule = await RendezVous.find({ status: "annulé", client: userId }); 
+            const nombreEnAttente = Object.keys(enAttente).length;
+            const nombreConfirme = Object.keys(confirme).length;
+            const nombreAnnule = Object.keys(annule).length; 
+            
+            const result = [
+            { status: "En attente", count: nombreEnAttente },
+            { status: "Confirmé", count: nombreConfirme },
+            { status: "Annulé", count: nombreAnnule },
+            ];
+            return res.status(202).json(result); 
+
+        } else if (req.utilisateur.role == 'mecanicien') {
+            const enAttente = await RendezVous.find({ status: { $in: ["en attente", "réservé", "assigné"] },  date: { $gte: startOfDay, $lte: endOfDay }, mecanicien: userId});
+            const termine = await RendezVous.find({status: "terminé",  date: { $gte: startOfDay, $lte: endOfDay }, mecanicien: userId} ); 
+            const nombreEnAttente = Object.keys(enAttente).length;
+            const nombreTermine = Object.keys(termine).length;
+
+            const appointments = await RendezVous.find({
+                date: { $gte: startOfDay, $lte: endOfDay }, mecanicien: userId
+            })          
+            const totalRDV = appointments.length;
+            const result = [
+                { status: "En attente", count: nombreEnAttente},
+                { status:"Terminé", count: nombreTermine},
+                { total: totalRDV }
+            ]
+            return res.status(202).json(result); 
+
+        } else if (req.utilisateur.role == "manager") {
+            const enAttente = await RendezVous.find({ status: { $in: ["en attente", "réservé", "assigné"]} });
             const confirme = await RendezVous.find({ status: "confirmé" }); 
             const annule = await RendezVous.find({ status: "anulé" }); 
             const nombreEnAttente = Object.keys(enAttente).length;
             const nombreConfirme = Object.keys(confirme).length;
             const nombreAnnule = Object.keys(annule).length; 
-
+            
             const result = [
             { status: "En attente", count: nombreEnAttente },
             { status: "Confirmé", count: nombreConfirme },
-            { status: "Annulé", count: nombreAnnule }
+            { status: "Annulé", count: nombreAnnule },
             ];
-
             return res.status(202).json(result); 
+        }
+        
+        return res.status(500).json({message: "Erreur du comptage"})
         
     }
-
-    // Liste rendezVous client et Meca 
+    
+    // Lister les rendezVous du jour 
     const listRendezVous = async (req, res) => {
         try {
-            const userId = req.utilisateur._id;  
-            const rendezVous = await RendezVous.find({ status: { $in : ["en attente", "réservé", "assigné", "confirmé"]}, 
-            client: userId })
-            return res.status(202).json(rendezVous); 
+            const userId = req.utilisateur._id;
+            const role = req.utilisateur.role;
+            //console.log(typeof role); 
+            const now = new Date();
+            const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));                
+            const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+    
+            if (role == 'client') {
+                // Récupérer les rendez-vous des 3 derniers mois
+                const threeMonthsAgo = new Date();
+                threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+    
+                const appointments = await RendezVous.find({
+                    status: { $in: ["en attente", "réservé", "assigné", "confirmé"] },
+                    client: userId,
+                    date: { $gte: threeMonthsAgo }
+                }).sort({ date: -1 });
+    
+                return res.status(200).json(appointments);
+    
+            } else if (role == 'mecanicien') {
+    
+                const appointments = await RendezVous.find({
+                    mecanicien: userId,
+                    date: { $gte: startOfDay, $lte: endOfDay }
+                })
+                .populate({path: "client", select: "nom"})
+                .sort({ date: 1 });
+
+                console.log("valeur de appoitement meca", appointments)
+    
+                return res.status(200).json(appointments);
+    
+            } else if (role == 'manager') {
+                
+                const appointments = await RendezVous.find({
+                    date: { $gte: startOfDay, $lte: endOfDay }
+                })
+                .populate([{path: "client", select: "nom"}, {path: "mecanicien", select: "nom"}])
+                .sort({ date: 1 })
+                .exec();
+                
+                //console.log("Rendez-vous récupérés:", appointments);
+                
+    
+                // Ajouter des statistiques pour le manager
+                const totalRDV = appointments.length;
+                const confirmes = appointments.filter(rdv => rdv.status == "confirmé").length;
+                const annules = appointments.filter(rdv => rdv.status == "annulé").length;
+    
+                return res.status(200).json({
+                    total: totalRDV,
+                    confirmes,
+                    annules,
+                    appointments
+                });
+            }
+    
+            res.status(403).json({ message: "Accès refusé" });
+    
         } catch (error) {
-            console.error(error)
-            res.status(500).json({message: "Erreur a la recup des rendezVous"})
+            console.error(error);
+            res.status(500).json({ message: "Erreur lors de la récupération des rendez-vous" });
         }
-    }
+    };
+    
 
     // Récupérer tous les utilisateurs ayant le rôle "mecanicien"
     const recupererMecanicien =  async (req, res) => {
@@ -51,7 +147,8 @@ const Utilisateur = require('../models/Utilisateur');
     //  Lister tous les rendezVous
     const listRendezVousDisponible = async (req, res) => { 
     try {
-        const rendezVous = await RendezVous.find({ status: "disponible" }); 
+        const rendezVous = await RendezVous.find({ status: "annulé" }); 
+        rendezVous.status = "disponible"; 
         return res.status(202).json(rendezVous);  
     } catch (error) {
         res.status(404).json({messsage: "Liste de rendezVous introuvable"}); 
@@ -59,7 +156,7 @@ const Utilisateur = require('../models/Utilisateur');
 }
 
 
-  //creer un rendezVous et assigner automatiquement un mecanicien disponible 
+  //creer un rendezVous et assigner automatiquement un mecanicien aleatoirement 
   const createRendezvous = async (req, res) => {
 
     try {
@@ -69,21 +166,19 @@ const Utilisateur = require('../models/Utilisateur');
         }
 
         const { heure, date, status, services } = req.body; 
-        const client = req.utilisateur._id;
-        const mecanicienDisponible = await Utilisateur.findOne({role: "mecanicien"});
-        
-        const mecanicien = mecanicienDisponible ? mecanicienDisponible._id : null; 
-
-        if (mecanicienDisponible) {
-            mecanicienDisponible.disponible = false; 
-            mecanicienDisponible.save(); 
-        }
-        
-        const rendezvous = new RendezVous({ heure, date, status,services , client, mecanicien: [mecanicien] }); 
+        const client = req.utilisateur._id;     
+        const mecanicienDisponible = await Utilisateur.aggregate([
+            { $match: { role: "mecanicien" } }, 
+            { $sample: { size: 1 } }           
+          ]);
+        //console.log("Mecanicien id", mecanicienDisponible._id); 
+        mecanicienId = mecanicienDisponible[0]._id ; 
+        const rendezvous = new RendezVous({ heure, date, status,services , client, mecanicien: [mecanicienId] }); 
+        //console.log("rendezVous creer",rendezvous)
         await rendezvous.save(); 
         return res.status(202).json(rendezvous); 
     } catch (error) {
-      return  res.status(500).json({ message: error.message}); 
+      return  res.status(500).json({ message: "Erreur back"+error.message}); 
     }
 }
 
@@ -92,8 +187,10 @@ const Utilisateur = require('../models/Utilisateur');
         const reserveRendezVous = async (req, res) => {
             
                 const {rendezVousId} = req.body; 
-                const clientId = req.utilisateur._id;               
-                const rendezVous = await RendezVous.findOne({_id: rendezVousId, status: "disponible"}); 
+                const clientId = req.utilisateur._id; 
+                //console.log(clientId);               
+                const rendezVous = await RendezVous.findOne({_id: rendezVousId, status: "annulé"}); 
+                //console.log("Valeur de la rendezVous", rendezVous);
                 rendezVous.client = clientId; 
                 rendezVous.status= "réservé"; 
                 await rendezVous.save(); 
@@ -174,6 +271,25 @@ const Utilisateur = require('../models/Utilisateur');
         }
 };
 
+        // confirmer rendezVous 
+        const confirmerRendezVous = async (req, res) => {
+            try {
+                const { rendezVousId } = req.body; 
+                console.log(rendezVousId); 
+                const rendezVousAnnule = await RendezVous.findByIdAndUpdate( rendezVousId, 
+                    { status: 'confirmé'},
+                    { new: true }
+                );
+                console.log("test", rendezVousAnnule); 
+                if (!rendezVousAnnule) {
+                    res.status(404).json({message: "RDV non trouvé"})
+                }
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({message: "erreur lors de la confirmation"})
+            }
+        }
+
         // Annuler un rendezVous 
         const annulationRendezVous = async (req, res) => {
             try {
@@ -193,5 +309,5 @@ const Utilisateur = require('../models/Utilisateur');
         
 
 
-module.exports = {listRendezVous, annulationRendezVous, recupererMecanicien, recupererStatusRendezVous, createRendezvous, reserveRendezVous, assignRendezVous, assignAvailableMecanicien, listRendezVousDisponible, assignedRendezVous}; 
+module.exports = {confirmerRendezVous, listRendezVous, annulationRendezVous, recupererMecanicien, recupererStatusRendezVous, createRendezvous, reserveRendezVous, assignRendezVous, assignAvailableMecanicien, listRendezVousDisponible, assignedRendezVous}; 
 

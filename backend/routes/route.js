@@ -15,6 +15,10 @@ router.get('/list-assignedrendezVous', verifierAuthentification, rendezVousContr
 router.get('/listMecaniciens', verifierAuthentification, rendezVousController.recupererMecanicien); //OK
 router.get('/listSatus', verifierAuthentification, rendezVousController.recupererStatusRendezVous);
 router.get('/listRendezVous', verifierAuthentification, rendezVousController.listRendezVous);
+router.put('/confirmerRendezVous', verifierAuthentification, rendezVousController.confirmerRendezVous);
+router.put('/annulerRendezVous', verifierAuthentification, rendezVousController.annulationRendezVous);
+
+
 
 
 // Utilisateur 
@@ -27,12 +31,6 @@ router.get('/current-user', verifierAuthentification, utilisateurController.getC
 router.put('/update-password', verifierAuthentification, utilisateurController.updatePassword);
 // router.get('/user/:id', utilisateurController.getUserById)
 
-// Rendezvous 
-router.post('/create-rendezVous', verifierAuthentification, rendezVousController.createRendezvous);
-router.get('/disponible-rendezVous', rendezVousController.listRendezVous);
-router.post('/reserve-rendezVous', verifierAuthentification, rendezVousController.reserveRendezVous);
-router.post('/assingn-mecanicien-disponibles-rendezVous', rendezVousController.assignAvailableMecanicien);// choisi par le Système et le client
-router.post('/assign-mecanicien', rendezVousController.assignRendezVous);// choisi par le manager
 
 
 const authenticationController = require('../controller/Auth_controller');

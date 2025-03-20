@@ -5,8 +5,8 @@ const RendezVousSchema = new mongoose.Schema({
     heure : { type: String, required: true}, 
     date : { type: Date, required: true}, 
     status : { type: String, 
-      default: "disponible",   
-      enum: ["en attente", "confirmé", "assigné", "annulé", "disponible", "réservé"]
+      default: "en attente",   
+      enum: ["en attente", "confirmé", "assigné", "annulé", "disponible", "réservé", "terminé"]
     },
     services : { type: String, required: true, default: ''},
     client : {

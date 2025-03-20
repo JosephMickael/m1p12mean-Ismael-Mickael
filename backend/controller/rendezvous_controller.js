@@ -93,6 +93,8 @@ const Utilisateur = require('../models/Utilisateur');
                 })
                 .populate({path: "client", select: "nom"})
                 .sort({ date: 1 });
+
+                console.log("valeur de appoitement meca", appointments)
     
                 return res.status(200).json(appointments);
     
@@ -154,7 +156,7 @@ const Utilisateur = require('../models/Utilisateur');
 }
 
 
-  //creer un rendezVous et assigner automatiquement un mecanicien disponible 
+  //creer un rendezVous et assigner automatiquement un mecanicien aleatoirement 
   const createRendezvous = async (req, res) => {
 
     try {
@@ -165,8 +167,14 @@ const Utilisateur = require('../models/Utilisateur');
 
         const { heure, date, status, services } = req.body; 
         const client = req.utilisateur._id;     
-        const mecanicienDisponible = await Utilisateur.findOne({ role: "mecanicien"});   
-        const rendezvous = new RendezVous({ heure, date, status,services , client, mecanicien: [mecanicienDisponible] }); 
+        const mecanicienDisponible = await Utilisateur.aggregate([
+            { $match: { role: "mecanicien" } }, 
+            { $sample: { size: 1 } }           
+          ]);
+        //console.log("Mecanicien id", mecanicienDisponible._id); 
+        mecanicienId = mecanicienDisponible[0]._id ; 
+        const rendezvous = new RendezVous({ heure, date, status,services , client, mecanicien: [mecanicienId] }); 
+        //console.log("rendezVous creer",rendezvous)
         await rendezvous.save(); 
         return res.status(202).json(rendezvous); 
     } catch (error) {

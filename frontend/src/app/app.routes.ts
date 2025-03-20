@@ -13,6 +13,11 @@ import { ProfilComponent } from './profil/profil.component';
 import { AcceuilClientComponent } from './client-page/pages/acceuil-client/acceuil-client.component';
 
 export const routes: Routes = [
+
+    //Test 
+    { path: 'create-rendezvous', component: RendezvousComponent },
+
+
     // Lorsque l'URL est vide, rediriger vers 'login'
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },

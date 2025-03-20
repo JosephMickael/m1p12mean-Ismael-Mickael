@@ -112,7 +112,7 @@
                 }
                 <form [formGroup]="userForm">
                     <div class="mb-3">
-                        <label for="nom" class="form-label">Nom complet</label>
+                        <label for="nom" class="form-label small text-muted">Nom complet</label>
                         <input type="text" class="form-control" id="nom" formControlName="nom"
                             placeholder="Entrez le nom complet">
                         <div *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched" class="text-danger">
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label small text-muted">Email</label>
                         <input type="email" class="form-control" id="email" formControlName="email"
                             placeholder="Entrez l'email">
                         <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="mb-3" *ngIf="!isEditMode">
-                        <label for="password" class="form-label">Mot de passe</label>
+                        <label for="password" class="form-label small text-muted">Mot de passe</label>
                         <div class="input-group">
                             <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
                                 formControlName="motDePasse" placeholder="Entrez le mot de passe">
@@ -144,7 +144,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="role" class="form-label">Rôle</label>
+                        <label for="role" class="form-label small text-muted">Rôle</label>
                         <select class="form-select" id="role" formControlName="role">
                             <option value="">Sélectionnez un rôle</option>
                             <option value="manager">Manager</option>

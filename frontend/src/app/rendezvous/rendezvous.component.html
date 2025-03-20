@@ -41,10 +41,10 @@
       <table class="table table-striped text-center">
           <thead>
               <tr>
-                  <th>Date</th>
-                  <th>Statut</th>
-                  <th>Description</th>
-                  <th>Actions</th>
+                <th>🗓️ Date</th>
+                <th>⚙️ Statut</th>
+                <th>📋 Description</th>
+                <th>🖊️ Actions</th>                
               </tr>
           </thead>
           <tbody>
@@ -91,24 +91,33 @@
   
 
     <!-- Liste des rendez-vous disponibles -->
-    <h3>Liste des rendez-vous disponibles</h3>
-    <div class="card">
+    <div class="card mt-4">
+      <div class="card-header bg-primary text-white">
+        <h5>Liste des rendez-vous disponibles</h5>
+      </div>
       <div class="card-body">
         <ul class="list-group">
           <li *ngFor="let rdv of availableRendezvous" class="list-group-item d-flex justify-content-between align-items-center">
-            {{ formatDate(rdv.date) }} à {{ rdv.heure }}
-            <button class="btn btn-primary btn-sm" (click)="reserveavailableRendezvous(rdv._id)">Réserver</button>
+            <span>{{ formatDate(rdv.date) }} à {{ rdv.heure }}</span>
+    
+            <button class="btn btn-success btn-sm" (click)="reserveavailableRendezvous(rdv._id)">
+              <i class="fas fa-calendar-check"></i> Réserver
+            </button>
           </li>
         </ul>
       </div>
     </div>
+    
 
     <div *ngIf="successReservation" class="alert alert-success mt-3" role="alert">
       {{ successReservation }}
     </div>
 
     <!-- Création d'un rendez-vous -->
-    <h4>Créer un rendez-vous</h4>
+    <div class="card mt-4">
+      <div class="card-header bg-primary text-white">
+        <h5>Créer un rendez-vous</h5>
+      </div>
     <div class="card">
       <div class="card-body">
         <div class="mb-3">
@@ -164,6 +173,7 @@
       {{ success }}
     </div>
   </div>
+  </div>
 
   <!-- Section Mécanicien -->
   <div *ngIf="userRole == 'mecanicien'">
@@ -188,16 +198,13 @@
     </div>
   
     
-<div class="container mt-4">
-  <h3 class="mb-3 text-center">Mes Rendez-vous du jour</h3>
-
   <div class="card mt-4">
     <div class="card-header bg-secondary text-white">
         <h5>📅 Rendez-vous du jour</h5>
     </div>
     <div class="card-body">
         <table class="table table-striped text-center align-middle">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th>🕒 Heure</th>
                     <th>👤 Client</th>
@@ -230,53 +237,54 @@
   <div *ngIf="!listRendezVous || listRendezVous.length === 0" class="alert alert-warning text-center">
     Aucun rendez-vous prévu pour aujourd’hui.
   </div>
+
+   
+  <div *ngIf="!listRendezVous || listRendezVous.length === 0">
+    <p>Aucun rendez-vous pour aujourd'hui.</p>
 </div>
 
-    
-    <div *ngIf="!listRendezVous || listRendezVous.length === 0">
-        <p>Aucun rendez-vous pour aujourd'hui.</p>
-    </div>
+<!-- Liste des rendez-vous assignés -->
+<div class="card mt-4">
+  <div class="card-header bg-secondary text-white">
+      <h5>📅 Rendez-vous assignés par le Manager</h5>
+  </div>
+  <div class="card-body">
+      <table class="table table-striped text-center align-middle">
+          <thead>
+              <tr>
+                  <th>🕒 Heure</th>
+                  <th>👤 Client</th>
+                  <th>⚙️ Statut</th>
+                  <th>📋 Description</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let rdv of assignedRendezvous">
+                  <td><strong>{{ rdv.heure }}</strong></td>
+                  <td>
+                      <span *ngIf="rdv.client">{{ rdv.client.nom }}</span>
+                      <span *ngIf="!rdv.client" class="text-muted">Client non disponible</span>
+                  </td>
+                  <td>
+                      <span 
+                            [ngClass]="{
+                                'bg-warning': rdv.status == 'En attente',
+                                'bg-success': rdv.status == 'Confirmé',
+                                'bg-danger': rdv.status == 'Annulé'
+                            }" 
+                            class="badge text-white">
+                          {{ rdv.status }}
+                      </span>
+                  </td>
+                  <td>{{ rdv.services }}</td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
+</div>
 
-    <!-- Liste des rendez-vous assignés -->
-    <div class="card mt-4">
-      <div class="card-header bg-secondary text-white">
-          <h5>📅 Rendez-vous assignés par le Manager</h5>
-      </div>
-      <div class="card-body">
-          <table class="table table-striped text-center align-middle">
-              <thead class="table-dark">
-                  <tr>
-                      <th>🕒 Heure</th>
-                      <th>👤 Client</th>
-                      <th>⚙️ Statut</th>
-                      <th>📋 Description</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr *ngFor="let rdv of assignedRendezvous">
-                      <td><strong>{{ rdv.heure }}</strong></td>
-                      <td>
-                          <span *ngIf="rdv.client">{{ rdv.client.nom }}</span>
-                          <span *ngIf="!rdv.client" class="text-muted">Client non disponible</span>
-                      </td>
-                      <td>
-                          <span 
-                                [ngClass]="{
-                                    'bg-warning': rdv.status == 'En attente',
-                                    'bg-success': rdv.status == 'Confirmé',
-                                    'bg-danger': rdv.status == 'Annulé'
-                                }" 
-                                class="badge text-white">
-                              {{ rdv.status }}
-                          </span>
-                      </td>
-                      <td>{{ rdv.services }}</td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-  </div>
-  </div>
+   
   
 
 
@@ -325,11 +333,11 @@
         <table class="table table-striped text-center">
             <thead>
                 <tr>
-                    <th>Heure</th>
-                    <th>Client</th>
-                    <th>Mécanicien</th>
-                    <th>Statut</th>
-                    <th>Description</th>
+                  <th>🕒 Heure</th>
+                  <th>👤 Client</th>
+                  <th>🛠️ Mécanicien</th>
+                  <th>⚙️ Statut</th>
+                  <th>📋 Description</th>                  
                 </tr>
             </thead>
             <tbody>

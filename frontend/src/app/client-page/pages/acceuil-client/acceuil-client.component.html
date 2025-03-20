@@ -1,0 +1,112 @@
+<div class="px-2 mt-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+        <h1 class="fw-bold">Bienvenue !</h1>
+    </div>
+
+    <!-- Section résumé -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white mb-3 rdv-attente">
+                <div class="card-body">
+                    <h5 class="card-title">Rendez-vous en attente</h5>
+                    <p class="card-text fs-3">3</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white mb-3 rdv-confirme">
+                <div class="card-body">
+                    <h5 class="card-title">Rendez-vous confirmés</h5>
+                    <p class="card-text fs-3">5</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white mb-3 rdv-annule">
+                <div class="card-body">
+                    <h5 class="card-title">Rendez-vous annulés</h5>
+                    <p class="card-text fs-3">1</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des rendez-vous récents -->
+    <div class="card mt-4">
+        <div class="card-header text-white" style="background-color: var(--main-gray);">
+            <h5>Derniers rendez-vous</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>20 Mars 2025</td>
+                        <td>10:00</td>
+                        <td><span class="badge bg-success">Confirmé</span></td>
+                    </tr>
+                    <tr>
+                        <td>25 Mars 2025</td>
+                        <td>14:30</td>
+                        <td><span class="badge bg-warning">En attente</span></td>
+                    </tr>
+                    <tr>
+                        <td>28 Mars 2025</td>
+                        <td>09:00</td>
+                        <td><span class="badge bg-danger">Annulé</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <main class="container mt-4">
+    <h2 class="mb-4">Prendre un Rendez-vous</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form>
+       
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date du Rendez-vous :</label>
+                    <input type="date" class="form-control" id="date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="heure" class="form-label">Heure du Rendez-vous :</label>
+                    <input type="time" class="form-control" id="heure" required>
+                </div>
+
+    
+                <div class="mb-3">
+                    <label for="service" class="form-label">Service souhaité :</label>
+                    <select class="form-select" id="service" required>
+                        <option value="">-- Sélectionnez un service --</option>
+                        <option value="vidange">Vidange</option>
+                        <option value="diagnostic">Diagnostic moteur</option>
+                        <option value="reparation">Réparation mécanique</option>
+                        <option value="carrosserie">Réparation carrosserie</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="mecanicien" class="form-label">Mécanicien :</label>
+                    <select class="form-select" id="mecanicien" required>
+                        <option value="">-- Sélectionnez un mécanicien --</option>
+                        <option value="luc">Luc Garnier (Électricité)</option>
+                        <option value="sophie">Sophie Bernard (Carrosserie)</option>
+                        <option value="marc">Marc Leblanc (Mécanique Générale)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Confirmer le Rendez-vous</button>
+            </form>
+        </div>
+    </div>
+</main> -->

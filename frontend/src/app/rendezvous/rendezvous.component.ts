@@ -1,38 +1,20 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RendezVous } from '../services/rendezvous.service';
 import { Router } from '@angular/router';
-import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDateSelectionModel } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
-import { MatListItem, MatListModule } from '@angular/material/list';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
-import { DatePipe } from '@angular/common';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
+
 
 @Component({
   selector: 'app-rendezvous',
   imports: [
     FormsModule,
     CommonModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatCardModule,
-    MatNativeDateModule,
-    MatTableModule,
-    MatDatepickerModule,
-    MatListModule,
-    MatIconModule,
-    NgxMatTimepickerModule,
     ReactiveFormsModule
   ],
   templateUrl: './rendezvous.component.html',
@@ -77,8 +59,8 @@ export class RendezvousComponent implements OnInit {
   }
 
   // Formatage date 
-  formatDate(date: string): string {
-    return this.datePipe.transform(date, 'dd MMMM yyyy') || '';
+  formatDate(date: string | Date): string | null {
+    return this.datePipe.transform(new Date(date), 'dd/MM/yyyy', 'fr-FR');
   }
 
   // Liste de rendezVous proche et du jour selon le role de user

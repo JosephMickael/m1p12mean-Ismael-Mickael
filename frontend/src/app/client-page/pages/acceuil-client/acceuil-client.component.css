@@ -1,0 +1,14 @@
+.rdv-attente {
+    background-color: var(--main-orange);
+    border-color: var(--main-orange);
+}
+
+.rdv-confirme {
+    background-color: var(--main-vert);
+    border-color: var(--main-vert);
+}
+
+.rdv-annule {
+    background-color: var(--main-rouge);
+    border-color: var(--main-rouge);
+}

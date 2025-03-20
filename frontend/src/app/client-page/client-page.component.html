@@ -1,23 +1,34 @@
 <!-- Barre de navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--main-bleu);">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Garage</a>
+        <a class="navbar-brand" [routerLink]="['/client-page/acceuil']" routerLinkActive="active">
+            Garage - Espace client
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Accueil</a>
+                    <a class="nav-link active" [routerLink]="['/client-page/acceuil']" routerLinkActive="active">
+                        Accueil
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Mes Rendez-vous</a>
+                    <a class="nav-link active" [routerLink]="['/client-page/profil']" routerLinkActive="active">
+                        Profil
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/client-page/profil']" routerLinkActive="active">Profil</a>
+                    <a class="nav-link active" [routerLink]="['/client-page/create-rendezvous']"
+                        routerLinkActive="active">
+                        Rendez-vous
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white btn btn-danger btn-sm" (click)="logout()">Déconnexion</a>
+                    <a class="nav-link text-white btn btn-sm" (click)="logout()">
+                        Déconnexion
+                    </a>
                 </li>
             </ul>
         </div>
@@ -27,23 +38,22 @@
 <!-- Layout principal -->
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
+        <!-- Barre latérale -->
         <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
             <div class="position-sticky pt-3">
-                <h5 class="text-center">Espace Client</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link" [routerLink]="['/client-page/acceuil']" routerLinkActive="active">
                             <i class="bi bi-house"></i> Tableau de bord
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" [routerLink]="['/client-page/create-rendezvous']" routerLinkActive="active">
                             <i class="bi bi-calendar-check"></i> Mes Rendez-vous
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" [routerLink]="['/client-page/profil']" routerLinkActive="active">
                             <i class="bi bi-person"></i> Profil
                         </a>
                     </li>
@@ -52,127 +62,8 @@
         </div>
 
         <!-- Contenu principal -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div
-                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h2>Bienvenue, Client !</h2>
-            </div>
-
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
             <router-outlet></router-outlet>
-
-            <!-- Section résumé -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card text-white bg-primary mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Rendez-vous en attente</h5>
-                            <p class="card-text fs-3">3</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-white bg-success mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Rendez-vous confirmés</h5>
-                            <p class="card-text fs-3">5</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-white bg-danger mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Rendez-vous annulés</h5>
-                            <p class="card-text fs-3">1</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Liste des rendez-vous récents -->
-            <div class="card mt-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5>Derniers rendez-vous</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Heure</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>20 Mars 2025</td>
-                                <td>10:00</td>
-                                <td><span class="badge bg-success">Confirmé</span></td>
-                            </tr>
-                            <tr>
-                                <td>25 Mars 2025</td>
-                                <td>14:30</td>
-                                <td><span class="badge bg-warning">En attente</span></td>
-                            </tr>
-                            <tr>
-                                <td>28 Mars 2025</td>
-                                <td>09:00</td>
-                                <td><span class="badge bg-danger">Annulé</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <main class="container mt-4">
-                <h2 class="mb-4">Prendre un Rendez-vous</h2>
-
-                <div class="card">
-                    <div class="card-body">
-                        <form>
-                            <!-- Sélection de la date -->
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Date du Rendez-vous :</label>
-                                <input type="date" class="form-control" id="date" required>
-                            </div>
-
-                            <!-- Sélection de l'heure -->
-                            <div class="mb-3">
-                                <label for="heure" class="form-label">Heure du Rendez-vous :</label>
-                                <input type="time" class="form-control" id="heure" required>
-                            </div>
-
-                            <!-- Choix du service -->
-                            <div class="mb-3">
-                                <label for="service" class="form-label">Service souhaité :</label>
-                                <select class="form-select" id="service" required>
-                                    <option value="">-- Sélectionnez un service --</option>
-                                    <option value="vidange">Vidange</option>
-                                    <option value="diagnostic">Diagnostic moteur</option>
-                                    <option value="reparation">Réparation mécanique</option>
-                                    <option value="carrosserie">Réparation carrosserie</option>
-                                </select>
-                            </div>
-
-                            <!-- Sélection du mécanicien -->
-                            <div class="mb-3">
-                                <label for="mecanicien" class="form-label">Mécanicien :</label>
-                                <select class="form-select" id="mecanicien" required>
-                                    <option value="">-- Sélectionnez un mécanicien --</option>
-                                    <option value="luc">Luc Garnier (Électricité)</option>
-                                    <option value="sophie">Sophie Bernard (Carrosserie)</option>
-                                    <option value="marc">Marc Leblanc (Mécanique Générale)</option>
-                                </select>
-                            </div>
-
-                            <!-- Bouton de validation -->
-                            <button type="submit" class="btn btn-primary">Confirmer le Rendez-vous</button>
-                        </form>
-                    </div>
-                </div>
-            </main>
-
-
         </main>
     </div>
-
 </div>

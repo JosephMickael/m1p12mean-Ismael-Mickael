@@ -179,8 +179,10 @@ const Utilisateur = require('../models/Utilisateur');
         const reserveRendezVous = async (req, res) => {
             
                 const {rendezVousId} = req.body; 
-                const clientId = req.utilisateur._id;               
-                const rendezVous = await RendezVous.findOne({_id: rendezVousId, status: "disponible"}); 
+                const clientId = req.utilisateur._id; 
+                //console.log(clientId);               
+                const rendezVous = await RendezVous.findOne({_id: rendezVousId, status: "annulé"}); 
+                //console.log("Valeur de la rendezVous", rendezVous);
                 rendezVous.client = clientId; 
                 rendezVous.status= "réservé"; 
                 await rendezVous.save(); 

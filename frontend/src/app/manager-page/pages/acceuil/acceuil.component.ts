@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { RendezVous } from '../../../services/rendezvous.service';
 
 @Component({
   selector: 'app-acceuil',
@@ -13,14 +14,17 @@ export class AcceuilComponent {
   currentUser: any
   totalClients: any
   totalMecaniciens: any
+  rdvEnAttente: number = 0
+  rdvAnnule: number = 0
   lastClients: any[] = []
   lastMecaniciens: any[] = []
 
-  constructor(private userservice: UserService, private authservice: AuthService) { }
+  constructor(private userservice: UserService, private authservice: AuthService, private rdvservice: RendezVous) { }
 
   ngOnInit() {
     this.currentUser = this.authservice.getCurrentUser()
     this.getUsersDetails()
+    this.getRdvDetails()
   }
 
   getUsersDetails() {
@@ -32,6 +36,17 @@ export class AcceuilComponent {
         this.lastClients = response.lastClients
         this.lastMecaniciens = response.lastMecaniciens
 
+      }, error: (error) => {
+        console.error('Erreur:', error);
+      }
+    })
+  }
+
+  getRdvDetails() {
+    this.rdvservice.getRdvDetails().subscribe({
+      next: (response: any) => {
+        this.rdvEnAttente = response.rdvEnAttente
+        this.rdvAnnule = response.rdvAnnule
       }, error: (error) => {
         console.error('Erreur:', error);
       }

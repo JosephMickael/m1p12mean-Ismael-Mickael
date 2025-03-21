@@ -1,7 +1,7 @@
 <div class="container">
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h2>Gestion des utilisateurs</h2>
+        <h2 class="fw-bold">Gestion des utilisateurs</h2>
     </div>
 
     <div *ngIf="!utilisateurs" class="alert alert-info">
@@ -47,11 +47,11 @@
 
     <div class="card mt-4">
         <div class="card-header text-white" style="background-color: #4e657c; border-color: #34495E;">
-            <h5>Utilisateurs</h5>
+            <h5>Tous les utilisateurs</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped" *ngIf="filteredUsers.length > 0">
+                <table class="table table-hover align-middle" *ngIf="filteredUsers.length > 0">
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -64,9 +64,37 @@
                     </thead>
                     <tbody>
                         <tr *ngFor=" let utilisateur of filteredUsers">
-                            <td>{{ utilisateur.nom }}</td>
-                            <td>{{ utilisateur.email }}</td>
-                            <td>{{ utilisateur.role }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-light p-2 me-2 d-flex align-items-center"
+                                        style="width: 32px; height: 32px;">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                    <div>
+                                        {{ utilisateur.nom }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-light p-2 me-2 d-flex align-items-center"
+                                        style="width: 32px; height: 32px;">
+                                        <i class="bi bi-envelope"></i>
+                                    </div>
+                                    <div>
+                                        {{ utilisateur.email }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge rounded-pill bg-opacity-10 px-2" [ngClass]="{
+                                  'text-success bg-success': utilisateur.role == 'client',
+                                  'text-info bg-info': utilisateur.role == 'mecanicien',
+                                  'text-danger bg-danger': utilisateur.role == 'manager'
+                                }">
+                                    {{ utilisateur.role }}
+                                </span>
+                            </td>
                             <td class="text-center">{{ utilisateur.specialite || '-' }}</td>
                             <td class="text-center">{{ utilisateur.role == 'mecanicien' ?
                                 formatDate(utilisateur.createdAt) : '-' }}</td>

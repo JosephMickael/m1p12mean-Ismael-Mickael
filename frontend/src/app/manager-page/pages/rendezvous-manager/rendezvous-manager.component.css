@@ -1,0 +1,30 @@
+.appointment-card {
+    transition: transform 0.2s;
+}
+
+.appointment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.status-pending {
+    background-color: #fff3cd;
+}
+
+.status-confirmed {
+    background-color: #d1e7dd;
+}
+
+.status-cancelled {
+    background-color: #f8d7da;
+}
+
+.status-completed {
+    background-color: #cff4fc;
+}
+
+.sidebar {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}

@@ -1,7 +1,7 @@
 <main class="container-fluid px-4">
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h2>Tableau de bord</h2>
+        <h2 class="fw-bold">Tableau de bord</h2>
     </div>
 
     <!-- Statistiques générales -->
@@ -26,7 +26,7 @@
             <div class="card text-white mb-3" id="rdv-attente">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous en attente</h5>
-                    <p class="card-text fs-3">5</p>
+                    <p class="card-text fs-3">{{ rdvEnAttente }}</p>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
             <div class="card text-white mb-3" id="rdv-annule">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous annulés</h5>
-                    <p class="card-text fs-3">2</p>
+                    <p class="card-text fs-3">{{ rdvAnnule }}</p>
                 </div>
             </div>
         </div>

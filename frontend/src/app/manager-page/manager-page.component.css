@@ -1,14 +1,13 @@
 .sidebar {
     min-height: 100vh;
     transition: all 0.3s ease;
-    /* Transition plus fluide */
     width: 250px;
     position: fixed;
     left: 0;
     top: 0;
     z-index: 100;
     overflow-x: hidden;
-    /* Empêche le débordement pendant la transition */
+    overflow-y: hidden;
 }
 
 .sidebar.collapsed {
@@ -33,13 +32,34 @@ h3 {
     align-items: center;
 }
 
+/* Contenu principale */
 main {
-    /* Contenu principale */
     transition: all 0.3s ease;
     margin-left: 250px;
+    margin-top: 70px;
     width: calc(100% - 250px);
     overflow-x: hidden;
 }
+
+.nav-main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 250px);
+    margin-left: 250px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+    overflow: visible;
+    z-index: 1050
+}
+
+.sidebar.collapsed+main .nav-main {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+}
+
 
 .sidebar.collapsed+main {
     margin-left: 60px;
@@ -82,6 +102,11 @@ main {
     border-bottom: 2px solid #1ABC9C;
 }
 
+.dropdown-menu {
+    position: absolute !important;
+    z-index: 1100;
+}
+
 /* dropdown list */
 .dropdown-item.active {
     background-color: var(--main-gray);
@@ -92,18 +117,26 @@ main {
     .sidebar {
         width: 250px;
         transform: translateX(-100%);
-        transition: transform 0.3s ease, width 0.3s ease;
+        transition: margin-left 0.3s ease, width 0.3s ease;
     }
 
     .sidebar.collapsed {
         transform: translateX(0);
         width: 60px;
+        transition: transform 0.3s ease, width 0s ease;
     }
 
     main {
         margin-left: 0;
         width: 100%;
         transition: margin-left 0.3s ease, width 0.3s ease;
+    }
+
+    .nav-main {
+        margin-left: 0;
+        width: 100%;
+        transition: margin-left 0.3s ease, width 0s ease;
+        overflow-x: hidden;
     }
 
     .sidebar.collapsed+main {

@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 // recupere tout les utilisateurs
 const getAllUser = async (req, res) => {
     try {
-        const utilisateurs = await Utilisateur.find();
+        const utilisateurs = await Utilisateur.find()
 
         res.json(utilisateurs);
     } catch (error) {

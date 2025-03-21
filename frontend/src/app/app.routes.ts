@@ -11,6 +11,7 @@ import { UtilisateursComponent } from './manager-page/pages/utilisateurs/utilisa
 import { AcceuilComponent } from './manager-page/pages/acceuil/acceuil.component';
 import { ProfilComponent } from './profil/profil.component';
 import { AcceuilClientComponent } from './client-page/pages/acceuil-client/acceuil-client.component';
+import { RendezvousManagerComponent } from './manager-page/pages/rendezvous-manager/rendezvous-manager.component';
 
 export const routes: Routes = [
 
@@ -82,6 +83,11 @@ export const routes: Routes = [
             {
                 path: 'utilisateurs',
                 component: UtilisateursComponent,
+                data: { role: 'manager' }
+            },
+            {
+                path: 'rendez-vous',
+                component: RendezvousManagerComponent,
                 data: { role: 'manager' }
             },
             {

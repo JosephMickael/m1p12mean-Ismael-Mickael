@@ -1,0 +1,229 @@
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h2 class="fw-bold">Gestion des Rendez-vous</h2>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100" style="background-color: var(--main-bleu)">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center text-white">
+                        <div>
+                            <p class="mb-1">Total Rendez-vous</p>
+                            <h3 class="mb-0">{{ totalRdv }}</h3>
+                        </div>
+                        <div class="">
+                            <i class="bi bi-calendar-date text-white fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-white" style="background-color: var(--main-vert)">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1">Confirmés</p>
+                            <h3 class="mb-0">{{ rdvConfirme }}</h3>
+                        </div>
+                        <div class="">
+                            <i class="bi bi-check-circle text-white fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-white" style="background-color: var(--main-orange)">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1">En attente</p>
+                            <h3 class="mb-0">{{ rdvEnAttente }}</h3>
+                        </div>
+                        <div class="">
+                            <i class="bi bi-hourglass-split text-white fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-white" style="background-color: var(--main-rouge)">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1">Annulés</p>
+                            <h3 class="mb-0">{{ rdvAnnule }}</h3>
+                        </div>
+                        <div class="">
+                            <i class="bi bi-x-circle text-white fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- rdv aujourd'hui -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-calendar-check me-2"></i>Rendez-vous d'aujourd'hui
+            </h5>
+            <div class="row g-3">
+                <div *ngFor="let rdv of todayRdv" class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 appointment-card">
+                        <div class="card-header bg-opacity-10 border-0 py-2" [ngClass]="{
+                            'bg-warning': rdv.status === 'en attente',
+                            'bg-success': rdv.status === 'confirmé',
+                            'bg-info': rdv.status === 'assigné',
+                            'bg-danger': rdv.status === 'annulé',
+                            'bg-light text-dark': rdv.status === 'disponible',
+                            'bg-primary': rdv.status === 'réservé',
+                            'bg-secondary': rdv.status === 'terminé'
+                        }">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-bold">{{ rdv.heure }}</h6>
+                                <span class="badge rounded-pill px-2" [ngClass]="{
+                                    'bg-warning': rdv.status === 'en attente',
+                                    'bg-success': rdv.status === 'confirmé',
+                                    'bg-info': rdv.status === 'assigné',
+                                    'bg-danger': rdv.status === 'annulé',
+                                    'bg-light text-dark': rdv.status === 'disponible',
+                                    'bg-primary': rdv.status === 'réservé',
+                                    'bg-secondary': rdv.status === 'terminé'
+                                }">{{ rdv.status}}</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-light p-2 me-3">
+                                    <i class="bi bi-person fs-3"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ rdv.client.nom }}</h6>
+                                    <small class="text-muted">{{ rdv.services }}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-wrench-adjustable me-2 text-muted"></i>
+                                <small class="text-muted">{{ rdv.mecanicien[0].nom }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (todayRdv.length == 0) {
+                <div class="bg-warning bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                    {{ todayMessage }}
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Prochain rendez-vous -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold"><i class="bi bi-calendar-event me-2"></i>Prochains rendez-vous</h5>
+            </div>
+            <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-3 py-3">Date & Heure</th>
+                                <th class="py-3">Client</th>
+                                <th class="py-3">Service</th>
+                                <th class="py-3">Assigné à</th>
+                                <th class="py-3">Statut</th>
+                                <th class="py-3 text-end pe-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let rendezvous of listeRendezVous">
+                                <td class="ps-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-2 text-center"
+                                            style="width: 40px; height: 40px;">
+                                            <i class="bi bi-stopwatch"></i>
+                                        </div>
+                                        <div>
+                                            <span class="fw-medium">{{ rendezvous.heure }}</span><br>
+                                            <small class="text-muted">{{ formatDate(rendezvous.date) }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- client -->
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-light p-2 me-2 d-flex align-items-center"
+                                            style="width: 32px; height: 32px;">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <div>
+                                            <span class="fw-medium">{{ rendezvous.client.nom }}</span><br>
+                                            <small class="text-muted">{{ rendezvous.client.email }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-2"> -->
+                                    {{ rendezvous.services }}
+                                    <!-- </span> -->
+                                </td>
+                                <td>
+                                    <div *ngFor="let mecanicien of rendezvous.mecanicien">
+                                        {{ mecanicien.nom }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill px-2" [ngClass]="{
+                                                'bg-warning': rendezvous.status === 'en attente',
+                                                'bg-success': rendezvous.status === 'confirmé',
+                                                'bg-info': rendezvous.status === 'assigné',
+                                                'bg-danger': rendezvous.status === 'annulé',
+                                                'bg-light text-dark': rendezvous.status === 'disponible',
+                                                'bg-primary': rendezvous.status === 'réservé',
+                                                'bg-secondary': rendezvous.status === 'terminé'
+                                            }">
+                                        {{ rendezvous.status }}
+                                    </span>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-secondary"><i
+                                                class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i
+                                                class="bi bi-x-lg"></i></button>
+                                        <button class="btn btn-sm btn-outline-dark dropdown-toggle"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#"><i class="bi bi-send me-2"></i>Envoyer
+                                                    rappel</a></li>
+                                            <li><a class="dropdown-item" href="#"><i
+                                                        class="bi bi-calendar-plus me-2"></i>Reprogrammer</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="#"><i
+                                                        class="bi bi-file-text me-2"></i>Détails</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

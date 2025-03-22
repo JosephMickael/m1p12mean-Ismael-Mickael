@@ -214,13 +214,12 @@
                                 </td>
                             </tr>
                         </tbody>
-                        @if (listeRendezVous.length == 0) {
-                        <div
-                            class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
-                            Pas encore de rendez-bous
-                        </div>
-                        }
                     </table>
+                    @if (listeRendezVous.length == 0) {
+                    <div class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                        Pas encore de rendez-bous
+                    </div>
+                    }
                 </div>
             </div>
         </div>

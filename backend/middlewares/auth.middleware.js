@@ -4,6 +4,7 @@ const Utilisateur = require('../models/Utilisateur');
 // Vérifie l'utilisateur connecté par son token
 const verifierAuthentification = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
+    console.log(token)
 
     if (!token) {
         return res.status(401).json({ message: 'Accès non autorisé, token manquant' });

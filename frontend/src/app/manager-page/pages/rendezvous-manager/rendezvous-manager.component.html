@@ -75,7 +75,7 @@
             <h5 class="fw-bold mb-3">
                 <i class="bi bi-calendar-check me-2"></i>Rendez-vous d'aujourd'hui
             </h5>
-            <div class="row g-3">
+            <div class="row">
                 <div *ngFor="let rdv of todayRdv" class="col-md-6 col-lg-4">
                     <div class="card border-0 shadow-sm h-100 appointment-card">
                         <div class="card-header bg-opacity-10 border-0 py-2" [ngClass]="{
@@ -119,7 +119,7 @@
                 </div>
 
                 @if (todayRdv.length == 0) {
-                <div class="bg-warning bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                <div class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
                     {{ todayMessage }}
                 </div>
                 }
@@ -127,14 +127,19 @@
         </div>
     </div>
 
-    <!-- Prochain rendez-vous -->
+    <!--  liste de tout les rendez-vous -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold"><i class="bi bi-calendar-event me-2"></i>Prochains rendez-vous</h5>
+                <h5 class="fw-bold"><i class="bi bi-calendar-event me-2"></i>Tout les rendez-vous</h5>
             </div>
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
+                    @if (deleteMessage) {
+                    <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                        {{ deleteMessage }}
+                    </div>
+                    }
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr>
@@ -174,9 +179,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <!-- <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-2"> -->
                                     {{ rendezvous.services }}
-                                    <!-- </span> -->
                                 </td>
                                 <td>
                                     <div *ngFor="let mecanicien of rendezvous.mecanicien">
@@ -198,30 +201,103 @@
                                 </td>
                                 <td class="text-end pe-3">
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-secondary"><i
-                                                class="bi bi-pencil"></i></button>
-                                        <button class="btn btn-sm btn-outline-danger"><i
-                                                class="bi bi-x-lg"></i></button>
-                                        <button class="btn btn-sm btn-outline-dark dropdown-toggle"
-                                            data-bs-toggle="dropdown">
-                                            <i class="bi bi-three-dots-vertical"></i>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            data-bs-toggle="modal" data-bs-target="#rendezVousModal"
+                                            (click)="prepareFormForEdit(rendezvous)" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="#"><i class="bi bi-send me-2"></i>Envoyer
-                                                    rappel</a></li>
-                                            <li><a class="dropdown-item" href="#"><i
-                                                        class="bi bi-calendar-plus me-2"></i>Reprogrammer</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li><a class="dropdown-item" href="#"><i
-                                                        class="bi bi-file-text me-2"></i>Détails</a></li>
-                                        </ul>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="deleteRendezVous(rendezvous._id)">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
+                        @if (listeRendezVous.length == 0) {
+                        <div
+                            class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                            Pas encore de rendez-bous
+                        </div>
+                        }
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour update -->
+    <div class="modal fade" id="rendezVousModal" tabindex="-1" aria-labelledby="rendezVousModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="rendezVousModalLabel">Créer un rendez-vous</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4">
+                    @if (errorMessage) {
+                    <div class="p-1 mb-3 text-white text-center bg-danger rounded">{{errorMessage}}</div>
+                    }
+                    @if (successMessage) {
+                    <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                        {{successMessage}}</div>
+                    }
+                    <form [formGroup]="rendezVousForm" (ngSubmit)="updateRendezVous()">
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="date" formControlName="date">
+                            <div class="invalid-feedback" *ngIf="submitted && rendezVousForm.controls['date'].errors">
+                                La date est requise
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="heure" class="form-label">Heure</label>
+                            <input type="time" class="form-control" id="heure" formControlName="heure">
+                            <div class="invalid-feedback" *ngIf="submitted && rendezVousForm.controls['heure'].errors">
+                                L'heure est requise
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="services" class="form-label">Services</label>
+                            <input type="text" class="form-control" id="services" formControlName="services">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mecanicien" class="form-label">Mécanicien</label>
+                            <select class="form-select" id="mecanicien" formControlName="mecanicien">
+                                <option value="" selected disabled>Sélectionner un mécanicien</option>
+                                <option *ngFor="let mecanicien of mecaniciens" [value]="mecanicien._id">
+                                    {{mecanicien.nom}} {{mecanicien.prenom}}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback"
+                                *ngIf="submitted && rendezVousForm.controls['mecanicien'].errors">
+                                Le mécanicien est requis
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Statut</label>
+                            <select class="form-select" id="status" formControlName="status">
+                                <option value="" selected disabled>Sélectionner un statut</option>
+                                <option *ngFor="let status of statusOptions" [value]="status">
+                                    {{status}}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" *ngIf="submitted && rendezVousForm.controls['status'].errors">
+                                Le statut est requis
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="button" class="btn btn-outline-secondary me-md-2"
+                                data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

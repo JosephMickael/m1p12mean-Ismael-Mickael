@@ -26,8 +26,24 @@ export class RendezVous {
     return this.http.get(`${environment.apiUrl}/today-rdv`)
   }
 
+  getNextRdv() {
+    return this.http.get(`${environment.apiUrl}/next-rdv`)
+  }
+
   getRdvDetails() {
     return this.http.get(`${environment.apiUrl}/rdv-details`)
+  }
+
+  // Mettre à jour un rendez-vous
+  updateRendezVous(rendezVousId: string, rendezVousData: any): Observable<any> {
+    const headers = this.createHeader();
+    return this.http.put(`${environment.apiUrl}/update-rdv/${rendezVousId}`, rendezVousData, { headers });
+  }
+
+  // Supprimer un rendez-vous
+  deleteRendezVous(rendezVousId: string): Observable<any> {
+    const headers = this.createHeader();
+    return this.http.delete(`${environment.apiUrl}/delete-rdv/${rendezVousId}`, { headers });
   }
 
   // Liste de rendezVous du client et du mecanicien 

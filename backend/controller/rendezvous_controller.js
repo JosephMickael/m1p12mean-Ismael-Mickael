@@ -58,6 +58,114 @@ const getTodayRendezVous = async (req, res) => {
     }
 };
 
+// Récupère les 5 prochains rendez-vous à partir d'aujourd'hui
+const getNextFiveRendezVous = async (req, res) => {
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Début de la journée
+
+        const prochainRendezVous = await RendezVous.find({
+            date: {
+                $gte: today
+            },
+            status: { $nin: ["annulé", "terminé"] } // Ne pas inclure les rendez-vous annulés ou terminés
+        })
+            .sort({ date: 1 }) // Tri par date croissante
+            .limit(5)
+            .populate('client', 'nom email')
+            .populate('mecanicien', 'nom');
+
+        res.status(200).json({
+            success: true,
+            count: prochainRendezVous.length,
+            data: prochainRendezVous
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Erreur lors de la récupération des prochains rendez-vous",
+            error: error.message
+        });
+    }
+};
+
+// Modifier un rendez-vous
+const updateRendezVous = async (req, res) => {
+    try {
+        const { rendezVousId } = req.params;
+        const updateData = req.body;
+
+        const updatedRendezVous = await RendezVous.findByIdAndUpdate(
+            rendezVousId,
+            updateData,
+            { new: true, runValidators: true }
+        ).populate('client', 'nom email')
+            .populate('mecanicien', 'nom email');
+
+        res.status(200).json({
+            success: true,
+            message: "Rendez-vous mis à jour avec succès",
+            data: updatedRendezVous
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Erreur lors de la mise à jour du rendez-vous",
+            error: error.message
+        });
+    }
+};
+
+// Supprimer un rendez-vous
+const deleteRendezVous = async (req, res) => {
+    try {
+        const { rendezVousId } = req.params;
+
+        // Vérifier si le rendez-vous existe
+        const rendezVous = await RendezVous.findById(rendezVousId);
+        if (!rendezVous) {
+            return res.status(404).json({
+                success: false,
+                message: "Rendez-vous introuvable"
+            });
+        }
+
+        // Vérification des permission
+        // Seuls les managers ou le client propriétaire peuvent supprimer
+        if (req.utilisateur.role === 'client' && req.utilisateur._id.toString() !== rendezVous.client.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "Vous n'êtes pas autorisé à supprimer ce rendez-vous"
+            });
+        }
+
+        // Si un mécanicien était assigné, le rendre à nouveau disponible
+        if (rendezVous.mecanicien && rendezVous.mecanicien.length > 0) {
+            for (const mecanicienId of rendezVous.mecanicien) {
+                await Utilisateur.findByIdAndUpdate(
+                    mecanicienId, { disponible: true }
+                );
+            }
+        }
+
+        // Supprimer le rendez-vous
+        await RendezVous.findByIdAndDelete(rendezVousId);
+
+        res.status(200).json({
+            success: true,
+            message: "Rendez-vous supprimé avec succès"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Erreur lors de la suppression du rendez-vous",
+            error: error.message
+        });
+    }
+};
 
 // Récupérer status rendezVous aujourd'hui
 const recupererStatusRendezVous = async (req, res) => {
@@ -151,7 +259,7 @@ const listRendezVous = async (req, res) => {
                 .populate({ path: "client", select: "nom" })
                 .sort({ date: 1 });
 
-            console.log("valeur de appoitement meca", appointments)
+            // console.log("valeur de appoitement meca", appointments)
 
             return res.status(200).json(appointments);
 
@@ -209,7 +317,7 @@ const listRendezVousDisponible = async (req, res) => {
 }
 
 
-//creer un rendezVous et assigner automatiquement un mecanicien aleatoirement 
+//creer un rendezVous et assigner automatiquement un mecanicien aleatoirement (CLIENT)
 const createRendezvous = async (req, res) => {
 
     try {
@@ -328,12 +436,12 @@ const assignedRendezVous = async (req, res) => {
 const confirmerRendezVous = async (req, res) => {
     try {
         const { rendezVousId } = req.body;
-        console.log(rendezVousId);
+        // console.log(rendezVousId);
         const rendezVousAnnule = await RendezVous.findByIdAndUpdate(rendezVousId,
             { status: 'confirmé' },
             { new: true }
         );
-        console.log("test", rendezVousAnnule);
+        // console.log("test", rendezVousAnnule);
         if (!rendezVousAnnule) {
             res.status(404).json({ message: "RDV non trouvé" })
         }
@@ -376,6 +484,9 @@ module.exports = {
     assignedRendezVous,
     getRendezVous,
     getRendezVousDetails,
-    getTodayRendezVous
+    getTodayRendezVous,
+    getNextFiveRendezVous,
+    updateRendezVous,
+    deleteRendezVous
 };
 

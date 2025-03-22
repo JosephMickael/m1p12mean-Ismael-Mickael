@@ -18,6 +18,7 @@ export class AcceuilComponent {
   rdvAnnule: number = 0
   lastClients: any[] = []
   lastMecaniciens: any[] = []
+  nextRendezVous: any[] = []
 
   constructor(private userservice: UserService, private authservice: AuthService, private rdvservice: RendezVous) { }
 
@@ -25,6 +26,7 @@ export class AcceuilComponent {
     this.currentUser = this.authservice.getCurrentUser()
     this.getUsersDetails()
     this.getRdvDetails()
+    this.getNextRdv()
   }
 
   getUsersDetails() {
@@ -49,6 +51,16 @@ export class AcceuilComponent {
         this.rdvAnnule = response.rdvAnnule
       }, error: (error) => {
         console.error('Erreur:', error);
+      }
+    })
+  }
+
+  getNextRdv() {
+    this.rdvservice.getNextRdv().subscribe({
+      next: (response: any) => {
+        this.nextRendezVous = response.data
+      }, error: (error) => {
+        console.log("Erreur => ", error)
       }
     })
   }

@@ -20,6 +20,9 @@ router.put('/confirmerRendezVous', verifierAuthentification, rendezVousControlle
 router.put('/annulerRendezVous', verifierAuthentification, rendezVousController.annulationRendezVous);
 router.get('/rdv-details', rendezVousController.getRendezVousDetails);
 router.get('/today-rdv', rendezVousController.getTodayRendezVous);
+router.get('/next-rdv', rendezVousController.getNextFiveRendezVous);
+router.put('/update-rdv/:rendezVousId', verifierAuthentification, rendezVousController.updateRendezVous);
+router.delete('/delete-rdv/:rendezVousId', verifierAuthentification, rendezVousController.deleteRendezVous);
 
 // Utilisateur 
 router.get('/get-utilisateur', utilisateurController.getAllUser)

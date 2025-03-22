@@ -3,10 +3,12 @@ import { RendezVous } from '../../../services/rendezvous.service';
 import { UserService } from '../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { RendezVousModel } from '../../../models/rendezvous.model'
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-rendezvous-manager',
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './rendezvous-manager.component.html',
   styleUrl: './rendezvous-manager.component.css'
 })
@@ -20,9 +22,36 @@ export class RendezvousManagerComponent implements OnInit {
   rdvConfirme: string = ''
   rdvEnAttente: string = ''
   rdvAnnule: string = ''
+  rendezVousForm: FormGroup;
+  rendezVousId: string
+  rendezVous: any;
+  mecaniciens: any[] = []
+  submitted: boolean = false
+  errorMessage: string = ''
+  successMessage: string = ''
+  deleteMessage: string = ''
+  selectedRdv: any = null;
+
+  statusOptions = [
+    "en attente", "confirmé", "assigné", "annulé", "disponible", "réservé", "terminé"
+  ];
 
 
-  constructor(private rdvservice: RendezVous, private userservice: UserService) { }
+  constructor(private rdvservice: RendezVous, private userservice: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router,) {
+    this.rendezVousForm = this.formBuilder.group({
+      heure: ['', Validators.required],
+      date: ['', Validators.required],
+      status: ['', Validators.required],
+      services: [''],
+      mecanicien: ['', Validators.required]
+    });
+
+    // récuperation de l'id dans la route (service)
+    this.rendezVousId = this.route.snapshot.params['id'];
+
+    // this.loadRendezVous();
+    this.loadMecaniciens();
+  }
 
   ngOnInit() {
     this.getListeRendezvous()
@@ -48,9 +77,7 @@ export class RendezvousManagerComponent implements OnInit {
         this.data = response.data
 
         if (this.data.length > 0) {
-          for (let i = 0; i < 3; i++) {
-            this.todayRdv.push(this.data[i])
-          }
+          this.todayRdv = this.data.slice(0, 3); // n'afficher que 3
         } else {
           this.todayMessage = "Aucun rendez-vous pour aujourd'hui"
         }
@@ -71,6 +98,90 @@ export class RendezvousManagerComponent implements OnInit {
       }
     })
   }
+
+  // utile pour update (liste mecaniciens)
+  loadMecaniciens(): void {
+    this.userservice.getAllUsers()
+      .subscribe({
+        next: (response: any) => {
+          response.forEach((user: { role: string | string[]; }) => {
+            if (Array.isArray(user.role) && user.role.includes('mecanicien')) {
+              this.mecaniciens.push(user)
+            }
+          });
+        },
+        error: (error) => {
+          this.errorMessage = 'Erreur lors du chargement des mécaniciens: ' + error.message;
+        }
+      });
+  }
+
+  // pre remplissage du formulaire (update)
+  prepareFormForEdit(rendezvous: any): void {
+    this.selectedRdv = rendezvous;
+    this.errorMessage = ''
+
+    const dateObj = new Date(rendezvous.date);
+    const formattedDate = dateObj.toISOString().split('T')[0];
+
+    this.rendezVousForm.patchValue({
+      heure: rendezvous.heure,
+      date: formattedDate,
+      status: rendezvous.status,
+      services: rendezvous.services,
+      mecanicien: Array.isArray(rendezvous.mecanicien) ?
+        (rendezvous.mecanicien[0]?._id || rendezvous.mecanicien[0]) :
+        (rendezvous.mecanicien?._id || rendezvous.mecanicien)
+    });
+  }
+
+  updateRendezVous(): void {
+    this.submitted = true;
+
+    if (this.rendezVousForm.invalid) {
+      return;
+    }
+
+    const updatedData = this.rendezVousForm.value;
+
+    // Convertion en tableau (backend)
+    updatedData.mecanicien = [updatedData.mecanicien];
+
+    this.rdvservice.updateRendezVous(this.selectedRdv._id, updatedData)
+      .subscribe({
+        next: (response) => {
+          this.successMessage = 'Mis à jour avec succès'
+          setTimeout(() => this.successMessage = '', 2000)
+          this.getListeRendezvous()
+          this.getRdvDetails()
+          this.getTodayRdv()
+        },
+        error: (error) => {
+          this.errorMessage = 'Erreur lors de la mise à jour: ' + error.message;
+          setTimeout(() => this.errorMessage = '', 2000)
+        }
+      });
+  }
+
+  deleteRendezVous(rendezVousId: string) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce rendez-vous?')) {
+      this.rdvservice.deleteRendezVous(rendezVousId).subscribe({
+        next: (response: any) => {
+          this.deleteMessage = 'Rendez-vous supprimé avec succès';
+          this.getListeRendezvous()
+          this.getRdvDetails()
+          this.getTodayRdv()
+          setTimeout(() => this.deleteMessage = '', 3000);
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression:', err);
+          this.errorMessage = err.error?.message || 'Erreur lors de la suppression de l\'utilisateur';
+          setTimeout(() => this.errorMessage = '', 3000);
+        }
+      });
+    }
+  }
+
 
   formatDate(date: string): string {
     const options: Intl.DateTimeFormatOptions = {

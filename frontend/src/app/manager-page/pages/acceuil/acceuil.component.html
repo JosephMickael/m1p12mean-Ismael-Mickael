@@ -118,32 +118,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>20 Mars 2025</td>
-                            <td>10:00</td>
-                            <td>Jean Dupont</td>
-                            <td>Luc Garnier</td>
-                            <td>Vidange</td>
-                            <td><span class="badge bg-primary">À venir</span></td>
-                        </tr>
-                        <tr>
-                            <td>21 Mars 2025</td>
-                            <td>14:30</td>
-                            <td>Marie Curie</td>
-                            <td>Sophie Bernard</td>
-                            <td>Réparation Carrosserie</td>
-                            <td><span class="badge bg-success">Confirmé</span></td>
-                        </tr>
-                        <tr>
-                            <td>22 Mars 2025</td>
-                            <td>09:00</td>
-                            <td>Paul Martin</td>
-                            <td>Marc Leblanc</td>
-                            <td>Diagnostic moteur</td>
-                            <td><span class="badge bg-warning">En attente</span></td>
+                        <tr *ngFor="let rendezvous of nextRendezVous">
+                            <td>{{ formatDate(rendezvous.date) }}</td>
+                            <td>{{ rendezvous.heure }}</td>
+                            <td>{{ rendezvous.client.nom }}</td>
+                            <td>{{ rendezvous.mecanicien[0].nom }}</td>
+                            <td>{{ rendezvous.services }}</td>
+                            <td><span class="badge" [ngClass]="{
+                                            'bg-warning': rendezvous.status === 'en attente',
+                                            'bg-success': rendezvous.status === 'confirmé',
+                                            'bg-info': rendezvous.status === 'assigné',
+                                            'bg-danger': rendezvous.status === 'annulé',
+                                            'bg-light text-dark': rendezvous.status === 'disponible',
+                                            'bg-primary': rendezvous.status === 'réservé',
+                                            'bg-secondary': rendezvous.status === 'terminé'
+                                        }">
+                                    {{ rendezvous.status }}
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+                @if (nextRendezVous.length == 0) {
+                <div class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                    Aucun rendez-vous
+                </div>
+                }
             </div>
         </div>
     </div>

@@ -7,7 +7,6 @@ import { RendezVousModel } from '../models/rendezvous.model';
 @Injectable({
   providedIn: 'root'
 })
-
 export class RendezVous {
 
   constructor(private http: HttpClient) { }
@@ -20,6 +19,11 @@ export class RendezVous {
 
   getAllRendezVous(): Observable<RendezVousModel[]> {
     return this.http.get<RendezVousModel[]>(`${environment.apiUrl}/all-rendezvous`);
+  }
+
+  getAllMecaRendezVous() {
+    const headers = this.createHeader();
+    return this.http.get(`${environment.apiUrl}/mecanicien-rendezvous`, { headers });
   }
 
   getTodayRdv() {

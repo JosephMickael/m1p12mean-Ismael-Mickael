@@ -31,6 +31,7 @@ export class RendezvousManagerComponent implements OnInit {
   successMessage: string = ''
   deleteMessage: string = ''
   selectedRdv: any = null;
+  status: any = {}
 
   statusOptions = [
     "en attente", "confirmé", "assigné", "annulé", "disponible", "réservé", "terminé"
@@ -91,10 +92,7 @@ export class RendezvousManagerComponent implements OnInit {
   getRdvDetails() {
     this.rdvservice.getRdvDetails().subscribe({
       next: (response: any) => {
-        this.totalRdv = response.totalRdv
-        this.rdvConfirme = response.rdvConfirmé
-        this.rdvEnAttente = response.rdvEnAttente
-        this.rdvAnnule = response.rdvAnnule
+        this.status = response
       }
     })
   }

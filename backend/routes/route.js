@@ -5,7 +5,7 @@ const utilisateurController = require('../controller/Utilisateur_controller');
 const rendezVousController = require('../controller/rendezvous_controller');
 const verifierAuthentification = require('../middlewares/auth.middleware');
 
-// Rendezvous 
+// Rendezvous
 router.get('/all-rendezvous', rendezVousController.getRendezVous)
 router.post('/create-rendezVous', verifierAuthentification, rendezVousController.createRendezvous);//OK
 router.get('/disponible-rendezVous', verifierAuthentification, rendezVousController.listRendezVousDisponible);//OK
@@ -15,16 +15,18 @@ router.post('/assign-mecanicien-rendezVous', verifierAuthentification, rendezVou
 router.get('/list-assignedrendezVous', verifierAuthentification, rendezVousController.assignedRendezVous); //OK
 router.get('/listMecaniciens', verifierAuthentification, rendezVousController.recupererMecanicien); //OK
 router.get('/listSatus', verifierAuthentification, rendezVousController.recupererStatusRendezVous);
-router.get('/listRendezVous', rendezVousController.listRendezVous);
+router.get('/listRendezVous', verifierAuthentification, rendezVousController.listRendezVous);
 router.put('/confirmerRendezVous', verifierAuthentification, rendezVousController.confirmerRendezVous);
 router.put('/annulerRendezVous', verifierAuthentification, rendezVousController.annulationRendezVous);
+router.get('/mecanicien-rendezvous', verifierAuthentification, rendezVousController.getMecaRendezVous);
+
 router.get('/rdv-details', rendezVousController.getRendezVousDetails);
 router.get('/today-rdv', rendezVousController.getTodayRendezVous);
 router.get('/next-rdv', rendezVousController.getNextFiveRendezVous);
 router.put('/update-rdv/:rendezVousId', verifierAuthentification, rendezVousController.updateRendezVous);
 router.delete('/delete-rdv/:rendezVousId', verifierAuthentification, rendezVousController.deleteRendezVous);
 
-// Utilisateur 
+// Utilisateur
 router.get('/get-utilisateur', utilisateurController.getAllUser)
 router.get('/users-details', utilisateurController.usersDetails)
 router.post('/create-utilisateur', utilisateurController.createUser)

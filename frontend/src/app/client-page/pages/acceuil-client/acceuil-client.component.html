@@ -9,7 +9,7 @@
             <div class="card text-white mb-3 rdv-attente">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous en attente</h5>
-                    <p class="card-text fs-3">3</p>
+                    <p class="card-text fs-3">{{ status.rdvEnAttente }}</p>
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="card text-white mb-3 rdv-confirme">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous confirmés</h5>
-                    <p class="card-text fs-3">5</p>
+                    <p class="card-text fs-3">{{ status.rdvConfirme }}</p>
                 </div>
             </div>
         </div>
@@ -25,88 +25,58 @@
             <div class="card text-white mb-3 rdv-annule">
                 <div class="card-body">
                     <h5 class="card-title">Rendez-vous annulés</h5>
-                    <p class="card-text fs-3">1</p>
+                    <p class="card-text fs-3">{{ status.rdvAnnule }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Liste des rendez-vous récents -->
-    <div class="card mt-4">
-        <div class="card-header text-white" style="background-color: var(--main-gray);">
-            <h5>Derniers rendez-vous</h5>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0 d-flex align-items-center">
+                <i class="bi bi-clock-history me-2"></i>
+                Derniers rendez-vous
+            </h5>
         </div>
-        <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Heure</th>
-                        <th>Statut</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>20 Mars 2025</td>
-                        <td>10:00</td>
-                        <td><span class="badge bg-success">Confirmé</span></td>
-                    </tr>
-                    <tr>
-                        <td>25 Mars 2025</td>
-                        <td>14:30</td>
-                        <td><span class="badge bg-warning">En attente</span></td>
-                    </tr>
-                    <tr>
-                        <td>28 Mars 2025</td>
-                        <td>09:00</td>
-                        <td><span class="badge bg-danger">Annulé</span></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Date</th>
+                            <th>Heure</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let rdv of listRendezVous">
+                            <td class="ps-4">
+                                <i class="bi bi-calendar-event text-muted me-2"></i>
+                                {{ formatDate(rdv.date) }}
+                            </td>
+                            <td>
+                                <i class="bi bi-stopwatch text-muted"></i>
+                                {{ rdv.heure }}
+                            </td>
+                            <td>
+                                <span class="badge rounded-pill px-2" [ngClass]="{
+                                    'bg-warning text-dark': rdv.status === 'en attente',
+                                    'bg-success': rdv.status === 'confirmé',
+                                    'bg-info': rdv.status === 'assigné',
+                                    'bg-danger': rdv.status === 'annulé',
+                                    'bg-light text-dark': rdv.status === 'disponible',
+                                    'bg-primary': rdv.status === 'réservé',
+                                    'bg-secondary': rdv.status === 'terminé'
+                                    }">
+                                    {{ rdv.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
 </div>
-
-
-<!-- <main class="container mt-4">
-    <h2 class="mb-4">Prendre un Rendez-vous</h2>
-
-    <div class="card">
-        <div class="card-body">
-            <form>
-       
-                <div class="mb-3">
-                    <label for="date" class="form-label">Date du Rendez-vous :</label>
-                    <input type="date" class="form-control" id="date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="heure" class="form-label">Heure du Rendez-vous :</label>
-                    <input type="time" class="form-control" id="heure" required>
-                </div>
-
-    
-                <div class="mb-3">
-                    <label for="service" class="form-label">Service souhaité :</label>
-                    <select class="form-select" id="service" required>
-                        <option value="">-- Sélectionnez un service --</option>
-                        <option value="vidange">Vidange</option>
-                        <option value="diagnostic">Diagnostic moteur</option>
-                        <option value="reparation">Réparation mécanique</option>
-                        <option value="carrosserie">Réparation carrosserie</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="mecanicien" class="form-label">Mécanicien :</label>
-                    <select class="form-select" id="mecanicien" required>
-                        <option value="">-- Sélectionnez un mécanicien --</option>
-                        <option value="luc">Luc Garnier (Électricité)</option>
-                        <option value="sophie">Sophie Bernard (Carrosserie)</option>
-                        <option value="marc">Marc Leblanc (Mécanique Générale)</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Confirmer le Rendez-vous</button>
-            </form>
-        </div>
-    </div>
-</main> -->

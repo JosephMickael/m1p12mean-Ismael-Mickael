@@ -40,8 +40,8 @@ export class RendezvousComponent implements OnInit {
   statusRendezVous: any[] = [];
   selectedService: string = "";
   autresServices: string = "";
-  statistics: any = {}; 
-  confirmation: string = ""; 
+  statistics: any = {};
+  confirmation: string = "";
 
 
 
@@ -52,15 +52,29 @@ export class RendezvousComponent implements OnInit {
     this.listAvailableRendezvous();
     this.listMecaniciens();
     this.getStatusRendezVous();
-    this.getRendezVous(); 
+    this.getRendezVous();
     if (this.userRole == 'mecanicien') {
       this.listAssignedRendezvous();
     }
   }
 
   // Formatage date 
-  formatDate(date: string | Date): string | null {
-    return this.datePipe.transform(new Date(date), 'dd/MM/yyyy', 'fr-FR');
+
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    };
+    const formattedDate = new Date(date).toLocaleDateString('fr-FR', options);
+
+    const parts = formattedDate.split(' ');
+
+    if (parts.length >= 2) {
+      parts[1] = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+    }
+
+    return parts.join(' ');
   }
 
   // Liste de rendezVous proche et du jour selon le role de user
@@ -193,26 +207,27 @@ export class RendezvousComponent implements OnInit {
   }
   //confirmer un rendezVous 
   confirmerRendezVous(rendezVousId: string): void {
-    this.confirmation = ""; 
+    this.confirmation = "";
     this.rendezVous.confirmerRendezVous(rendezVousId).subscribe(
       () => {
-      this.getRendezVous();
-      this.confirmation = "Rendez-vous confirmé avec succés";
-      setTimeout(()=> {
-        this.confirmation=""; 
-      }, 5000)
+        this.getRendezVous();
+        this.confirmation = "Rendez-vous confirmé avec succés";
+        setTimeout(() => {
+          this.confirmation = "";
+        }, 5000)
       }
     );
   }
   //annulerRendezVous 
   annulerRendezVous(rendezVousId: string): void {
-    this.confirmation = ""; 
+    this.confirmation = "";
     this.rendezVous.annulerRendezVous(rendezVousId).subscribe(
       () => {
-      this.getRendezVous();
-      this.confirmation = "Rendez-vous annulé avec succés";
-      setTimeout(()=> {
-        this.confirmation=""; 
-      }, 5000)})
+        this.getRendezVous();
+        this.confirmation = "Rendez-vous annulé avec succés";
+        setTimeout(() => {
+          this.confirmation = "";
+        }, 5000)
+      })
   }
 }

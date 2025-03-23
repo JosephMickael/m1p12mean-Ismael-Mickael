@@ -4,13 +4,12 @@ import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
 import { tap } from 'rxjs/internal/operators/tap';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  private apiUrl = "http://localhost:5001/garage_api"
 
   private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   public isLoggedIn$: Observable<boolean> = this.loggedIn.asObservable();
@@ -19,7 +18,7 @@ export class AuthService {
 
   // Méthode pour authentifier un utilisateur
   login(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}/login`, {
+    return this.http.post(`${environment.apiUrl}/login`, {
       email: email,
       motDePasse: password
     }).pipe(

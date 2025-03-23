@@ -1,0 +1,59 @@
+<div class="container-fluid mt-5">
+    <h1 class="fw-bold mb-3 ms-4">Liste des rendez-vous</h1>
+    <div class="card shadow border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive p-4">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0">Date</th>
+                            <th class="border-0">Heure</th>
+                            <th class="border-0">Client</th>
+                            <th class="border-0">A propos</th>
+                            <th class="border-0">Statut</th>
+                            <th class="border-0 rounded-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let rdv of listeRendezVous">
+                            <td class="text-nowrap">
+                                <i class="bi bi-calendar-event text-muted me-2"></i>
+                                {{ formatDate(rdv.date) }}
+                            </td>
+                            <td class="text-nowrap">
+                                <i class="bi bi-stopwatch text-muted"></i>
+                                {{ rdv.heure }}
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div
+                                        class="avatar-sm bg-primary bg-opacity-10 rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-person p-2 py-1"></i>
+                                    </div>
+                                    <div>{{ rdv.client.nom }}</div>
+                                </div>
+                            </td>
+                            <td>{{ rdv.services }}</td>
+                            <td><span class="badge rounded text-white" [ngClass]="{
+                                'bg-warning': rdv.status === 'en attente',
+                                'bg-success': rdv.status === 'confirmé',
+                                'bg-info': rdv.status === 'assigné',
+                                'bg-danger': rdv.status === 'annulé',
+                                'bg-light text-dark': rdv.status === 'disponible',
+                                'bg-primary': rdv.status === 'réservé',
+                                'bg-secondary': rdv.status === 'terminé'
+                            }">{{ rdv.status }}</span></td>
+                            <td>
+                                <div class="btn-group ms-3">
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

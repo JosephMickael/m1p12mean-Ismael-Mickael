@@ -13,7 +13,7 @@
                     <div class="d-flex justify-content-between align-items-center text-white">
                         <div>
                             <p class="mb-1">Total Rendez-vous</p>
-                            <h3 class="mb-0">{{ totalRdv }}</h3>
+                            <h3 class="mb-0">{{ status.totalRdv }}</h3>
                         </div>
                         <div class="">
                             <i class="bi bi-calendar-date text-white fs-4"></i>
@@ -28,7 +28,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="mb-1">Confirmés</p>
-                            <h3 class="mb-0">{{ rdvConfirme }}</h3>
+                            <h3 class="mb-0">{{ status.rdvConfirme }}</h3>
                         </div>
                         <div class="">
                             <i class="bi bi-check-circle text-white fs-4"></i>
@@ -43,7 +43,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="mb-1">En attente</p>
-                            <h3 class="mb-0">{{ rdvEnAttente }}</h3>
+                            <h3 class="mb-0">{{ status.rdvEnAttente }}</h3>
                         </div>
                         <div class="">
                             <i class="bi bi-hourglass-split text-white fs-4"></i>
@@ -58,7 +58,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="mb-1">Annulés</p>
-                            <h3 class="mb-0">{{ rdvAnnule }}</h3>
+                            <h3 class="mb-0">{{ status.rdvAnnule }}</h3>
                         </div>
                         <div class="">
                             <i class="bi bi-x-circle text-white fs-4"></i>
@@ -159,7 +159,7 @@
                                             style="width: 40px; height: 40px;">
                                             <i class="bi bi-stopwatch"></i>
                                         </div>
-                                        <div>
+                                        <div class="text-nowrap">
                                             <span class="fw-medium">{{ rendezvous.heure }}</span><br>
                                             <small class="text-muted">{{ formatDate(rendezvous.date) }}</small>
                                         </div>

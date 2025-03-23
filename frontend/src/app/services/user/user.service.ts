@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { User } from '../../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class UserService {
       role: roleToSend
     };
 
-    return this.http.post(`${this.apiUrl}/create-utilisateur`, userData);
+    return this.http.post(`${environment.apiUrl}/create-utilisateur`, userData);
   }
 
   updatePassword(currentPassword: string, newPassword: string, confirmPassword: string): Observable<any> {
@@ -39,26 +40,26 @@ export class UserService {
       'Authorization': `Bearer ${localStorage.getItem('token')}` // Récupère le token JWT de l'utilisateur (stocké dans localStorage ou sessionStorage)
     });
 
-    return this.http.put(`${this.apiUrl}/update-password`, body, { headers });
+    return this.http.put(`${environment.apiUrl}/update-password`, body, { headers });
   }
 
   getAllUsers() {
-    return this.http.get<string[]>(`${this.apiUrl}/get-utilisateur`);
+    return this.http.get<string[]>(`${environment.apiUrl}/get-utilisateur`);
   }
 
   getUserById(id: string) {
-    return this.http.get(`${this.apiUrl}/get-utilisateur/${id}`)
+    return this.http.get(`${environment.apiUrl}/get-utilisateur/${id}`)
   }
 
   getUsersDetails(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users-details`);
+    return this.http.get<User[]>(`${environment.apiUrl}/users-details`);
   }
 
   updateUser(id: string, userData: any) {
-    return this.http.put(`${this.apiUrl}/update-utilisateur/${id}`, userData);
+    return this.http.put(`${environment.apiUrl}/update-utilisateur/${id}`, userData);
   }
 
   deleteUser(id: string) {
-    return this.http.delete(`${this.apiUrl}/delete-utilisateur/${id}`)
+    return this.http.delete(`${environment.apiUrl}/delete-utilisateur/${id}`)
   }
 }

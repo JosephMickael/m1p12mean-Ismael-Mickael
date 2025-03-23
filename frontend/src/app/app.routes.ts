@@ -12,6 +12,7 @@ import { AcceuilComponent } from './manager-page/pages/acceuil/acceuil.component
 import { ProfilComponent } from './profil/profil.component';
 import { AcceuilClientComponent } from './client-page/pages/acceuil-client/acceuil-client.component';
 import { RendezvousManagerComponent } from './manager-page/pages/rendezvous-manager/rendezvous-manager.component';
+import { MecaRendezvousComponent } from './mecanicien-page/pages/meca-rendezvous/meca-rendezvous.component';
 
 export const routes: Routes = [
 
@@ -59,9 +60,31 @@ export const routes: Routes = [
         data: { role: 'mecanicien' },
         children: [
             {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'acceuil'
+            },
+            {
                 path: 'profil',
                 component: ProfilComponent,
-            }
+            },
+            {
+                path: 'create-rendezvous',
+                component: RendezvousComponent,
+                canActivate: [RoleGuard],
+                data: { role: 'mecanicien' }
+            },
+            {
+                path: 'list-rendezvous',
+                component: MecaRendezvousComponent,
+                canActivate: [RoleGuard],
+                data: { role: 'mecanicien' }
+            },
+            {
+                path: 'acceuil',
+                component: AcceuilClientComponent,
+                data: { role: 'mecanicien' }
+            },
         ]
     },
     {

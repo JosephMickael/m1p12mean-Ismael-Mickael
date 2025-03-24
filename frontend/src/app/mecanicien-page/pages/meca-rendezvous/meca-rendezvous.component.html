@@ -53,6 +53,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="!listeRendezVous || listeRendezVous.length === 0" class="p-4 text-center text-muted">
+                    <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
+                    Aucun rendez-vous.
+                </div>
             </div>
         </div>
     </div>

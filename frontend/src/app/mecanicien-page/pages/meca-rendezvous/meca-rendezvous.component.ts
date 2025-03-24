@@ -20,7 +20,7 @@ export class MecaRendezvousComponent implements OnInit {
   getAllRendezVous() {
     this.rdvservice.getAllMecaRendezVous().subscribe({
       next: (response: any) => {
-        this.listeRendezVous = response
+        this.listeRendezVous = response.data
       }, error: error => {
         console.error('Erreur lors de la récupération des rendez-vous', error.message);
       }

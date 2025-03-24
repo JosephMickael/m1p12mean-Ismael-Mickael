@@ -353,6 +353,10 @@
               </tr>
             </tbody>
           </table>
+          <div *ngIf="!assignedRendezvous || assignedRendezvous.length === 0" class="p-4 text-center text-muted">
+            <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
+            Aucun rendez-vous assigné.
+          </div>
         </div>
       </div>
     </div>
@@ -428,7 +432,8 @@
           </tbody>
         </table>
         <!-- Message si aucun rendez-vous -->
-        <div *ngIf="!listRendezVous || listRendezVous.length === 0" class="container my-4">
+        <div *ngIf="!listRendezVous || listRendezVous.length === 0" class="p-4 text-center container my-4">
+          <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
           <p>Aucun rendez-vous prévu aujourd'hui.</p>
         </div>
       </div>

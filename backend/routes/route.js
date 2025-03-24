@@ -4,7 +4,7 @@ const router = express.Router();
 const utilisateurController = require('../controller/Utilisateur_controller');
 const rendezVousController = require('../controller/rendezvous_controller');
 const verifierAuthentification = require('../middlewares/auth.middleware');
-const devisController = require ('../controller/devis_controller'); 
+const devisController = require('../controller/devis_controller');
 
 // Rendezvous 
 router.get('/all-rendezvous', rendezVousController.getRendezVous)
@@ -24,11 +24,12 @@ router.get('/today-rdv', rendezVousController.getTodayRendezVous);
 router.get('/next-rdv', rendezVousController.getNextFiveRendezVous);
 router.put('/update-rdv/:rendezVousId', verifierAuthentification, rendezVousController.updateRendezVous);
 router.delete('/delete-rdv/:rendezVousId', verifierAuthentification, rendezVousController.deleteRendezVous);
+router.get('/mecanicien-rendezvous', verifierAuthentification, rendezVousController.getMecanicienConnecteRendezVous);
 
 // Utilisateur 
 router.get('/get-utilisateur', utilisateurController.getAllUser)
 router.get('/users-details', utilisateurController.usersDetails)
-router.post('/create-utilisateur', utilisateurController.createUser) 
+router.post('/create-utilisateur', utilisateurController.createUser)
 router.put('/update-utilisateur/:id', utilisateurController.updateUser)
 router.delete('/delete-utilisateur/:id', utilisateurController.deleteUser)
 router.get('/current-user', verifierAuthentification, utilisateurController.getCurrentUser)
@@ -39,9 +40,9 @@ router.get('/get-utilisateur/:id', utilisateurController.getUserById)
 router.post('/create-devis', verifierAuthentification, devisController.creerDevis);
 router.put('/modifier-devis', verifierAuthentification, devisController.modifierDevis);
 router.get('/getAllDevis', verifierAuthentification, devisController.getAllDevis);
-router.get('/getDevis', verifierAuthentification, devisController.getDevisById); 
-router.put('/valider-devis', verifierAuthentification, devisController.validerDevis); 
-router.delete('/supprimer-devis', verifierAuthentification, devisController.supprimerDevis); 
+router.get('/getDevis', verifierAuthentification, devisController.getDevisById);
+router.put('/valider-devis', verifierAuthentification, devisController.validerDevis);
+router.delete('/supprimer-devis', verifierAuthentification, devisController.supprimerDevis);
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

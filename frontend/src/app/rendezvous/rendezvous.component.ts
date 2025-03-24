@@ -213,31 +213,49 @@ export class RendezvousComponent implements OnInit {
   }
 
   //confirmer un rendezVous
-  // TODO probleme sur les valeurs de l'observable dans subscribe
-  // J'ai forcé l'affichage sans attendre les réponses API,
-  // à la bonne méthode ça ne marche pas
   confirmerRendezVous(rendezVousId: string): void {
-
-  this.rendezVous.confirmerRendezVous(rendezVousId).subscribe()
-  this.confirmation = "Rendez-vous confirmé avec succès";
-  setTimeout(() => {
-        this.confirmation = "";
-    }, 3000);
-    this.getRendezVous();
-    this.listAvailableRendezvous();
+    this.rendezVous.confirmerRendezVous(rendezVousId).subscribe({
+      next: () => {
+        this.confirmation = "Rendez-vous confirmé avec succès";
+  
+        // Masquer le message après 3 secondes
+        setTimeout(() => {
+          this.confirmation = "";
+        }, 3000);
+  
+        // Rafraîchir les données après confirmation réussie
+        this.getRendezVous();
+        this.listAvailableRendezvous();
+      },
+      error: (err) => {
+        console.error("Erreur lors de la confirmation :", err);
+        this.confirmation = "Erreur lors de la confirmation du rendez-vous.";
+        
+        setTimeout(() => {
+          this.confirmation = "";
+        }, 3000);
+      }
+    });
   }
+  
 
 
   //annulerRendezVous
-  // TODO de même que confirmerRendezVous
   annulerRendezVous(rendezVousId: string): void {
-    this.rendezVous.annulerRendezVous(rendezVousId).subscribe()
+    this.rendezVous.annulerRendezVous(rendezVousId).subscribe({
+      next: () => {
         this.getRendezVous();
         this.listAvailableRendezvous();
         this.annulation = "Rendez-vous annulé avec succés";
         setTimeout(() => {
           this.annulation = "";
         }, 3000)
-
+      }, 
+      error: (err) => {
+        console.error("Erreur lors de l'annulation :", err);
+        this.annulation = "Erreur lors de l'annulation du rendez-vous.";
+      }
+    }
+    )
       }
   }

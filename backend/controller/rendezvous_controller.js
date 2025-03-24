@@ -227,7 +227,7 @@ const recupererStatusRendezVous = async (req, res) => {
 
 }
 
-// Lister les rendezVous du jour 
+// Lister les rendezVous des 3 mois prochain (client), du jour (meca) et (manager)
 const listRendezVous = async (req, res) => {
     try {
         const userId = req.utilisateur._id;
@@ -238,16 +238,22 @@ const listRendezVous = async (req, res) => {
         const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
 
         if (role == 'client') {
-            // Récupérer les rendez-vous des 3 derniers mois
-            const threeMonthsAgo = new Date();
-            threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+            const threeMonths = new Date();
+            threeMonths.setMonth(threeMonths.getMonth() + 3);
 
             const appointments = await RendezVous.find({
                 status: { $in: ["en attente", "réservé", "assigné", "confirmé"] },
                 client: userId,
-                date: { $gte: threeMonthsAgo }
+                date: { $gte: new Date(), $lte: threeMonths }
             }).sort({ date: -1 });
 
+            // degisena en en attente le status reservé sy assigné mba ts anahirana client 
+            for (let i=0; i<=appointments.length-1;i++) {
+                if (appointments[i].status == "réservé" ||  appointments[i].status == "assigné") {
+                    appointments[i].status = "en attente"; 
+                }
+            }
+           
             return res.status(200).json(appointments);
 
         } else if (role == 'mecanicien') {
@@ -437,14 +443,15 @@ const confirmerRendezVous = async (req, res) => {
     try {
         const { rendezVousId } = req.body;
         // console.log(rendezVousId);
-        const rendezVousAnnule = await RendezVous.findByIdAndUpdate(rendezVousId,
+        const rendezVous = await RendezVous.findByIdAndUpdate(rendezVousId,
             { status: 'confirmé' },
             { new: true }
         );
         // console.log("test", rendezVousAnnule);
-        if (!rendezVousAnnule) {
+        if (!rendezVous) {
             res.status(404).json({ message: "RDV non trouvé" })
         }
+        return res.status(202).json(rendezVous); 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "erreur lors de la confirmation" })
@@ -462,6 +469,7 @@ const annulationRendezVous = async (req, res) => {
         if (!rendezVousAnnule) {
             res.status(404).json({ message: "RDV non trouvé" })
         }
+        return res.status(202).json(rendezVousAnnule); 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "erreur lors de l'annulation" })

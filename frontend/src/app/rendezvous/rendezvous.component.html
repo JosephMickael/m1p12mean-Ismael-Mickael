@@ -9,37 +9,6 @@
 
   <!-- Section Client -->
   <div *ngIf="userRole == 'client'" class="dashboard-container p-4">
-    <!-- Cartes de statistiques -->
-    <div class="row mb-4">
-      <div *ngFor="let status of statusRendezVous; let i = index" class="col-md-4 mb-3">
-        <div *ngIf="status.status == 'En attente'" class="card border-0 shadow-sm h-100 bg-light">
-          <div class="card-body text-center">
-            <h6 class="text-muted mb-2">Rendez-vous en attente</h6>
-            <h2 class="mb-0 fw-bold text-info">{{ status.count }}</h2>
-          </div>
-        </div>
-
-        <div *ngIf="status.status == 'Confirmé'" class="card border-0 shadow-sm h-100 bg-light">
-          <div class="card-body text-center">
-            <h6 class="text-muted mb-2">Rendez-vous confirmés</h6>
-            <h2 class="mb-0 fw-bold text-success">{{ status.count }}</h2>
-          </div>
-        </div>
-
-        <div *ngIf="status.status == 'Annulé'" class="card border-0 shadow-sm h-100 bg-light">
-          <div class="card-body text-center">
-            <h6 class="text-muted mb-2">Rendez-vous annulés</h6>
-            <h2 class="mb-0 fw-bold text-danger">{{ status.count }}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h4 class="mb-3 fw-bold text-secondary">Mes Rendez-vous des 3 derniers mois</h4>
-
-    <div *ngIf="confirmation" class="alert alert-info rounded-3 border-0 shadow-sm" role="alert">
-      {{ confirmation }}
-    </div>
 
     <!-- Liste des rendez-vous récents -->
     <div *ngIf="listRendezVous && listRendezVous.length > 0">
@@ -47,7 +16,7 @@
         <div class="card-header bg-white border-0 py-3">
           <h5 class="mb-0 d-flex align-items-center">
             <i class="bi bi-clock-history me-2"></i>
-            Derniers rendez-vous
+            Mes Rendez-vous des 3 prochains mois
           </h5>
         </div>
         <div class="card-body p-0">

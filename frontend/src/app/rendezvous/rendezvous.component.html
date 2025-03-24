@@ -51,7 +51,7 @@
                   </td>
                   <td>{{ rdv.services }}</td>
                   <td>
-                    <button *ngIf="rdv.status" (click)="confirmerRendezVous(rdv._id)" class="btn btn-sm me-2 text-white"
+                    <button *ngIf="rdv.status && rdv.status!='confirmé'" (click)="confirmerRendezVous(rdv._id)" class="btn btn-sm me-2 text-white"
                       style="background-color: var(--main-vert)">
                       <i class="fas fa-check"></i> Confirmer
                     </button>

@@ -281,12 +281,12 @@ const listRendezVous = async (req, res) => {
             }).sort({ date: -1 });
 
             // degisena en en attente le status reservé sy assigné mba ts anahirana client 
-            for (let i=0; i<=appointments.length-1;i++) {
-                if (appointments[i].status == "réservé" ||  appointments[i].status == "assigné") {
-                    appointments[i].status = "en attente"; 
+            for (let i = 0; i <= appointments.length - 1; i++) {
+                if (appointments[i].status == "réservé" || appointments[i].status == "assigné") {
+                    appointments[i].status = "en attente";
                 }
             }
-           
+
             return res.status(200).json(appointments);
 
         } else if (role == 'mecanicien') {
@@ -484,7 +484,7 @@ const confirmerRendezVous = async (req, res) => {
         if (!rendezVous) {
             res.status(404).json({ message: "RDV non trouvé" })
         }
-        return res.status(202).json(rendezVous); 
+        return res.status(202).json(rendezVous);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "erreur lors de la confirmation" })
@@ -502,7 +502,7 @@ const annulationRendezVous = async (req, res) => {
         if (!rendezVousAnnule) {
             res.status(404).json({ message: "RDV non trouvé" })
         }
-        return res.status(202).json(rendezVousAnnule); 
+        return res.status(202).json(rendezVousAnnule);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "erreur lors de l'annulation" })

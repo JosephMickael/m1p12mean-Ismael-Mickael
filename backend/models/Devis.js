@@ -1,47 +1,41 @@
-const mongoose = require('mongoose'); 
-const { type } = require('os');
+const mongoose = require('mongoose');
 
-
-const pieceSchema = new mongoose.Schema({
-    nom : { type: String, required: true },
-    reference : { type: String, required: true}, 
-    prixUnitaireHT: { type: Number, required: true}, 
-    prixUnitaireTTC: { type: Number, required: true},
-    quantite: { type: String, required: true}
-})
-
-
-const DevisSchema = new mongoose.Schema({
-    client : {
+const devisSchema = new mongoose.Schema({
+    client: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Utilisateur',
         required: true
     },
-    mecanicien : {
+    mecanicien: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref:'Utilisateur',
+        ref: 'Utilisateur',
         required: true
     },
-    manager : {
+    manager: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref:'Utilisateue',
+        ref: 'Utilisateur', 
         required: true
     }, 
-    dateCreation : {
-        type : Date, default: Date.now 
+    dateCreation: { 
+        type: Date, 
+        default: Date.now 
     },
-    status : {
+    status: {
         type: String, 
         enum: ['En attente', 'Validé', 'Refusé'], 
         default: 'En attente'
     }, 
-    services : [{
+    services: [{
         type: String, 
         required: true
     }],
-    piece: [pieceSchema]
-}) 
-    
-const Devis = mongoose.model('Devis', DevisSchema); 
+    pieces: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Piece',
+        required: true
+    }
+}); 
 
-module.exports = { Devis }; 
+module.exports = mongoose.model('Devis', devisSchema);
+
+

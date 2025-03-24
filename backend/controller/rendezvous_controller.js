@@ -1,7 +1,6 @@
 const express = require('express');
 const RendezVous = require('../models/Rendezvous');
 const Utilisateur = require('../models/Utilisateur');
-const Rendezvous = require('../models/Rendezvous');
 
 // Recuperation de tout les rendez-vous 
 const getRendezVous = async (req, res) => {
@@ -15,37 +14,15 @@ const getRendezVous = async (req, res) => {
     }
 }
 
-// Recuperation des rendez-vous selon le mecanicien
-const getMecaRendezVous = async (req, res) => {
-    try {
-        if (!req.utilisateur) {
-            return res.status(401).json({ message: "Utilisateur non authentifié." });
-        }
-
-        const mecanicienId = req.utilisateur._id;
-
-        const rendezVous = await RendezVous.find({ mecanicien: mecanicienId }).populate({ path: "client", select: "nom" });
-
-        if (rendezVous.length > 0) {
-            return res.status(200).json(rendezVous);
-        } else {
-            return res.status(404).json({ message: "Aucun rendez-vous assigné trouvé." });
-        }
-
-    } catch (error) {
-        return res.status(500).json({ message: "Erreur lors de la récupération des rendez-vous assignés." });
-    }
-}
-
 // Recuperarion nombre rdv en fonction du status
 const getRendezVousDetails = async (req, res) => {
     try {
         const totalRdv = await RendezVous.countDocuments()
-        const rdvConfirme = await RendezVous.countDocuments({ status: 'confirmé' })
+        const rdvConfirmé = await RendezVous.countDocuments({ status: 'confirmé' })
         const rdvEnAttente = await RendezVous.countDocuments({ status: 'en attente' })
         const rdvAnnule = await RendezVous.countDocuments({ status: 'annulé' })
 
-        res.json({ totalRdv, rdvConfirme, rdvEnAttente, rdvAnnule })
+        res.json({ totalRdv, rdvConfirmé, rdvEnAttente, rdvAnnule })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -355,7 +332,7 @@ const createRendezvous = async (req, res) => {
             { $match: { role: "mecanicien" } },
             { $sample: { size: 1 } }
         ]);
-        //console.log("Mecanicien id", mecanicienDisponible._id); 
+        console.log("Mecanicien id", mecanicienDisponible._id); 
         mecanicienId = mecanicienDisponible[0]._id;
         const rendezvous = new RendezVous({ heure, date, status, services, client, mecanicien: [mecanicienId] });
         //console.log("rendezVous creer",rendezvous)
@@ -447,6 +424,7 @@ const assignedRendezVous = async (req, res) => {
             return res.status(200).json(rendezVous);
         } else {
             return res.status(404).json({ message: "Aucun rendez-vous assigné trouvé." });
+
         }
 
     } catch (error) {
@@ -509,7 +487,6 @@ module.exports = {
     getTodayRendezVous,
     getNextFiveRendezVous,
     updateRendezVous,
-    deleteRendezVous,
-    getMecaRendezVous
+    deleteRendezVous
 };
 

@@ -42,6 +42,9 @@ export class RendezvousComponent implements OnInit {
   autresServices: string = "";
   statistics: any = {};
   confirmation: string = "";
+  errorConfirmation: string = "";
+  annulation: string = "";
+  errorAnnulation: string = "";
 
 
 
@@ -58,7 +61,7 @@ export class RendezvousComponent implements OnInit {
     }
   }
 
-  // Formatage date 
+  // Formatage date
 
   formatDate(date: string): string {
     const options: Intl.DateTimeFormatOptions = {
@@ -98,7 +101,7 @@ export class RendezvousComponent implements OnInit {
     );
   }
 
-  // Comtage des status rendezVous 
+  // Comtage des status rendezVous
   getStatusRendezVous(): void {
     this.rendezVous.getStatusRendezVous().subscribe(data => {
       this.statusRendezVous = data
@@ -129,7 +132,7 @@ export class RendezvousComponent implements OnInit {
     });
   }
 
-  // Lister tous les rendezVous 
+  // Lister tous les rendezVous
   listAvailableRendezvous(): void {
     this.rendezVous.getAvailableRendezvous().subscribe(data => this.availableRendezvous = data)
   }
@@ -140,8 +143,11 @@ export class RendezvousComponent implements OnInit {
     this.errorMessage = "";
     this.rendezVous.reserveRendezVous(rendezVousId).subscribe({
       next: () => {
-        this.successReservation = "réservation effectué avec succès";
+        this.successReservation = "réservation effectuée avec succès";
         this.listAvailableRendezvous();
+        this.getRendezVous();
+        setTimeout(()=> {
+          this.successReservation=""}, 3000);
       },
       error: (error) => {
         this.errorMessage = "Rendezvous non disponible";
@@ -161,8 +167,8 @@ export class RendezvousComponent implements OnInit {
 
     this.rendezVous.createRendezVous(date, time, services).subscribe({
       next: () => {
-        this.listAvailableRendezvous();
         this.success = "Création de rendezVous effectué avec succès !";
+        this.getRendezVous();
       },
       error: (error) => {
         console.error("Erreur backend:", error);
@@ -205,29 +211,33 @@ export class RendezvousComponent implements OnInit {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);  // Mois commence à 0 en JavaScript
   }
-  //confirmer un rendezVous 
+
+  //confirmer un rendezVous
+  // TODO probleme sur les valeurs de l'observable dans subscribe
+  // J'ai forcé l'affichage sans attendre les réponses API,
+  // à la bonne méthode ça ne marche pas
   confirmerRendezVous(rendezVousId: string): void {
-    this.confirmation = "";
-    this.rendezVous.confirmerRendezVous(rendezVousId).subscribe(
-      () => {
-        this.getRendezVous();
-        this.confirmation = "Rendez-vous confirmé avec succés";
-        setTimeout(() => {
-          this.confirmation = "";
-        }, 5000)
-      }
-    );
+
+  this.rendezVous.confirmerRendezVous(rendezVousId).subscribe()
+  this.confirmation = "Rendez-vous confirmé avec succès";
+  setTimeout(() => {
+        this.confirmation = "";
+    }, 3000);
+    this.getRendezVous();
+    this.listAvailableRendezvous();
   }
-  //annulerRendezVous 
+
+
+  //annulerRendezVous
+  // TODO de même que confirmerRendezVous
   annulerRendezVous(rendezVousId: string): void {
-    this.confirmation = "";
-    this.rendezVous.annulerRendezVous(rendezVousId).subscribe(
-      () => {
+    this.rendezVous.annulerRendezVous(rendezVousId).subscribe()
         this.getRendezVous();
-        this.confirmation = "Rendez-vous annulé avec succés";
+        this.listAvailableRendezvous();
+        this.annulation = "Rendez-vous annulé avec succés";
         setTimeout(() => {
-          this.confirmation = "";
-        }, 5000)
-      })
+          this.annulation = "";
+        }, 3000)
+
+      }
   }
-}

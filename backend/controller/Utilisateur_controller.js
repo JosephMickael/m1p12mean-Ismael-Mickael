@@ -14,6 +14,16 @@ const getAllUser = async (req, res) => {
     }
 }
 
+const getAllManagers = async (req, res) => {
+    try {
+        const managers = await Utilisateur.find({ role: 'manager' })
+
+        res.json(managers)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 const getUserById = async (req, res) => {
     try {
         const utilisateur = await Utilisateur.findById(req.params.id)
@@ -155,4 +165,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUser, createUser, getUserById, updateUser, updatePassword, getCurrentUser, deleteUser, usersDetails }
+module.exports = { getAllUser, createUser, getUserById, updateUser, updatePassword, getCurrentUser, deleteUser, usersDetails, getAllManagers }

@@ -371,7 +371,13 @@ const createRendezvous = async (req, res) => {
             { $match: { role: "mecanicien" } },
             { $sample: { size: 1 } }
         ]);
-        console.log("Mecanicien id", mecanicienDisponible._id);
+
+        // Au cas ou il n'y a pas de mecanicien disponible 
+        if (!mecanicienDisponible || mecanicienDisponible.length === 0) {
+            return res.status(401).json({ message: 'Vous ne pouvez pas encore prendre un rendez-vous' })
+        }
+
+        // console.log("Mecanicien id", mecanicienDisponible._id);
         mecanicienId = mecanicienDisponible[0]._id;
         const rendezvous = new RendezVous({ heure, date, status, services, client, mecanicien: [mecanicienId] });
         //console.log("rendezVous creer",rendezvous)

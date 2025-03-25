@@ -27,15 +27,18 @@ export class RendezVous {
   }
 
   getTodayRdv() {
-    return this.http.get(`${environment.apiUrl}/today-rdv`)
+    const headers = this.createHeader();
+    return this.http.get(`${environment.apiUrl}/today-rdv`, { headers })
   }
 
   getNextRdv() {
-    return this.http.get(`${environment.apiUrl}/next-rdv`)
+    const headers = this.createHeader();
+    return this.http.get(`${environment.apiUrl}/next-rdv`, { headers })
   }
 
   getRdvDetails() {
-    return this.http.get(`${environment.apiUrl}/rdv-details`)
+    const headers = this.createHeader();
+    return this.http.get(`${environment.apiUrl}/rdv-details`, { headers })
   }
 
   // Mettre à jour un rendez-vous

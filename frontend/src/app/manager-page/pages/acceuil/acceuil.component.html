@@ -58,13 +58,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let client of lastClients">
+                                <tr *ngFor="let client of lastClients" class="text-nowrap">
                                     <td>{{ client.nom }}</td>
                                     <td>{{ client.email }}</td>
                                     <td class="text-center">{{ formatDate(client.createdAt) }} </td>
                                 </tr>
                             </tbody>
                         </table>
+                        @if (lastClients.length == 0) {
+                        <div
+                            class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                            Aucun rendez-vous
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -86,13 +92,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let mecanicien of lastMecaniciens">
+                                <tr *ngFor="let mecanicien of lastMecaniciens" class="text-nowrap">
                                     <td>{{ mecanicien.nom }}</td>
                                     <td class="text-center">{{ mecanicien.specialite || '-' }}</td>
                                     <td class="text-center">{{ formatDate(mecanicien.createdAt) }}</td>
                                 </tr>
                             </tbody>
                         </table>
+                        @if (lastMecaniciens.length == 0) {
+                        <div
+                            class="bg-warning rounded bg-opacity-10 d-flex justify-content-center align-items-center p-3">
+                            Aucun rendez-vous
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -118,7 +130,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let rendezvous of nextRendezVous">
+                        <tr *ngFor="let rendezvous of nextRendezVous" class="text-nowrap">
                             <td>{{ formatDate(rendezvous.date) }}</td>
                             <td>{{ rendezvous.heure }}</td>
                             <td>{{ rendezvous.client.nom }}</td>

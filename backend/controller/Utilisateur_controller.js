@@ -155,4 +155,26 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUser, createUser, getUserById, updateUser, updatePassword, getCurrentUser, deleteUser, usersDetails }
+// recupere tous les utilisateurs selon la gestion de devis
+const getAllUserDevis = async (req, res) => {
+    try {
+        let users = {};
+
+        if (req.utilisateur.role == "mecanicien") {
+            users.client = await Utilisateur.find({ role: "client" });
+            users.manager = await Utilisateur.find({ role: "manager" });
+        } else if (req.utilisateur.role == "manager") {
+            users.client = await Utilisateur.find({ role: "client" });
+            users.mecanicien = await Utilisateur.find({ role: "mecanicien" });
+        } else {
+            return res.status(403).json({ message: "Accès refusé" });
+        }
+
+        return res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+module.exports = { getAllUserDevis, getAllUser, createUser, getUserById, updateUser, updatePassword, getCurrentUser, deleteUser, usersDetails }

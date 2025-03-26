@@ -42,6 +42,7 @@ router.get('/getAllDevis', verifierAuthentification, devisController.getAllDevis
 router.get('/getDevis', verifierAuthentification, devisController.getDevisById); 
 router.put('/valider-devis', verifierAuthentification, devisController.validerDevis); 
 router.delete('/supprimer-devis', verifierAuthentification, devisController.supprimerDevis); 
+router.get('/get-utilisateur-devis', verifierAuthentification, utilisateurController.getAllUserDevis); 
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

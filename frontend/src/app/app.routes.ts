@@ -14,12 +14,13 @@ import { AcceuilClientComponent } from './client-page/pages/acceuil-client/acceu
 import { RendezvousManagerComponent } from './manager-page/pages/rendezvous-manager/rendezvous-manager.component';
 import { MecaRendezvousComponent } from './mecanicien-page/pages/meca-rendezvous/meca-rendezvous.component';
 import { DevisComponent } from './devis/devis.component';
+import { ContactComponent } from './client-page/pages/contact/contact.component';
 
 export const routes: Routes = [
 
     //Test
     { path: 'create-rendezvous', component: RendezvousComponent },
-    { path: 'devis', component: DevisComponent},
+    { path: 'devis', component: DevisComponent },
 
 
     // Lorsque l'URL est vide, rediriger vers 'login'
@@ -46,6 +47,10 @@ export const routes: Routes = [
             {
                 path: 'profil',
                 component: ProfilComponent,
+            },
+            {
+                path: 'contact',
+                component: ContactComponent,
             },
             {
                 path: 'create-rendezvous',

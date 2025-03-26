@@ -34,7 +34,7 @@
                                 </div>
                             </td>
                             <td>{{ rdv.services }}</td>
-                            <td><span class="badge rounded text-white" [ngClass]="{
+                            <td><span class="badge rounded" [ngClass]="{
                                 'bg-warning': rdv.status === 'en attente',
                                 'bg-success': rdv.status === 'confirmé',
                                 'bg-info': rdv.status === 'assigné',
@@ -45,7 +45,9 @@
                             }">{{ rdv.status }}</span></td>
                             <td>
                                 <div class="btn-group ms-3">
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <!-- Modifier -->
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#statusModal" (click)="prepareFormForEdit(rdv)">
                                         <i class="bi bi-pencil"></i>
                                     </button>
                                 </div>
@@ -53,6 +55,53 @@
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="!listeRendezVous || listeRendezVous.length === 0" class="p-4 text-center text-muted">
+                    <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
+                    Aucun rendez-vous.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal  modification status -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 text-white" style="background-color: var(--main-bleu);">
+                <h5 class="modal-title fw-bold" id="statusModalLabel">Modifier status</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                @if (errorMessage) {
+                <div class="p-1 mb-3 text-white text-center bg-danger rounded">{{errorMessage}}</div>
+                }
+                @if (successMessage) {
+                <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                    {{successMessage}}</div>
+                }
+                <form [formGroup]="statusForm" (ngSubmit)="updateRendezVousStatus()">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" formControlName="status">
+                            <option value="" selected disabled>Sélectionner un statut</option>
+                            <option *ngFor="let status of statusOptions" [value]="status">
+                                {{ status }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="submitted && statusForm.controls['status'].errors">
+                            Le statut est requis
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <button type="button" class="btn btn-outline-secondary me-md-2"
+                            data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn text-white"
+                            style="background-color: var(--main-bleu);">Modifier</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

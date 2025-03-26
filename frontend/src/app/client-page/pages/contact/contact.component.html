@@ -1,0 +1,69 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <h1 class="display-5 fw-bold mb-3" style="color: var(--main-bleu-deep);">
+                            <i class=" bi bi-envelope-paper"></i> Contactez-nous
+                        </h1>
+                        <p class="lead text-muted">
+                            Nous répondons à toutes vos questions dans les plus brefs délais
+                        </p>
+                    </div>
+                    @if (successMessage) {
+                    <div class="p-1 mb-3 text-white text-center rounded" style="background-color: #59d88e;">
+                        {{ successMessage }}
+                    </div>
+                    }
+                    @if (errorMessage) {
+                    <div class="p-1 mb-3 text-white text-center bg-danger rounded">
+                        {{errorMessage}}
+                    </div>
+                    }
+                    <form [formGroup]="contactForm">
+                        <div class="mb-4">
+                            <label for="title" class="form-label fw-bold">
+                                <i class="bi bi-card-heading me-2 text-muted"></i>Titre du message
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="title" formControlName="title"
+                                placeholder="Objet de votre demande">
+                            <div *ngIf="contactForm.get('title')?.invalid && contactForm.get('title')?.touched"
+                                class="text-danger">
+                                Indquez l'objet de votre message
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="content" class="form-label fw-bold">
+                                <i class="bi bi-chat-square-text me-2 text-muted"></i>Votre message
+                            </label>
+                            <textarea class="form-control form-control-lg" id="content" rows="5"
+                                formControlName="content" placeholder="Décrivez votre demande en détail..."></textarea>
+                            <div *ngIf="contactForm.get('content')?.invalid && contactForm.get('content')?.touched"
+                                class="text-danger">
+                                Indquez l'objet de votre message
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-5">
+                            <button type="submit" class="btn btn-lg text-white" (click)="onSubmit()"
+                                style="background-color: var(--main-bleu-deep);">
+                                <i class=" bi bi-send-fill me-2"></i>Envoyer le message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 text-muted">
+                <p>
+                    <i class="bi bi-telephone me-2"></i>+261 33 333 33
+                </p>
+                <p>
+                    <i class="bi bi-envelope me-2"></i>contact&#64;exemple.com
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

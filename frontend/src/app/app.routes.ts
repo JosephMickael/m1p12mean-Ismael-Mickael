@@ -15,6 +15,7 @@ import { RendezvousManagerComponent } from './manager-page/pages/rendezvous-mana
 import { MecaRendezvousComponent } from './mecanicien-page/pages/meca-rendezvous/meca-rendezvous.component';
 import { DevisComponent } from './devis/devis.component';
 import { ContactComponent } from './client-page/pages/contact/contact.component';
+import { PiecesComponent } from './piece/piece.component';
 import { MessagesComponent } from './manager-page/pages/messages/messages.component';
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
     //Test
     { path: 'create-rendezvous', component: RendezvousComponent },
     { path: 'devis', component: DevisComponent },
+    { path: 'piece', component: PiecesComponent },
 
 
     // Lorsque l'URL est vide, rediriger vers 'login'

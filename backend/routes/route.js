@@ -41,11 +41,13 @@ router.get('/get-utilisateur/:id', verifierAuthentification, utilisateurControll
 
 //Devis
 router.post('/create-devis', verifierAuthentification, devisController.creerDevis);
-router.put('/modifier-devis', verifierAuthentification, devisController.modifierDevis);
-router.get('/getAllDevis', verifierAuthentification, devisController.getAllDevis);
-router.get('/getDevis', verifierAuthentification, devisController.getDevisById);
-router.put('/valider-devis', verifierAuthentification, devisController.validerDevis);
-router.delete('/supprimer-devis', verifierAuthentification, devisController.supprimerDevis);
+router.put('/modifier-devis/:id', verifierAuthentification, devisController.modifierDevis);
+router.get('/devis', verifierAuthentification, devisController.getAllDevis);
+router.get('/devis/:id', verifierAuthentification, devisController.getDevisById);
+router.put('/valider-devis/:id', verifierAuthentification, devisController.validerDevis);
+router.delete('/supprimer-devis/:id', verifierAuthentification, devisController.supprimerDevis);
+router.get('/get-utilisateur-devis', verifierAuthentification, utilisateurController.getAllUserDevis);
+
 
 // Contact
 router.post('/send', verifierAuthentification, contactController.sendMessage)

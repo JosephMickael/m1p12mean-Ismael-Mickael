@@ -1,0 +1,19 @@
+<h3>Ajouter une Pièce</h3>
+<form [formGroup]="pieceForm" (ngSubmit)="addPiece()">
+  <label>Nom :</label>
+  <input type="text" formControlName="nom">
+
+  <label>Référence :</label>
+  <input type="text" formControlName="reference">
+
+  <label>Prix HT :</label>
+  <input type="number" formControlName="prixUnitaireHT">
+
+  <label>Prix TTC :</label>
+  <input type="number" formControlName="prixUnitaireTTC">
+
+  <label>Quantité :</label>
+  <input type="number" formControlName="quantite">
+
+  <button type="submit">➕ Ajouter</button>
+</form>

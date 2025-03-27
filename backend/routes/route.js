@@ -5,7 +5,7 @@ const utilisateurController = require('../controller/Utilisateur_controller');
 const rendezVousController = require('../controller/rendezvous_controller');
 const verifierAuthentification = require('../middlewares/auth.middleware');
 const devisController = require('../controller/devis_controller');
-const contactController = require('../controller/Contact_controller')
+const contactController = require('../controller/Contact_controller'); 
 
 // Rendezvous 
 router.get('/all-rendezvous', rendezVousController.getRendezVous)
@@ -40,12 +40,13 @@ router.get('/get-utilisateur/:id', verifierAuthentification, utilisateurControll
 
 //Devis
 router.post('/create-devis', verifierAuthentification, devisController.creerDevis);
-router.put('/modifier-devis', verifierAuthentification, devisController.modifierDevis);
-router.get('/getAllDevis', verifierAuthentification, devisController.getAllDevis);
-router.get('/getDevis', verifierAuthentification, devisController.getDevisById); 
-router.put('/valider-devis', verifierAuthentification, devisController.validerDevis); 
-router.delete('/supprimer-devis', verifierAuthentification, devisController.supprimerDevis); 
-router.get('/get-utilisateur-devis', verifierAuthentification, utilisateurController.getAllUserDevis); 
+router.put('/modifier-devis/:id', verifierAuthentification, devisController.modifierDevis);
+router.get('/devis', verifierAuthentification, devisController.getAllDevis);
+router.get('/devis/:id', verifierAuthentification, devisController.getDevisById);
+router.put('/valider-devis/:id', verifierAuthentification, devisController.validerDevis); 
+router.delete('/supprimer-devis/:id', verifierAuthentification, devisController.supprimerDevis); 
+router.get('/get-utilisateur-devis', verifierAuthentification, utilisateurController.getAllUserDevis);
+
 
 // Contact
 router.post('/send', verifierAuthentification, contactController.sendMessage)

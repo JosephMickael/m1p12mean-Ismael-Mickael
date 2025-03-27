@@ -1,5 +1,19 @@
 const mongoose = require('mongoose');
 
+const pieceSchema = new mongoose.Schema({
+    nom: { type: String, required: true },
+    reference: { type: String, required: true },
+    prixUnitaireHT: { type: Number, required: true },
+    prixUnitaireTTC: { type: Number, required: true },
+    quantite: { type: Number, required: true },
+    total: { type: Number, required: true }
+});
+
+const servicesSchema = new mongoose.Schema({
+    description: {type: String, required: true}, 
+    coutServices: {type: Number, required: true} 
+})
+
 const devisSchema = new mongoose.Schema({
     client: {
         type: mongoose.Schema.Types.ObjectId, 
@@ -11,11 +25,6 @@ const devisSchema = new mongoose.Schema({
         ref: 'Utilisateur',
         required: true
     },
-    manager: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Utilisateur', 
-        required: true
-    }, 
     dateCreation: { 
         type: Date, 
         default: Date.now 
@@ -25,17 +34,12 @@ const devisSchema = new mongoose.Schema({
         enum: ['En attente', 'Validé', 'Refusé'], 
         default: 'En attente'
     }, 
-    services: [{
-        type: String, 
-        required: true
-    }],
-    pieces: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Piece',
-        required: true
+    services: [servicesSchema],
+    pieces: [pieceSchema], 
+    totalGeneral: { 
+        type: Number, 
+        default: 0 
     }
 }); 
 
 module.exports = mongoose.model('Devis', devisSchema);
-
-

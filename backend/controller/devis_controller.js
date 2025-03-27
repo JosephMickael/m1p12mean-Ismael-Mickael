@@ -1,50 +1,28 @@
 const Devis  = require('../models/Devis'); 
 const Utilisateur = require('../models/Utilisateur');
 
-// recupere tous les utilisateurs
-const getAllUser = async (req, res) => {
-    try {
-        if (req.utilisateur.role == "mecanicien") {
-        const client = await Utilisateur.find({ role: "client"});
-        const manager = await Utilisateur.find({ role: "manager"}); 
-        res.status(202).json({client, manager});
-
-        } else if (req.utilisateur.role == "manager") {
-        const client = await Utilisateur.find({ role: "client"});
-        const mecanicien = await Utilisateur.find({ role: "mecanicien"});
-        res.status(202).json({client, mecanicien});
-
-        }
-        return res.status(404).json({ message: "Sortie de la condition  erreur"})
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-
 
 //  Créer un devis
 const creerDevis = async (req, res) => {
-    try {
-        const { client, mecanicien, manager, services, pieces } = req.body;
-        const nouveauDevis = new Devis({
-            client,
-            mecanicien,
-            manager,
-            services,
-            pieces
-        });
+    // try {
+        const mecanicien = req.utilisateur._id;
+        const status = "En attente"; 
+        const devisData = { ...req.body, mecanicien, status }; // Ajout du mécanicien sans extraire manuellement
+
+        // Créer une nouvelle instance avec seulement les champs reçus
+        const nouveauDevis = new Devis(devisData);
 
         await nouveauDevis.save();
         console.log("Nouveau devis ", nouveauDevis); 
         res.status(201).json({ nouveauDevis });
-    } catch (error) {
-        res.status(500).json({ message: " Erreur lors de la création du devis", error });
-    } 
+    // } catch (error) {
+    //     res.status(500).json({ message: "Erreur lors de la création du devis", error });
+    // } 
 };
 
 //  Modifier un devis
 const modifierDevis = async (req, res) => {
-    try {
+    // try {
         const { id } = req.params;
         const devisMisAJour = await Devis.findByIdAndUpdate(id, req.body, { new: true });
 
@@ -53,16 +31,26 @@ const modifierDevis = async (req, res) => {
         }
 
         res.status(200).json({ message: " Devis mis à jour avec succès", devis: devisMisAJour });
-    } catch (error) {
-        res.status(500).json({ message: " &#x274C Erreur lors de la mise à jour", error });
+    // } catch (error) {
+    //     res.status(500).json({ message: " &#x274C Erreur lors de la mise à jour", error });
 
-    }
+    // }
 };
 
 // Récupérer tous les devis
 const getAllDevis = async (req, res) => {
     try {
-        const devis = await Devis.find().populate("client mecanicien manager");
+        let devis; 
+        if (req.utilisateur.role == "client") {
+            const clientId = req.utilisateur._id; 
+             devis = await Devis.find({ client: clientId }).populate(['client', 'mecanicien', 'services']);
+        //console.log("liste des devis", devis)
+        } else if (req.utilisateur.role == "mecanicien") {
+            const mecaId = req.utilisateur._id; 
+             devis = await Devis.find({ mecanicien: mecaId }).populate(['client', 'mecanicien', 'services']);
+        } else if (req.utilisateur.role == "manager") {
+            devis = await Devis.find().populate(['client', 'mecanicien', 'services']);
+        }
         res.status(200).json(devis);
     } catch (error) {
         res.status(500).json({ message: " Erreur lors de la récupération des devis", error });

@@ -179,8 +179,10 @@ const getAllUserDevis = async (req, res) => {
         } else {
             return res.status(403).json({ message: "Accès refusé" });
         }
+        //console.log("DevisUser", users); 
 
         return res.status(200).json(users);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -14,7 +14,6 @@
     width: 60px;
 }
 
-/* Modifier la règle existante pour h3 */
 h3 {
     opacity: 1;
     transition: opacity 0.3s ease;
@@ -130,6 +129,7 @@ main {
         margin-left: 0;
         width: 100%;
         transition: margin-left 0.3s ease, width 0.3s ease;
+        overflow-x: hidden;
     }
 
     .nav-main {
@@ -137,10 +137,19 @@ main {
         width: 100%;
         transition: margin-left 0.3s ease, width 0s ease;
         overflow-x: hidden;
+        overflow: visible;
+        z-index: 1050
     }
 
     .sidebar.collapsed+main {
         margin-left: 60px;
         width: calc(100% - 60px);
+    }
+
+    .dropdown-menu {
+        position: abolute !important;
+        right: 0;
+        left: auto;
+        z-index: 1100;
     }
 }

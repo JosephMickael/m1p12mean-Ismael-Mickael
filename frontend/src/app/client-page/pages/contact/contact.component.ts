@@ -34,6 +34,7 @@ export class ContactComponent implements OnInit {
     this.contactservice.sendMessage(this.clientId, managersId, title, content).subscribe({
       next: (response) => {
         this.successMessage = response.message
+        this.contactForm.reset()
         setTimeout(() => this.successMessage = '', 2000);
       }, error: error => {
         this.errorMessage = "Une erreur s'est produite"

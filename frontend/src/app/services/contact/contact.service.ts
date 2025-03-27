@@ -33,4 +33,9 @@ export class ContactService {
   markAsRead(messageId: string, managerId: string): Observable<any> {
     return this.http.put(`${environment.apiUrl}/read/${messageId}`, { managerId }, { headers: this.headers });
   }
+
+  // suppression message
+  deleteMessage(messageId: string) {
+    return this.http.delete(`${environment.apiUrl}/message/${messageId}`, { headers: this.headers })
+  }
 }

@@ -29,18 +29,29 @@ const sendMessage = async (req, res) => {
 // Récupère les messages (pour tous les managers)
 const getMessage = async (req, res) => {
     try {
-        const messages = await Contact.find({ managers: 'manager' })
+        const userId = req.utilisateur._id;
+
+        const isManager = await Utilisateur.findOne({ _id: userId, role: 'manager' });
+
+        if (!isManager) {
+            return res.status(403).json({ error: "Accès refusé : réservé aux managers" });
+        }
+
+        const messages = await Contact.find({ managers: userId })
             .populate('client', 'nom email')
-        res.json(messages)
+            .populate('readBy', 'nom email')  // Récupère les managers qui ont lu
+            .populate('managers', 'nom email');
+
+        res.json(messages);
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: error.message });
     }
 }
 
 // Marquer "lu ou vu" par les managers 
 const markAsRead = async (req, res) => {
     try {
-        const { managerId } = res.body
+        const { managerId } = req.body
         const message = await Contact.findById(req.params.messageId)
 
         if (!message) {
@@ -59,4 +70,13 @@ const markAsRead = async (req, res) => {
     }
 }
 
-module.exports = { sendMessage, getMessage, markAsRead }
+const deleteMessage = async (req, res) => {
+    try {
+        await Contact.findByIdAndDelete(req.params.messageId)
+        res.json({ message: 'Message supprimé avec succès' })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
+module.exports = { sendMessage, getMessage, markAsRead, deleteMessage }

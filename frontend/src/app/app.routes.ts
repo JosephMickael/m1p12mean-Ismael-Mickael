@@ -15,6 +15,7 @@ import { RendezvousManagerComponent } from './manager-page/pages/rendezvous-mana
 import { MecaRendezvousComponent } from './mecanicien-page/pages/meca-rendezvous/meca-rendezvous.component';
 import { DevisComponent } from './devis/devis.component';
 import { ContactComponent } from './client-page/pages/contact/contact.component';
+import { MessagesComponent } from './manager-page/pages/messages/messages.component';
 
 export const routes: Routes = [
 
@@ -123,6 +124,11 @@ export const routes: Routes = [
             {
                 path: 'profil',
                 component: ProfilComponent,
+            },
+            {
+                path: 'messages',
+                component: MessagesComponent,
+                data: { role: 'manager' }
             },
         ]
     },

@@ -6,6 +6,7 @@ const rendezVousController = require('../controller/rendezvous_controller');
 const verifierAuthentification = require('../middlewares/auth.middleware');
 const devisController = require('../controller/devis_controller');
 const contactController = require('../controller/Contact_controller')
+const emailController = require('../controller/Email_controller')
 
 // Rendezvous 
 router.get('/all-rendezvous', rendezVousController.getRendezVous)
@@ -49,7 +50,11 @@ router.delete('/supprimer-devis', verifierAuthentification, devisController.supp
 // Contact
 router.post('/send', verifierAuthentification, contactController.sendMessage)
 router.get('/managers/messages', verifierAuthentification, contactController.getMessage)
-router.put('/read/:messageId', verifierAuthentification, contactController.getMessage)
+router.put('/read/:messageId', verifierAuthentification, contactController.markAsRead)
+router.delete('/message/:messageId', verifierAuthentification, contactController.deleteMessage)
+
+// Envoi Email
+router.post('/send-email', verifierAuthentification, emailController.sendEmail)
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

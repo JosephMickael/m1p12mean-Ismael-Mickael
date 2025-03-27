@@ -7,6 +7,6 @@ const contactSchema = new mongoose.Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
     readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "Utilisateur" }] // Managers ayant lu le message
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Contact', contactSchema); 

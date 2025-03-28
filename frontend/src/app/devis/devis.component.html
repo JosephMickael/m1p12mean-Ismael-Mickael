@@ -1,98 +1,108 @@
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Gestion de devis</h2>
-
   <!-- Affichage pour les clients -->
   <div *ngIf="userRole == 'client'">
     <!-- Liste des devis -->
-    <div class="card shadow-sm">
-      <div class="card-header bg-info text-white">
-        <h3 class="m-0">Liste des devis</h3>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th>Mécanicien</th>
-                <th>Services</th>
-                <th>Coût des services</th>
-                <th>Status</th>
-                <th>Pièces</th>
-                <th>Prix HT</th>
-                <th>Prix TTC</th>
-                <th>Total général</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let d of devis">
-                <td>{{ d.mecanicien?.nom }}</td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li *ngFor="let service of d.services">
-                      {{ service.description }}
-                    </li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li *ngFor="let service of d.services">
-                      {{ service.coutServices }} 
-                    </li>
-                  </ul>
-                </td>
-                <td>{{ d.status }}</td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li *ngFor="let piece of d.pieces">
-                      {{ piece.nom }} ({{ piece.quantite }} x {{ piece.prixUnitaireTTC }} )
-                    </li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li *ngFor="let piece of d.pieces">
-                      {{ piece.prixUnitaireHT }} 
-                    </li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li *ngFor="let piece of d.pieces">
-                      {{ piece.prixUnitaireTTC }} 
-                    </li>
-                  </ul>
-                </td>
-                <td>{{ d.totalGeneral }}</td>
-              </tr>
-            </tbody>
-          </table>
+    <div *ngIf="devis && devis.length > 0">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-info text-white py-3">
+          <h5 class="mb-0 d-flex align-items-center">
+            <i class="bi bi-file-earmark-text me-2"></i>
+            Liste des devis
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Mécanicien</th>
+                  <th>Services</th>
+                  <th>Coût des services</th>
+                  <th>Status</th>
+                  <th>Pièces</th>
+                  <th>Prix TTC</th>
+                  <th>Total général</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of devis">
+                  <td>{{ d.mecanicien?.nom }}</td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li *ngFor="let service of d.services">
+                        {{ service.description }}
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li *ngFor="let service of d.services">
+                        {{ service.coutServices | currency:'AR' }}
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill px-2" [ngClass]="{
+                      'bg-warning': d.status === 'En attente',
+                      'bg-success': d.status === 'Validé',
+                    }">
+                      {{ d.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li *ngFor="let piece of d.pieces">
+                        {{ piece.nom }} ({{ piece.quantite }} x {{ piece.prixUnitaireTTC }})
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li *ngFor="let piece of d.pieces">
+                        {{ piece.prixUnitaireTTC | currency:'AR' }}
+                      </li>
+                    </ul>
+                  </td>
+                  <td>{{ d.totalGeneral | currency:'AR' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
-  
+
+    <!-- Si la liste des devis est vide -->
+    <div *ngIf="!devis || devis.length === 0">
+      <div class="alert alert-warning" role="alert">
+        Aucun devis disponible.
+      </div>
+    </div>
 
   <!-- Affichage pour les mécaniciens -->
   <div *ngIf="userRole == 'mecanicien'">
     <div class="card mb-4">
-      <div class="card-header bg-primary text-white">
-        <h3>Créer un nouveau devis</h3>
-      </div>
+      <div class="card-header bg-info text-white">
+        <h5 class="d-flex align-items-center">
+          <i class="bi bi-file-earmark-plus me-2"></i>
+          Créer un nouveau devis
+        </h5>
+              </div>
       <div class="card-body">
         <form (ngSubmit)="creerDevis()">
           <div class="form-group">
             <label for="clientControl" class="form-label">Nom du client</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="clientControl" 
-              placeholder="Entrez un nom de client" 
+            <input
+              type="text"
+              class="form-control"
+              id="clientControl"
+              placeholder="Entrez un nom de client"
               [formControl]="clientControl"
               (focus)="showDropdown = true">
-            <ul *ngIf="showDropdown && (filteredUsers$ | async) as filteredUsers" 
+            <ul *ngIf="showDropdown && (filteredUsers$ | async) as filteredUsers"
                 class="list-group custom-dropdown">
-              <li *ngFor="let client of filteredUsers" 
+              <li *ngFor="let client of filteredUsers"
                   class="list-group-item list-group-item-action"
                   (click)="selectUser(client)">
                 {{ client.nom }}
@@ -114,48 +124,58 @@
           <app-pieces (pieceAdded)="onPieceAdded($event)"></app-pieces>
 
           <!-- Liste des pièces ajoutées -->
-          <label>Pièces du Devis</label>
-          <table>
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Référence</th>
-                <th>Prix HT</th>
-                <th>Prix TTC</th>
-                <th>Quantité</th>
-                <th>Total</th>
-                <th>Actions</th> 
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let piece of newDevis.pieces; let i = index">
-                <td>{{ piece.nom }}</td>
-                <td>{{ piece.reference }}</td>
-                <td>{{ piece.prixUnitaireHT }}</td>
-                <td>{{ piece.prixUnitaireTTC }}</td>
-                <td>{{ piece.quantite }}</td>
-                <td>{{ piece.total }}</td>
-                <td>
-                  <button (click)="removePiece(i)">🗑 Supprimer</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="container mt-5">
+            <label class="h5">Pièces du Devis</label>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nom</th>
+                    <th>Référence</th>
+                    <th>Prix TTC</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let piece of newDevis.pieces; let i = index">
+                    <td>{{ piece.nom }}</td>
+                    <td>{{ piece.reference }}</td>
+                    <td>{{ piece.prixUnitaireTTC | currency:'AR'}}</td>
+                    <td>{{ piece.quantite }}</td>
+                    <td>{{ piece.total | currency: 'AR' }}</td>
+                    <td>
+                      <button (click)="removePiece(i)" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <div class="form-group">
+
             <label for="totalGeneral"><strong>Total Général :</strong></label>
             <input type="number" class="form-control" [(ngModel)]="newDevis.totalGeneral" name="totalGeneral" readonly>
-          </div>
+
 
           <button type="submit" class="btn btn-success mt-3">Créer le devis</button>
+        </div>
         </form>
       </div>
+    </div>
+    <div *ngIf="success" class="alert alert-success rounded-3 border-0 shadow-sm mb-4">
+      {{ success }}
     </div>
 
     <div class="card">
       <div class="card-header bg-info text-white">
-        <h3>Liste des devis</h3>
-      </div>
+        <h5 class="d-flex align-items-center">
+          <i class="bi bi-file-earmark-text me-2"></i>
+          Liste des devis
+        </h5>
+              </div>
       <div class="card-body">
         <table class="table table-bordered">
           <thead class="thead-dark">
@@ -176,8 +196,13 @@
                   </li>
                 </ul>
               </td>
-              <td>{{ d.status }} </td>
-              <td>{{ d.totalGeneral }} </td>
+              <td> <span class="badge rounded-pill px-2" [ngClass]="{
+                'bg-warning': d.status === 'En attente',
+                'bg-success': d.status === 'Validé',
+              }">
+              {{ d.status }}
+            </span> </td>
+              <td>{{ d.totalGeneral | currency:'AR' }} </td>
             </tr>
           </tbody>
         </table>
@@ -187,16 +212,23 @@
 
   <!-- Affichage pour les managers -->
   <div *ngIf="userRole == 'manager'">
-    <!-- Liste des devis avec actions -->
-    <div class="card">
-      <div class="card-header bg-info text-white">
-        <h3>Liste des devis</h3>
-      </div>
-      <div class="card-body">
-        <table class="table table-bordered">
-          <thead class="thead-dark">
+
+   <!-- Liste des devis avec actions -->
+<div *ngIf="devis && devis.length > 0; else noDevis">
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-info text-white py-3">
+      <h5 class="mb-0 d-flex align-items-center">
+        <i class="bi bi-file-earmark-text me-2"></i>
+        Liste des Devis
+      </h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
             <tr>
-              <th>Client</th>
+              <th class="ps-4">Client</th>
+              <th>Mécanicien</th>
               <th>Services</th>
               <th>Status</th>
               <th>Actions</th>
@@ -204,7 +236,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let d of devis">
-              <td>{{ d.client.nom }}</td>
+              <td class="ps-4">{{ d.client?.nom || 'Client non spécifié' }}</td>
+              <td>{{ d.mecanicien?.nom || 'Mécanicien non spécifié' }}</td>
               <td>
                 <ul>
                   <li *ngFor="let service of d.services">
@@ -212,53 +245,75 @@
                   </li>
                 </ul>
               </td>
-              <td>{{ d.status }} </td>
               <td>
-                <button class="btn btn-warning btn-sm" (click)="selectDevis(d)">Modifier</button>
-                <button class="btn btn-success btn-sm" (click)="validerDevis(d._id)">Valider</button>
-                <button class="btn btn-danger btn-sm" (click)="supprimerDevis(d._id)">Supprimer</button>
+                <span class="badge rounded-pill px-2" [ngClass]="{
+                    'bg-warning': d.status === 'En attente',
+                    'bg-success': d.status === 'Validé',
+                  }">
+                  {{ d.status }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-warning btn-sm m-2" (click)="selectDevis(d)">Modifier</button>
+                <button class="btn btn-success btn-sm m-2" (click)="validerDevis(d._id)">Valider</button>
+                <button class="btn btn-danger btn-sm m-2" (click)="supprimerDevis(d._id)">Supprimer</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+  </div>
+</div>
+
+<ng-template #noDevis>
+  <div class="card">
+    <div class="card-body text-center">
+      <h5>Aucun devis disponible</h5>
+    </div>
+  </div>
+</ng-template>
 
     <!-- Formulaire de modification de devis -->
     <div *ngIf="selectedDevis" class="card mt-4">
-      <div class="card-header bg-warning text-white">
-        <h3>Modifier un devis</h3>
-      </div>
+      <div class="card-header bg-info text-white">
+        <h5 class="d-flex align-items-center">
+          <i class="bi bi-pencil me-2"></i>
+          Modifier un devis
+        </h5>
+        </div>
       <div class="card-body">
         <form (ngSubmit)="modifierDevis(selectedDevis._id)">
-          <div class="form-group">
-            <label for="client">Client:</label>
-            {{ selectedDevis.client?.nom }}
+          <div class="form-group mb-3">
+            <label for="client" class="form-label"><i class="bi bi-person-circle"></i> Client :</label>
+            <div class="form-control-plaintext">{{ selectedDevis.client?.nom }}</div>
           </div>
-          <div class="form-group">
-            <label for="mecanicien">Mécanicien:</label>
-            {{ selectedDevis.mecanicien?.nom }}
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label for="mecanicien" class="form-label"><i class="bi bi-tools"></i> Mécanicien :</label>
+            <div class="form-control-plaintext">{{ selectedDevis.mecanicien?.nom }}</div>
           </div>
+        </div>
 
           <!-- Affichage et modification de services -->
           <div *ngFor="let service of selectedDevis.services; let i = index">
             <div class="form-group">
               <label for="serviceDescription{{i}}">Déscription du service :</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                [(ngModel)]="selectedDevis.services[i].description" 
-                [name]="'serviceDescription' + i" 
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="selectedDevis.services[i].description"
+                [name]="'serviceDescription' + i"
                 required>
             </div>
 
             <div class="form-group">
               <label for="serviceCoutServices{{i}}">Coût du service :</label>
-              <input 
-                type="number" 
-                class="form-control" 
-                [(ngModel)]="selectedDevis.services[i].coutServices"  
-                [name]="'serviceCoutServices' + i" 
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="selectedDevis.services[i].coutServices"
+                [name]="'serviceCoutServices' + i"
                 required>
             </div>
           </div>
@@ -267,38 +322,59 @@
           <div class="form-group">
             <label for="pieces">Pièces:</label>
             <div *ngFor="let piece of selectedDevis.pieces; let j = index">
-              <div class="row">
-                <div class="col-4">
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [(ngModel)]="piece.nom" 
-                    name="pieceNom-{{j}}" 
+              <div class="row mb-3">
+                <!-- Nom de la pièce -->
+                <div class="col-md-3">
+                  <label for="pieceNom-{{j}}">Nom de la pièce:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="piece.nom"
+                    name="pieceNom-{{j}}"
+                    placeholder="Nom de la pièce"
                     required>
                 </div>
-                <div class="col-4">
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [(ngModel)]="piece.reference" 
-                    name="pieceReference-{{j}}" 
+
+                <div class="col-md-3">
+                  <label for="pieceReference-{{j}}">Référence:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="piece.reference"
+                    name="pieceReference-{{j}}"
+                    placeholder="Référence de la pièce"
                     required>
                 </div>
-                <div class="col-4">
-                  <input 
-                    type="number" 
-                    class="form-control" 
-                    [(ngModel)]="piece.prixUnitaireHT" 
-                    name="piecePrixUnitaireHT-{{j}}" 
-                    (input)="calculTotal()"
+
+                <div class="col-md-3">
+                  <label for="piecequantite-{{j}}">Quantité :</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="piece.quantite"
+                    name="piecequantite-{{j}}"
+                    placeholder="Quantité de la piece"
+                    (input)="calculTotalModification()"
+                    required>
+                </div>
+
+                <div class="col-md-2">
+                  <label for="piecePrixUnitaireTTC-{{j}}">Prix Unitaire TTC:</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="piece.prixUnitaireTTC"
+                    name="piecePrixUnitaireTTC-{{j}}"
+                    (input)="calculTotalModification()"
+                    placeholder="Prix HT"
                     required>
                 </div>
               </div>
             </div>
             <div class="form-group">
               <label for="totalGeneral"><strong>Total Général :</strong></label>
-              <input type="number" class="form-control" [(ngModel)]="newDevis.totalGeneral" name="totalGeneral" readonly>
-            </div>      
+              <input type="number" class="form-control" [(ngModel)]="selectedDevis.totalGeneral" name="totalGeneral" readonly>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-warning mt-3">Mettre à jour le devis</button>

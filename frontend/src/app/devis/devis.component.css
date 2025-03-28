@@ -12,7 +12,7 @@
     z-index: 10;
     transition: all 0.3s ease-in-out;
   }
-  
+
   /* Élément de la liste */
   .custom-dropdown li {
     padding: 10px 15px;
@@ -20,22 +20,29 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
-  
+
   /* Effet de survol en vert */
   .custom-dropdown li:hover {
     background-color: #28a745; /* Vert Bootstrap */
     color: white;
     transform: scale(1.02); /* Léger agrandissement */
   }
-  
-  
-  
+
+
+
   .custom-dropdown::-webkit-scrollbar-thumb {
     background: #28a745; /* Vert */
     border-radius: 10px;
   }
-  
+
   .custom-dropdown::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
-  
+
+  .bg-info {
+    background-color: #9A9A9A9A!important;
+  }
+  tr {
+    text-align: center;
+    vertical-align: middle;
+  }

@@ -43,6 +43,7 @@ export class DevisComponent implements OnInit {
   selectedUser: any = null;
   showDropdown: boolean = false;
   success: string  = "";
+  errorMp: string = ""; 
 
 
 
@@ -54,8 +55,9 @@ export class DevisComponent implements OnInit {
     this.getUserRoleFromToken();
 
     // alaina element an le tableau (client, manager,meca) ao am le objet de atao tableau ray [] mahazatra
+    // zan hoe mba ipasena le clé client:  an objet fatong de element tableau [{obj1},{objt2}] no azo 
     this.devisService.getAllUserDevis().subscribe(data => {
-      this.listUser = [...(data.client || []), ...(data.manager || []), ...(data.mecanicien || [])]; // Stocke l'objet entier
+      this.listUser = [...(data.client || [])]; 
     });
 
     ///console.log("Contient listUzser", this.listUser);
@@ -122,18 +124,19 @@ export class DevisComponent implements OnInit {
   // Créer un devis
   creerDevis(): void {
     this.success = "";
-    this.devisService.creerDevis(this.newDevis).subscribe(
-      (response: any) => {
+    this.devisService.creerDevis(this.newDevis).subscribe({
+      next: () => {
         this.success = "Devis créé avec succès"
-        console.log('Devis créé avec succès', response);
         this.getAllDevis();
         setTimeout(()=> {
           this.success= "";
         }, 3000);
       },
-      (error) => {
-        console.error('Erreur lors de la création du devis', error);
+      error: (err) => {
+        console.error('Erreur lors de la création du devis', err);
+        this.errorMp = "Erreur lors de la création du devis veuillez bien vérifier"
       }
+    }
     );
   }
 
@@ -200,7 +203,7 @@ export class DevisComponent implements OnInit {
     this.calculTotal();
   }
 
-   // calcul general cout devis rehetra
+   // calcul general cout devis rehetra eo am creer Devis 
    calculTotal(): void {
     const totalServices = this.newDevis.services.reduce((sum, service) => sum + service.coutServices, 0);
     const totalPieces = this.newDevis.pieces.reduce((sum, piece) => sum + (piece.total || 0), 0);
@@ -208,13 +211,25 @@ export class DevisComponent implements OnInit {
     this.newDevis.totalGeneral = totalServices + totalPieces;
     console.log("Total général:", this.newDevis.totalGeneral);
   }
-  // calcul total modif
+
+  // calcul total general eo am champ Modifier devis
   calculTotalModification(): void {
-    const totalPieces = this.selectedDevis.pieces.reduce((sum: number, piece: any) => sum + piece.quantite*piece.prixUnitaireTTC, 0);
-    const totalServices = this.selectedDevis.services.reduce((sum: number , service: any ) => sum + service.coutServices, 0);
-
-    this.selectedDevis.totalGeneral = totalPieces + totalServices ;
-
+    const totalPieces = this.selectedDevis.pieces?.reduce((sum: number, piece: any) => {
+      const totalPiece = piece.quantite * piece.prixUnitaireTTC || 0;  
+      return sum + totalPiece;
+    }, 0) || 0;
+  
+    const totalServices = this.selectedDevis.services?.reduce((sum: number, service: any) => {
+      return sum + (service.coutServices || 0);
+    }, 0) || 0;
+  
+    this.selectedDevis.totalGeneral = totalPieces + totalServices;
   }
+
+  // // Fonction de validation de champ vide
+  // isFieldEmpty(fieldName: string): boolean {
+  //   return !this.newDevis.services[0][fieldName];
+  // }
+  
 
 }

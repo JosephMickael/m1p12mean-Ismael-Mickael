@@ -172,14 +172,13 @@ const getAllUserDevis = async (req, res) => {
 
         if (req.utilisateur.role == "mecanicien") {
             users.client = await Utilisateur.find({ role: "client" });
-            users.manager = await Utilisateur.find({ role: "manager" });
         } else if (req.utilisateur.role == "manager") {
             users.client = await Utilisateur.find({ role: "client" });
             users.mecanicien = await Utilisateur.find({ role: "mecanicien" });
         } else {
             return res.status(403).json({ message: "Accès refusé" });
         }
-        //console.log("DevisUser", users); 
+        console.log("DevisUser", users); 
 
         return res.status(200).json(users);
 

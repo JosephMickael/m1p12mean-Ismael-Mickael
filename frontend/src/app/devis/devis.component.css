@@ -23,15 +23,15 @@
 
   /* Effet de survol en vert */
   .custom-dropdown li:hover {
-    background-color: #28a745; /* Vert Bootstrap */
+    background-color: #28a745; 
     color: white;
-    transform: scale(1.02); /* Léger agrandissement */
+    transform: scale(1.02); 
   }
 
 
 
   .custom-dropdown::-webkit-scrollbar-thumb {
-    background: #28a745; /* Vert */
+    background: #28a745; 
     border-radius: 10px;
   }
 
@@ -39,10 +39,50 @@
     background: #f1f1f1;
   }
 
-  .bg-info {
-    background-color: #9A9A9A9A!important;
+  .devis .bg-info {
+    background-color: #4e657c!important;
   }
   tr {
     text-align: center;
     vertical-align: middle;
   }
+  .total {
+    width: max-content;
+    height: 100%;
+    background-color: #4e657c;
+    padding: 0.7em;
+    border-radius: 5px;
+    font-weight: 700;
+    margin-top: 30px;
+    color: #ffff;
+}
+.form-group.mb-3.devisUser {
+  width: max-content;
+  height: 100%;
+  background-color: #9A9A9A9A;
+  padding: 1em;
+  border-radius: 20px;
+}
+.devis .mb-3 {
+  background-color: aliceblue;
+  border-radius: 5px;
+  padding: 12px;
+  box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.03);
+
+}
+
+.devis th {
+  background-color: aliceblue !important;
+  font-weight: 400;
+
+}
+
+.devis .font-petit {
+  font-size: 0.8em;
+}
+.devis .tpie {
+    font-weight: 500;
+}
+.devis ul {
+  list-style: none;
+}

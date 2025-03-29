@@ -43,13 +43,14 @@ const getAllDevis = async (req, res) => {
         let devis; 
         if (req.utilisateur.role == "client") {
             const clientId = req.utilisateur._id; 
-             devis = await Devis.find({ client: clientId }).populate(['client', 'mecanicien', 'services']);
+             devis = await Devis.find({ client: clientId }).populate(['client', 'mecanicien', 'services', 'pieces']);
         //console.log("liste des devis", devis)
         } else if (req.utilisateur.role == "mecanicien") {
             const mecaId = req.utilisateur._id; 
-             devis = await Devis.find({ mecanicien: mecaId }).populate(['client', 'mecanicien', 'services']);
+             devis = await Devis.find({ mecanicien: mecaId }).populate(['client', 'mecanicien', 'services', 'pieces']);
         } else if (req.utilisateur.role == "manager") {
-            devis = await Devis.find().populate(['client', 'mecanicien', 'services']);
+            devis = await Devis.find().populate(['client', 'mecanicien', 'services', 'pieces']);
+           // console.log("devis de manager", devis); 
         }
         res.status(200).json(devis);
     } catch (error) {

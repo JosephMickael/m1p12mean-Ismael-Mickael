@@ -46,8 +46,8 @@ export class PiecesComponent implements OnInit {
     // ALEO reinitilisena tsirairay
     this.pieceForm.controls['nom'].setValue('');
     this.pieceForm.controls['reference'].setValue('');
-    this.pieceForm.controls['prixprixUnitaireTTC'].setValue(0);
-    this.pieceForm.controls['quantite'].setValue(0);
+    this.pieceForm.controls['prixUnitaireTTC'].setValue(null);
+    this.pieceForm.controls['quantite'].setValue(null);
     }
   }
 

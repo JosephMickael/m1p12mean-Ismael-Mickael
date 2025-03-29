@@ -1,23 +1,27 @@
-<div class="container mt-5">
-  <h3 class="mb-4">Ajouter une Pièce</h3>
+<div class="container mt-5 devis">
+  <div class="d-flex align-items-center mb-4">
+    <span class="me-2" style="font-size: 1.5em;">➕</span>
+    <h5 class="mb-0">Ajouter une Pièce</h5> 
+  </div>
+    
   <form [formGroup]="pieceForm" (ngSubmit)="addPiece()">
     <div class="mb-3">
-      <label for="nom" class="form-label">Nom :</label>
+      <label for="nom" class="form-label">Nom </label>
       <input type="text" id="nom" formControlName="nom" class="form-control" placeholder="Nom de la pièce" required>
     </div>
 
     <div class="mb-3">
-      <label for="reference" class="form-label">Référence :</label>
+      <label for="reference" class="form-label">Référence </label>
       <input type="text" id="reference" formControlName="reference" class="form-control" placeholder="Référence de la pièce" required>
     </div>
 
     <div class="mb-3">
-      <label for="prixUnitaireTTC" class="form-label">Prix TTC :</label>
+      <label for="prixUnitaireTTC" class="form-label">Prix TTC </label>
       <input type="number" id="prixUnitaireTTC" formControlName="prixUnitaireTTC" class="form-control" placeholder="Prix unitaire TTC" required>
     </div>
 
     <div class="mb-3">
-      <label for="quantite" class="form-label">Quantité :</label>
+      <label for="quantite" class="form-label">Quantité </label>
       <input type="number" id="quantite" formControlName="quantite" class="form-control" placeholder="Quantité de la pièce" required>
     </div>
 

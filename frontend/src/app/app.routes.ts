@@ -60,7 +60,13 @@ export const routes: Routes = [
                 component: RendezvousComponent,
                 canActivate: [RoleGuard],
                 data: { role: 'client' }
-            }
+            },
+            {
+                path: 'devis',
+                component: DevisComponent,
+                canActivate: [RoleGuard],
+                data: { role: 'client' }
+            },
         ]
     },
     {
@@ -136,6 +142,12 @@ export const routes: Routes = [
             {
                 path: 'messages',
                 component: MessagesComponent,
+                data: { role: 'manager' }
+            },
+            {
+                path: 'devis',
+                component: DevisComponent,
+                canActivate: [RoleGuard],
                 data: { role: 'manager' }
             },
         ]

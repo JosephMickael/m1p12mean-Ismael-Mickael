@@ -9,12 +9,9 @@ import { PiecesComponent } from '../piece/piece.component';
 import { Piece } from '../models/piece.model';
 import Swal from 'sweetalert2';
 
-
-
-
 @Component({
   selector: 'app-devis',
-  imports : [
+  imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -44,8 +41,8 @@ export class DevisComponent implements OnInit {
   filteredUsers$: Observable<{ _id: string, nom: string }[]> = new Observable();
   selectedUser: any = null;
   showDropdown: boolean = false;
-  success: string  = "";
-  errorMp: string = ""; 
+  success: string = "";
+  errorMp: string = "";
 
 
 
@@ -59,7 +56,7 @@ export class DevisComponent implements OnInit {
     // alaina element an le tableau (client, manager,meca) ao am le objet de atao tableau ray [] mahazatra
     // zan hoe mba ipasena le clé client:  an objet fatong de element tableau [{obj1},{objt2}] no azo 
     this.devisService.getAllUserDevis().subscribe(data => {
-      this.listUser = [...(data.client || [])]; 
+      this.listUser = [...(data.client || [])];
     });
 
     ///console.log("Contient listUzser", this.listUser);
@@ -93,21 +90,21 @@ export class DevisComponent implements OnInit {
   }
 
 
-    // Récupérer le rôle de l'utilisateur depuis le token JWT
-    getUserRoleFromToken(): void {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const decodedToken: any = jwtDecode(token);
-          this.userRole = decodedToken.role;
-          console.log("Rôle de l'utilisateur:", this.userRole);
-        } catch (error) {
-          console.error("Erreur lors du décodage du token:", error);
-        }
-      } else {
-        console.warn("Aucun token trouvé !");
+  // Récupérer le rôle de l'utilisateur depuis le token JWT
+  getUserRoleFromToken(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        this.userRole = decodedToken.role;
+        console.log("Rôle de l'utilisateur:", this.userRole);
+      } catch (error) {
+        console.error("Erreur lors du décodage du token:", error);
       }
+    } else {
+      console.warn("Aucun token trouvé !");
     }
+  }
 
 
   // Récupérer tous les devis
@@ -115,7 +112,7 @@ export class DevisComponent implements OnInit {
     this.devisService.getAllDevis().subscribe(
       (data: any) => {
         this.devis = data;
-        this.selectedDevis="";
+        this.selectedDevis = "";
       },
       (error) => {
         console.error('Erreur lors de la récupération des devis', error);
@@ -131,8 +128,8 @@ export class DevisComponent implements OnInit {
       next: () => {
         this.success = "Devis créé avec succès"
         this.getAllDevis();
-        setTimeout(()=> {
-          this.success= "";
+        setTimeout(() => {
+          this.success = "";
         }, 3000);
       },
       error: (err) => {
@@ -212,14 +209,14 @@ export class DevisComponent implements OnInit {
     console.log('Devis enregistré:', this.newDevis);
   }
 
-   // Ajouter une pièce au devis lorsque l'événement (Eventemitter() le natsoina tan am piece.component)
-   onPieceAdded(piece: Piece): void {
+  // Ajouter une pièce au devis lorsque l'événement (Eventemitter() le natsoina tan am piece.component)
+  onPieceAdded(piece: Piece): void {
     this.newDevis.pieces.push(piece);
     this.calculTotal();
   }
 
-   // calcul general cout devis rehetra eo am creer Devis 
-   calculTotal(): void {
+  // calcul general cout devis rehetra eo am creer Devis 
+  calculTotal(): void {
     const totalServices = this.newDevis.services.reduce((sum, service) => sum + service.coutServices, 0);
     const totalPieces = this.newDevis.pieces.reduce((sum, piece) => sum + (piece.total || 0), 0);
 
@@ -230,14 +227,14 @@ export class DevisComponent implements OnInit {
   // calcul total general eo am champ Modifier devis
   calculTotalModification(): void {
     const totalPieces = this.selectedDevis.pieces?.reduce((sum: number, piece: any) => {
-      const totalPiece = piece.quantite * piece.prixUnitaireTTC || 0;  
+      const totalPiece = piece.quantite * piece.prixUnitaireTTC || 0;
       return sum + totalPiece;
     }, 0) || 0;
-  
+
     const totalServices = this.selectedDevis.services?.reduce((sum: number, service: any) => {
       return sum + (service.coutServices || 0);
     }, 0) || 0;
-  
+
     this.selectedDevis.totalGeneral = totalPieces + totalServices;
   }
 
@@ -245,8 +242,8 @@ export class DevisComponent implements OnInit {
   isFieldEmpty(index: number, fieldName: 'description' | 'coutServices'): boolean {
     return !this.newDevis.services[index]?.[fieldName];
   }
-  
-  
-  
+
+
+
 
 }

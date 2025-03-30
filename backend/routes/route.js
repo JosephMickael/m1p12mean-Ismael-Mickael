@@ -56,7 +56,8 @@ router.put('/read/:messageId', verifierAuthentification, contactController.markA
 router.delete('/message/:messageId', verifierAuthentification, contactController.deleteMessage)
 
 // Envoi Email
-router.post('/send-email', verifierAuthentification, emailController.sendEmail)
+router.post('/send-email', verifierAuthentification, emailController.sendEmail);
+router.post('send-devisMail', verifierAuthentification, emailController.sendDevisMail); 
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

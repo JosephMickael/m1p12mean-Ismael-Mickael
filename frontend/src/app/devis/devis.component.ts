@@ -7,6 +7,8 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, startWith, map } from 'rxjs';
 import { PiecesComponent } from '../piece/piece.component';
 import { Piece } from '../models/piece.model';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -124,6 +126,7 @@ export class DevisComponent implements OnInit {
   // Créer un devis
   creerDevis(): void {
     this.success = "";
+    this.errorMp = "";
     this.devisService.creerDevis(this.newDevis).subscribe({
       next: () => {
         this.success = "Devis créé avec succès"
@@ -155,17 +158,29 @@ export class DevisComponent implements OnInit {
 
   // Supprimer un devis
   supprimerDevis(id: string): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce devis ?')) {
-      this.devisService.supprimerDevis(id).subscribe(
-        (response) => {
-          console.log('Devis supprimé avec succès');
-          this.getAllDevis();
-        },
-        (error) => {
-          console.error('Erreur lors de la suppression du devis', error);
-        }
-      );
-    }
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Cette action est irréversible !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.devisService.supprimerDevis(id).subscribe(
+          () => {
+            Swal.fire('Supprimé !', 'Le devis a été supprimé avec succès.', 'success');
+            this.getAllDevis();
+          },
+          (error) => {
+            Swal.fire('Erreur', 'Une erreur est survenue lors de la suppression.', 'error');
+            console.error('Erreur lors de la suppression du devis', error);
+          }
+        );
+      }
+    });
   }
 
   // Valider un devis
@@ -226,10 +241,12 @@ export class DevisComponent implements OnInit {
     this.selectedDevis.totalGeneral = totalPieces + totalServices;
   }
 
-  // // Fonction de validation de champ vide
-  // isFieldEmpty(fieldName: string): boolean {
-  //   return !this.newDevis.services[0][fieldName];
-  // }
+  // si le champ services est vide 
+  isFieldEmpty(index: number, fieldName: 'description' | 'coutServices'): boolean {
+    return !this.newDevis.services[index]?.[fieldName];
+  }
+  
+  
   
 
 }

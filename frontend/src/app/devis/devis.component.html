@@ -98,7 +98,7 @@
               type="text"
               class="form-control"
               id="clientControl"
-              placeholder="Entrez un nom de client"
+              placeholder="Entrez et Séléctionner un nom de client"
               [formControl]="clientControl"
               (focus)="showDropdown = true" required>
             <ul *ngIf="showDropdown && (filteredUsers$ | async) as filteredUsers"
@@ -109,18 +109,23 @@
                 {{ client.nom }}
               </li>
             </ul>
+            <div *ngIf="!selectedUser" class="text-danger">Veuillez saisir et selecionner</div>
           </div>
 
-          <!-- Champs pour services -->
-          <div class="mb-3">
-            <label for="services" class="form-label">Services</label>
-            <textarea type="text" class="form-control" [(ngModel)]="newDevis.services[0].description" name="description" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="coutServices" class="form-label">Coût des services </label>
-            <input type="number" class="form-control" [(ngModel)]="newDevis.services[0].coutServices" name="coutServices" (input)="calculTotal()" required>
-          </div>
+        <!-- Champs pour services -->
+        <div class="mb-3">
+          <label for="services" class="form-label">Services</label>
+          <textarea type="text" class="form-control" [(ngModel)]="newDevis.services[0].description" name="description" placeholder="Déscription du service"></textarea>
+          <div *ngIf="isFieldEmpty(0, 'description')" class="text-danger">Ce champ est requis</div>
         </div>
+
+        <div class="mb-3">
+          <label for="coutServices" class="form-label">Coût des services</label>
+          <input type="number" class="form-control" [(ngModel)]="newDevis.services[0].coutServices" name="coutServices" (input)="calculTotal()" required>
+          <div *ngIf="isFieldEmpty(0, 'coutServices')" class="text-danger">Le coût doit être renseigné</div>
+        </div>
+        </div>
+
           <!-- Composant Pièces -->
           <app-pieces (pieceAdded)="onPieceAdded($event)"></app-pieces>
 
@@ -187,6 +192,7 @@
         </h5>
               </div>
       <div class="card-body">
+        <div class="table-responsive">
         <table class="table table-bordered">
           <thead class="thead-dark">
             <tr>
@@ -242,10 +248,11 @@
           </tbody>
         </table>
       </div>
+      </div>
     </div>
   </div>
 
-  <!-- Affichage pour les managers -->
+  <!-- Affichage po ur les managers -->
   <div *ngIf="userRole == 'manager'">
 
    <!-- Liste des devis avec actions -->

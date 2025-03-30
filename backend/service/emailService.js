@@ -32,4 +32,29 @@ const sendEmailToClient = async (clientEmail, subject, message) => {
     }
 };
 
-module.exports = sendEmailToClient;
+const sendDevisMail = async (client, services, totalGeneral, clientMail) => {
+
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,  
+      to: clientMail, 
+      subject: `Devis pour ${client}`,
+      html: `
+        <h2>Devis pour ${client}</h2>
+        <p><strong>Total Général :</strong> ${totalGeneral}€</p>
+        <h3>Services :</h3>
+        <ul>
+          ${services.map(s => `<li>${s.description} - ${s.coutServices}€</li>`).join('')}
+        </ul>
+      `
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ message: 'E-mail envoyé avec succès via Mailtrap' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur lors de l’envoi du mail' });
+    }
+  };
+
+module.exports = {sendEmailToClient, sendDevisMail};

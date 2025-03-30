@@ -1,10 +1,11 @@
 const Devis  = require('../models/Devis'); 
 const Utilisateur = require('../models/Utilisateur');
+const nodemailer = require('nodemailer'); 
 
 
 //  Créer un devis
 const creerDevis = async (req, res) => {
-    // try {
+     try {
         const mecanicien = req.utilisateur._id;
         const status = "En attente"; 
         const devisData = { ...req.body, mecanicien, status }; // Ajout du mécanicien sans extraire manuellement
@@ -15,9 +16,9 @@ const creerDevis = async (req, res) => {
         await nouveauDevis.save();
         console.log("Nouveau devis ", nouveauDevis); 
         res.status(201).json({ nouveauDevis });
-    // } catch (error) {
-    //     res.status(500).json({ message: "Erreur lors de la création du devis", error });
-    // } 
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la création du devis", error });
+    } 
 };
 
 //  Modifier un devis
@@ -112,6 +113,7 @@ const supprimerDevis = async (req, res) => {
 module.exports ={creerDevis,
     modifierDevis,
     getAllDevis,
-    getDevisById,
+    getDevisById, 
     validerDevis,
-    supprimerDevis}
+    supprimerDevis
+}

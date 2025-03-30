@@ -57,4 +57,9 @@ export class DevisService {
     const headers = this.createHeader();
     return this.http.delete(`${environment.apiUrl}/supprimer-devis/${id}`, { headers });
   }
+
+// //Envoyer devis vers mail 
+// sendDevisMail(): Observable<any> {
+
+//}
 }

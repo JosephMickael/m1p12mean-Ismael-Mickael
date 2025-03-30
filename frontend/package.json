@@ -40,6 +40,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ngx-mat-timepicker": "^19.0.0",
+    "sweetalert2": "^11.17.2",
     "typescript": "~5.7.2"
   }
 }

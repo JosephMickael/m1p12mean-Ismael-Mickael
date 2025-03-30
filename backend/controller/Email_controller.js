@@ -21,4 +21,16 @@ const sendEmail = async (req, res) => {
     }
 }
 
-module.exports = { sendEmail };
+const sendDevisMail = async (req, res) =>  {
+    const { client, services, totalGeneral, clientMail } = req.body; 
+    
+    const result = await sendDevisMail(client, services, totalGeneral, clientMail);
+
+    if (result.success) {
+        res.status(200).json({ message: "E-mail envoyé avec succès !" });
+    } else {
+        res.status(500).json({ error: "Échec de l'envoi de l'e-mail" });
+    }
+}
+
+module.exports = { sendEmail, sendDevisMail };

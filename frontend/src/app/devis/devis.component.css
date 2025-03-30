@@ -1,7 +1,7 @@
 /* Liste déroulante */
 .custom-dropdown {
     position: absolute;
-    width: 100%;
+    width: max-content;
     margin-top: 5px;
     border-radius: 8px;
     background: white;
@@ -11,6 +11,8 @@
     overflow-y: auto;
     z-index: 10;
     transition: all 0.3s ease-in-out;
+    margin-left: -2px;
+    margin-top: 2px;
   }
 
   /* Élément de la liste */
@@ -77,7 +79,7 @@
 
 }
 
-.devis .font-petit {
+.devis .font-petit, .fs{
   font-size: 0.8em;
 }
 .devis .tpie {

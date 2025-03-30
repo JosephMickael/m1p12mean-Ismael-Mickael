@@ -71,14 +71,15 @@
         </div>
       </div>
     </div>
-  </div>
-
-    <!-- Si la liste des devis est vide -->
-    <div *ngIf="!devis || devis.length === 0">
-      <div class="alert alert-warning" role="alert">
-        Aucun devis disponible.
-      </div>
+  <!-- Si la liste des devis est vide -->
+  <div *ngIf="!devis || devis.length === 0">
+    <div class="alert alert-warning" role="alert">
+      Aucun devis disponible.
     </div>
+  </div>  
+</div>
+
+    
 
   <!-- Affichage pour les mécaniciens -->
   <div *ngIf="userRole == 'mecanicien'">
@@ -109,20 +110,20 @@
                 {{ client.nom }}
               </li>
             </ul>
-            <div *ngIf="!selectedUser" class="text-danger">Veuillez saisir et selecionner</div>
+            <div *ngIf="!selectedUser" class="text-danger fs">Veuillez saisir et selecionner</div>
           </div>
 
         <!-- Champs pour services -->
         <div class="mb-3">
           <label for="services" class="form-label">Services</label>
           <textarea type="text" class="form-control" [(ngModel)]="newDevis.services[0].description" name="description" placeholder="Déscription du service"></textarea>
-          <div *ngIf="isFieldEmpty(0, 'description')" class="text-danger">Ce champ est requis</div>
+          <div *ngIf="isFieldEmpty(0, 'description')" class="text-danger fs">Ce champ est requis</div>
         </div>
 
         <div class="mb-3">
           <label for="coutServices" class="form-label">Coût des services</label>
           <input type="number" class="form-control" [(ngModel)]="newDevis.services[0].coutServices" name="coutServices" (input)="calculTotal()" required>
-          <div *ngIf="isFieldEmpty(0, 'coutServices')" class="text-danger">Le coût doit être renseigné</div>
+          <div *ngIf="isFieldEmpty(0, 'coutServices')" class="text-danger fs">Le coût doit être renseigné</div>
         </div>
         </div>
 
@@ -219,7 +220,7 @@
               <td>
                 <ul class="list-unstyled">
                   <li *ngFor="let service of d.services">
-                    {{ service.coutServices }}
+                    {{ service.coutServices | currency:'AR'}}
                   </li>
                 </ul>
               </td>
@@ -248,6 +249,12 @@
           </tbody>
         </table>
       </div>
+      </div>
+    </div>
+    <!-- Si la liste des devis est vide -->
+    <div *ngIf="!devis || devis.length === 0">
+      <div class="alert alert-warning" role="alert">
+        Aucun devis disponible.
       </div>
     </div>
   </div>

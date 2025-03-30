@@ -75,6 +75,11 @@ export const routes: Routes = [
                 redirectTo: 'acceuil'
             },
             {
+                path: 'acceuil',
+                component: AcceuilClientComponent,
+                data: { role: 'mecanicien' }
+            },
+            {
                 path: 'profil',
                 component: ProfilComponent,
             },
@@ -91,8 +96,9 @@ export const routes: Routes = [
                 data: { role: 'mecanicien' }
             },
             {
-                path: 'acceuil',
-                component: AcceuilClientComponent,
+                path: 'devis',
+                component: DevisComponent,
+                canActivate: [RoleGuard],
                 data: { role: 'mecanicien' }
             },
         ]

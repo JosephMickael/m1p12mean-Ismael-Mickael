@@ -133,6 +133,47 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold"><i class="bi bi-calendar-event me-2"></i>Tout les rendez-vous</h5>
             </div>
+
+            <!-- Filtres -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body p-3">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <label for="filterStatus" class="form-label">Filtrer par statut</label>
+                            <select class="form-select" id="filterStatus" [(ngModel)]="filterStatus">
+                                <option value="">Tous les statuts</option>
+                                <option *ngFor="let status of statusOptions" [value]="status">
+                                    {{ status }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterMecanicien" class="form-label">Filtrer par mécanicien</label>
+                            <select class="form-select" id="filterMecanicien" [(ngModel)]="filterMecanicien">
+                                <option value="">Tous les mécaniciens</option>
+                                <option *ngFor="let mecanicien of mecaniciens" [value]="mecanicien._id">
+                                    {{ mecanicien.nom }} {{ mecanicien.prenom }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="filterDate" class="form-label">Filtrer par date</label>
+                            <input type="date" class="form-control" id="filterDate" [(ngModel)]="filterDate">
+                        </div>
+                        <div class="col-4 d-flex align-items-end">
+                            <div class="d-flex gap-2">
+                                <button class="btn text-white" style="background-color: var(--main-bleu);"
+                                    (click)="appliquerFiltres()">
+                                    <i class="bi bi-funnel me-1"></i>Appliquer
+                                </button>
+                                <button class="btn btn-outline-secondary" (click)="reinitialiserFiltres()">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Réinitialiser
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
                     @if (deleteMessage) {

@@ -19,13 +19,6 @@ import { PiecesComponent } from './piece/piece.component';
 import { MessagesComponent } from './manager-page/pages/messages/messages.component';
 
 export const routes: Routes = [
-
-    //Test
-    { path: 'create-rendezvous', component: RendezvousComponent },
-    { path: 'devis', component: DevisComponent },
-    { path: 'piece', component: PiecesComponent },
-
-
     // Lorsque l'URL est vide, rediriger vers 'login'
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },

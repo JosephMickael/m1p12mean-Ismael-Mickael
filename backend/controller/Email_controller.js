@@ -1,5 +1,5 @@
 const express = require('express');
-const sendEmailToClient = require("./../service/emailService");
+const { sendEmailToClient } = require("./../service/emailService");
 
 const sendEmail = async (req, res) => {
     const { email, subject, message } = req.body;
@@ -21,9 +21,9 @@ const sendEmail = async (req, res) => {
     }
 }
 
-const sendDevisMail = async (req, res) =>  {
-    const { client, services, totalGeneral, clientMail } = req.body; 
-    
+const sendDevisMail = async (req, res) => {
+    const { client, services, totalGeneral, clientMail } = req.body;
+
     const result = await sendDevisMail(client, services, totalGeneral, clientMail);
 
     if (result.success) {

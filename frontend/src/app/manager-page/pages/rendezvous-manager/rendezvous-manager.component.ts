@@ -37,6 +37,10 @@ export class RendezvousManagerComponent implements OnInit {
     "en attente", "confirmé", "assigné", "annulé", "disponible", "réservé", "terminé"
   ];
 
+  listeRendezVousComplete: RendezVousModel[] = []; // Liste complète non filtrée
+  filterStatus: string = '';
+  filterMecanicien: string = '';
+  filterDate: string = '';
 
   constructor(private rdvservice: RendezVous, private userservice: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router,) {
     this.rendezVousForm = this.formBuilder.group({
@@ -63,10 +67,11 @@ export class RendezvousManagerComponent implements OnInit {
   getListeRendezvous() {
     this.rdvservice.getAllRendezVous().subscribe({
       next: (response) => {
-        this.listeRendezVous = response;
+        this.listeRendezVousComplete = response
+        this.listeRendezVous = [...this.listeRendezVousComplete]
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des rendez-vous', error);
+        console.error('Erreur lors du chargement des rendez-vous', error)
       }
     });
   }
@@ -178,6 +183,49 @@ export class RendezvousManagerComponent implements OnInit {
         }
       });
     }
+  }
+
+  // filtres
+  appliquerFiltres() {
+    let filteredList = [...this.listeRendezVousComplete];
+
+    // Filtre par statut
+    if (this.filterStatus) {
+      filteredList = filteredList.filter(rdv => rdv.status === this.filterStatus);
+    }
+
+    // Filtre par mécanicien
+    if (this.filterMecanicien) {
+      filteredList = filteredList.filter(rdv => {
+        if (Array.isArray(rdv.mecanicien)) {
+          return rdv.mecanicien.some(mec =>
+            String(typeof mec === 'object' ? mec._id : mec) === String(this.filterMecanicien)
+          );
+        }
+        return false;
+      });
+    }
+
+    // Filtre par date
+    if (this.filterDate) {
+      const filterDateStr = new Date(this.filterDate).toISOString().split('T')[0];
+
+      filteredList = filteredList.filter(rdv => {
+        const rdvDateStr = new Date(rdv.date).toISOString().split('T')[0];
+        return rdvDateStr === filterDateStr;
+      });
+    }
+
+    // Mettre à jour la liste affichée
+    this.listeRendezVous = filteredList;
+  }
+
+  reinitialiserFiltres() {
+    this.filterStatus = '';
+    this.filterMecanicien = '';
+    this.filterDate = '';
+
+    this.listeRendezVous = [...this.listeRendezVousComplete];
   }
 
 

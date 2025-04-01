@@ -257,11 +257,6 @@
   <!-- Affichage po ur les managers -->
   <div *ngIf="userRole == 'manager'">
 
-    <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h2 class="fw-bold">Devis</h2>
-    </div>
-
     <!-- Liste des devis avec actions -->
     <div *ngIf="devis && devis.length > 0; else noDevis">
       <div class="card border-0 shadow-sm mb-4">
@@ -274,9 +269,9 @@
         <div class="card-body p-0">
           <div class="table-responsive">
             <table class="table table-hover mb-0">
-              <thead class="table-light">
+              <thead>
                 <tr>
-                  <th class="ps-4">Client</th>
+                  <th>Client</th>
                   <th>Mécanicien</th>
                   <th>Services</th>
                   <th>Status</th>

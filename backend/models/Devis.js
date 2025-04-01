@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Mail = require('nodemailer/lib/mailer');
 
 const pieceSchema = new mongoose.Schema({
     nom: { type: String, required: true },
@@ -22,6 +23,10 @@ const devisSchema = new mongoose.Schema({
     mecanicien: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Utilisateur',
+        required: true
+    },
+    emailClient: {
+        type: String,
         required: true
     },
     dateCreation: { 

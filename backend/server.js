@@ -1,16 +1,23 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const routes = require('../backend/routes/route')
+const routes = require('./routes/route')
 
 require('dotenv').config();
+
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
 
 const app = express()
 const PORT = process.env.PORT || 5001
 console.log(process.env.MONGO_URI);
 
 // Middleware 
-app.use(cors())
+app.use(cors(corsOptions));
 app.use(express.json())
 
 // Connexion à mongoose

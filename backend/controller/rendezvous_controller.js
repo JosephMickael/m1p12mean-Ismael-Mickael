@@ -344,11 +344,12 @@ const recupererMecanicien = async (req, res) => {
     }
 };
 
-//  Lister tous les rendezVous
+//  Lister tous les rendezVous disponible 
 const listRendezVousDisponible = async (req, res) => {
     try {
-        const rendezVous = await RendezVous.find({ status: "annulé" });
+        const rendezVous = await RendezVous.find({ status: "annulé", date: { $gte: new Date() } });
         rendezVous.status = "disponible";
+
         return res.status(202).json(rendezVous);
     } catch (error) {
         res.status(404).json({ messsage: "Liste de rendezVous introuvable" });

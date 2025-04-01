@@ -1,5 +1,9 @@
 const nodemailer = require("nodemailer");
 require('dotenv').config();
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -32,29 +36,26 @@ const sendEmailToClient = async (clientEmail, subject, message) => {
     }
 };
 
-const sendDevisMail = async (client, services, totalGeneral, clientMail) => {
-
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,  
-      to: clientMail, 
-      subject: `Devis pour ${client}`,
-      html: `
-        <h2>Devis pour ${client}</h2>
-        <p><strong>Total Général :</strong> ${totalGeneral}€</p>
-        <h3>Services :</h3>
-        <ul>
-          ${services.map(s => `<li>${s.description} - ${s.coutServices}€</li>`).join('')}
-        </ul>
-      `
-    };
-  
-    try {
-      await transporter.sendMail(mailOptions);
-      res.status(200).json({ message: 'E-mail envoyé avec succès via Mailtrap' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Erreur lors de l’envoi du mail' });
-    }
+const sendDevisMail = async (email, subject, message, attachment) => {
+  const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: subject || "Votre Devis",
+      text: message,
+      html: `<div style="backgroud-color:#9A9A9A; padding: 5px">${message}</div>`,
+      attachments: attachment ? [{
+          filename: attachment.filename,
+          path: attachment.path
+      }] : [] 
   };
+
+  try {
+      await transporter.sendMail(mailOptions);
+      return { success: true };
+  } catch (error) {
+      console.error("Erreur d'envoi d'e-mail :", error);
+      throw new Error("Erreur lors de l’envoi du mail");
+  }
+};
 
 module.exports = {sendEmailToClient, sendDevisMail};

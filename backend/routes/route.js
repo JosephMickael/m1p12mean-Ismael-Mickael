@@ -7,6 +7,7 @@ const verifierAuthentification = require('../middlewares/auth.middleware');
 const devisController = require('../controller/devis_controller');
 const contactController = require('../controller/Contact_controller')
 const emailController = require('../controller/Email_controller')
+const upload = require('../middlewares/upload.middleware')
 
 // Rendezvous 
 router.get('/all-rendezvous', rendezVousController.getRendezVous)
@@ -57,7 +58,7 @@ router.delete('/message/:messageId', verifierAuthentification, contactController
 
 // Envoi Email
 router.post('/send-email', verifierAuthentification, emailController.sendEmail);
-router.post('send-devisMail', verifierAuthentification, emailController.sendDevisMail); 
+router.post('/send-devisMail', verifierAuthentification, upload.single('fichierPdf'), emailController.sendDevisMailPost); 
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

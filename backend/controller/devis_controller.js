@@ -23,7 +23,7 @@ const creerDevis = async (req, res) => {
 
 //  Modifier un devis
 const modifierDevis = async (req, res) => {
-    // try {
+     try {
         const { id } = req.params;
         const devisMisAJour = await Devis.findByIdAndUpdate(id, req.body, { new: true });
 
@@ -32,10 +32,10 @@ const modifierDevis = async (req, res) => {
         }
 
         res.status(200).json({ message: " Devis mis à jour avec succès", devis: devisMisAJour });
-    // } catch (error) {
-    //     res.status(500).json({ message: " &#x274C Erreur lors de la mise à jour", error });
+     } catch (error) {
+         res.status(500).json({ message: " &#x274C Erreur lors de la mise à jour", error });
 
-    // }
+     }
 };
 
 // Récupérer tous les devis

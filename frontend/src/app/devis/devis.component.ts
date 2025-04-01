@@ -8,6 +8,9 @@ import { Observable, startWith, map } from 'rxjs';
 import { PiecesComponent } from '../piece/piece.component';
 import { Piece } from '../models/piece.model';
 import Swal from 'sweetalert2';
+import jsPDF from "jspdf";
+import { autoTable } from 'jspdf-autotable';
+import { EmailService } from '../services/email/email.service';
 
 @Component({
   selector: 'app-devis',
@@ -21,6 +24,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./devis.component.css']
 })
 export class DevisComponent implements OnInit {
+
 
   devis: any[] = [];
   newDevis = {
@@ -43,15 +47,19 @@ export class DevisComponent implements OnInit {
   showDropdown: boolean = false;
   success: string = "";
   errorMp: string = "";
+  imp: any = {}; 
+  successMail: string = ""; 
 
 
 
-  constructor(private devisService: DevisService) { }
+  constructor(private devisService: DevisService, private emailService: EmailService) { }
 
 
   ngOnInit(): void {
     this.getAllDevis();
     this.getUserRoleFromToken();
+    console.log("verifier si auto", new jsPDF()); 
+    
 
     // alaina element an le tableau (client, manager,meca) ao am le objet de atao tableau ray [] mahazatra
     // zan hoe mba ipasena le clé client:  an objet fatong de element tableau [{obj1},{objt2}] no azo 
@@ -244,6 +252,104 @@ export class DevisComponent implements OnInit {
   }
 
 
+  // Imprimer en PDF 
+  imprimerDevis(devis: any): void {
 
+    //console.log("Valeur de Devis",  devis)
+    this.imp = { ...devis };
+    //console.log("SelectedDevis", this.imp)
+    const doc = new jsPDF();
+  
+    // Ajout du titre du document
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(0, 128, 0); 
+    doc.text('DEVIS GARAGE_VERT', 105, 15, { align: 'center' });
+  
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0); 
+    doc.text(`Client: ${this.imp.client.nom}`, 15, 30);
 
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0); 
+    doc.text(`Mécanicien: ${this.imp.mecanicien.nom}`, 150, 30);
+  
+  
+    let currentY = 40; 
+  
+    const servicesTableData = this.imp.services.map((service: any, index: number) => [
+      index + 1, 
+      service.description,
+      `${service.coutServices} Ar`
+    ]);
+  
+    autoTable(doc, {
+      startY: currentY,
+      head: [['#', 'Service', 'Coût (Ar)']],
+      body: servicesTableData,
+      theme: 'striped',
+      styles: { fontSize: 12, cellPadding: 3 },
+      headStyles: { fillColor: [78, 101, 124], textColor: 255, fontSize: 13 }
+    });
+  
+    currentY +=  30;
+  
+    const piecesTableData = this.imp.pieces.map((piece: any, index: number) => [
+      index + 1, 
+      piece.nom,
+      piece.quantite, 
+      `${piece.prixUnitaireTTC} Ar`
+    ]);
+  
+    autoTable(doc, {
+      startY: currentY,
+      head: [['#', 'Pièce','Quantité', 'Prix (Ar)']],
+      body: piecesTableData,
+      theme: 'striped',
+      styles: { fontSize: 12, cellPadding: 3 },
+      headStyles: { fillColor: [78, 101, 124], textColor: 255, fontSize: 13 }
+    });
+  
+    currentY +=  40;
+  
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setFillColor(78, 101, 124); 
+    doc.setTextColor(0,0,1); 
+    doc.text(`Total Général : ${this.imp.totalGeneral} Ar`, 15, currentY + 15);
+  
+    doc.save(`Devis_${this.imp.client.nom}.pdf`);
+    
+    const pdfBlob = doc.output('blob'); // Convertir en blob
+    
+    const pdfFile = new File([pdfBlob], `Devis_${this.imp.client.nom}.pdf`, { type: 'application/pdf' });
+    
+    console.log("contenu de PDF",pdfFile); 
+    this.envoyerMail("ismkamikaze869@gmail.com", "Votre Devis", "Voici votre devis en pièce jointe.", pdfFile);
+  }
+
+  //Envoyer via mail 
+  envoyerMail(email: string, subject: string, message: string, attachment: File): void {
+    this.emailService.sendDevisMail(email, subject, message, attachment).subscribe({
+        next: () => {
+            this.successMail = "Email envoyé avec succés"; 
+            setTimeout(() => {
+              this.successMail ="";
+            }, 3000); 
+        },
+        error: (err) => {
+            console.error("Erreur lors de l'envoi de l'e-mail :", err);
+        },
+        complete: () => {
+            console.log("Processus d'envoi terminé.");
+        }
+    });
 }
+
+
+} 
+
+
+

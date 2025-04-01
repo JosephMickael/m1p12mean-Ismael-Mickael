@@ -88,3 +88,53 @@
 .devis ul {
   list-style: none;
 }
+.loading-indicator {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.loading-indicator::after {
+  content: '...';
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: ellipsis steps(4,end) 900ms infinite;
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 20px;
+  }
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(5px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+}
+
+
+.centered-box {
+  max-width: 80%; 
+  text-align: center;
+  padding: 2rem;
+  background: white; 
+}
+
+
+.loading-indicator {
+  font-size: 1.2rem;
+  color: #333;
+}

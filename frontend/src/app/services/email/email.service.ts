@@ -20,14 +20,16 @@ export class EmailService {
   sendEmail(email: string, subject: string, message: string) {
     return this.http.post(`${environment.apiUrl}/send-email`, { email, subject, message }, { headers: this.headers });
   }
-
+ 
   sendDevisMail(email: string, subject: string, message: string, attachment: File) {
+
     const formData = new FormData();
     formData.append('email', email);
-    formData.append('subject', subject);
+    formData.append('subject', subject); 
     formData.append('message', message);
-    formData.append('fichierPdf', attachment);  
+    formData.append('pdf', attachment);  
 
-    return this.http.post(`${environment.apiUrl}/send-devisMail`, formData, { headers: this.headers })
+    
+    return this.http.post(`${environment.apiUrl}/send-devisMail`, formData , { headers: this.headers })
   }
 }

@@ -107,6 +107,12 @@
               <div *ngIf="!selectedUser" class="text-danger fs">Veuillez saisir et selecionner</div>
             </div>
 
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="newDevis.emailClient" name="email" placeholder="Entrez votre email" required>
+              <div *ngIf="!isValidEmail(newDevis.emailClient) && newDevis.emailClient" class="text-danger fs">L'email n'est pas valide</div>
+            </div>
+
             <!-- Champs pour services -->
             <div class="mb-3">
               <label for="services" class="form-label">Services</label>
@@ -307,10 +313,10 @@
                   <button class="btn btn-danger btn-sm m-2" (click)="supprimerDevis(d._id)">
                       <i class="bi bi-trash"></i> 
                   </button>
-                  <!-- <button class="btn btn-primary btn-sm m-2" (click)="envoyerMail(d)">
+                  <button class="btn btn-primary btn-sm m-2" (click)="envoyerMail(d.emailClient, 'GARAGE_VERT', 'Voici votre devis en pièce jointe', d);">
                       <i class="bi bi-envelope"></i> 
-                  </button> -->
-                  <button class="btn btn-secondary btn-sm m-2" (click)="imprimerDevis(d)">
+                  </button>
+                  <button class="btn btn-secondary btn-sm m-2" (click)="telechargerPDF(d)">
                       <i class="bi bi-printer"></i> 
                   </button>
                   
@@ -322,8 +328,13 @@
           </div>
         </div>
       </div>
-      <div *ngIf="successMail" class="alert alert-success rounded-3 border-0 shadow-sm mb-4">
-        {{ successMail }}
+      <div *ngIf="isLoading || successMail" class="overlay">
+        <div *ngIf="isLoading" class="loading-indicator centered-box">
+          Envoi en cours...
+        </div>      
+        <div *ngIf="successMail" class="alert alert-success centered-box rounded-3 border-0 shadow-sm">
+          {{ successMail }}
+        </div>
       </div>
     </div>
 
@@ -355,6 +366,12 @@
               <div class="form-control-plaintext ">{{ selectedDevis.mecanicien?.nom }}</div>
             </div>
           </div>
+
+            <div class="form-group mb-3">
+              <label for="emailclient">Email </label>
+              <input type="text" class="form-control" [(ngModel)]="selectedDevis.emailClient"
+                name="emailClient" required>
+            </div>
 
           <!-- Affichage et modification de services -->
           <div *ngFor="let service of selectedDevis.services; let i = index">

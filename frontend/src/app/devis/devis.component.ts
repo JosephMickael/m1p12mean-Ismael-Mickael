@@ -29,6 +29,7 @@ export class DevisComponent implements OnInit {
   devis: any[] = [];
   newDevis = {
     client: '',
+    emailClient: '',
     services: [
       {
         description: '',
@@ -49,6 +50,9 @@ export class DevisComponent implements OnInit {
   errorMp: string = "";
   imp: any = {}; 
   successMail: string = ""; 
+  isLoading: boolean = false;
+  errorMessageMail: string = ""; 
+
 
 
 
@@ -96,6 +100,13 @@ export class DevisComponent implements OnInit {
     this.showDropdown = false;
 
   }
+
+  // Validation simple de l'email
+  isValidEmail(email: string): boolean {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  }
+
 
 
   // Récupérer le rôle de l'utilisateur depuis le token JWT
@@ -253,7 +264,7 @@ export class DevisComponent implements OnInit {
 
 
   // Imprimer en PDF 
-  imprimerDevis(devis: any): void {
+  imprimerDevis(devis: any): any {
 
     //console.log("Valeur de Devis",  devis)
     this.imp = { ...devis };
@@ -320,36 +331,50 @@ export class DevisComponent implements OnInit {
     doc.setTextColor(0,0,1); 
     doc.text(`Total Général : ${this.imp.totalGeneral} Ar`, 15, currentY + 15);
   
-    doc.save(`Devis_${this.imp.client.nom}.pdf`);
+    //doc.save(`Devis_${this.imp.client.nom}.pdf`);
     
     const pdfBlob = doc.output('blob'); // Convertir en blob
     
     const pdfFile = new File([pdfBlob], `Devis_${this.imp.client.nom}.pdf`, { type: 'application/pdf' });
-    
-    console.log("contenu de PDF",pdfFile); 
-    this.envoyerMail("ismkamikaze869@gmail.com", "Votre Devis", "Voici votre devis en pièce jointe.", pdfFile);
+
+    return { pdfFile, doc }; 
   }
 
-  //Envoyer via mail 
-  envoyerMail(email: string, subject: string, message: string, attachment: File): void {
-    this.emailService.sendDevisMail(email, subject, message, attachment).subscribe({
-        next: () => {
-            this.successMail = "Email envoyé avec succés"; 
-            setTimeout(() => {
-              this.successMail ="";
-            }, 3000); 
-        },
-        error: (err) => {
-            console.error("Erreur lors de l'envoi de l'e-mail :", err);
-        },
-        complete: () => {
-            console.log("Processus d'envoi terminé.");
-        }
+ // Fonction pour télécharger le PDF du devis
+ telechargerPDF(devis: any): void {
+  const { doc } = this.imprimerDevis(devis);
+  doc.save(`Devis_${this.imp.client.nom}.pdf`);
+  }
+
+
+  // Envoie du Mail 
+  envoyerMail(email: string, subject: string, message: string, devis: any): void {
+    this.successMail = "";
+    this.isLoading = true;
+    const { pdfFile } = this.imprimerDevis(devis);
+  
+  
+    this.emailService.sendDevisMail(email, subject, message, pdfFile).subscribe({
+      next: () => {
+        this.successMail = 'Email envoyé avec succès';
+        setTimeout(() => {
+          this.successMail = '';
+        }, 3000);
+      },
+      error: (err) => {
+        console.error("Erreur lors de l'envoi de l'e-mail :", err);
+        this.isLoading = false;
+        this.errorMessageMail = 'Erreur lors de l\'envoi du mail. Veuillez réessayer.';
+      },
+      complete: () => {
+        this.isLoading = false;
+        console.log('Processus d\'envoi terminé.');
+      },
     });
+  }
+  
 }
 
-
-} 
 
 
 

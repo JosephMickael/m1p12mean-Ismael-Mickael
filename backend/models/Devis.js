@@ -25,10 +25,6 @@ const devisSchema = new mongoose.Schema({
         ref: 'Utilisateur',
         required: true
     },
-    emailClient: {
-        type: String,
-        required: true
-    },
     dateCreation: { 
         type: Date, 
         default: Date.now 

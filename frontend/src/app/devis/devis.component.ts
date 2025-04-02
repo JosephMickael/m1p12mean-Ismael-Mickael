@@ -29,7 +29,6 @@ export class DevisComponent implements OnInit {
   devis: any[] = [];
   newDevis = {
     client: '',
-    emailClient: '',
     services: [
       {
         description: '',

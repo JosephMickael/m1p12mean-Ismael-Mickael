@@ -40,7 +40,7 @@ const modifierDevis = async (req, res) => {
 
 // Récupérer tous les devis
 const getAllDevis = async (req, res) => {
-    try {
+    // try {
         let devis; 
         if (req.utilisateur.role == "client") {
             const clientId = req.utilisateur._id; 
@@ -51,12 +51,12 @@ const getAllDevis = async (req, res) => {
              devis = await Devis.find({ mecanicien: mecaId }).populate(['client', 'mecanicien', 'services', 'pieces']);
         } else if (req.utilisateur.role == "manager") {
             devis = await Devis.find().populate(['client', 'mecanicien', 'services', 'pieces']);
-           // console.log("devis de manager", devis); 
+            console.log("devis de manager", devis); 
         }
         res.status(200).json(devis);
-    } catch (error) {
-        res.status(500).json({ message: " Erreur lors de la récupération des devis", error });
-    }
+    // } catch (error) {
+    //     res.status(500).json({ message: " Erreur lors de la récupération des devis", error });
+    // }
 };
 
 //  Récupérer un devis par ID

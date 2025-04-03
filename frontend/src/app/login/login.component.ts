@@ -31,8 +31,8 @@ export class LoginComponent {
   ngOnInit() {
     // Initialisation du formulaire avec validation
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: ['micka@gmail.com', [Validators.required, Validators.email]],
+      password: ['test', Validators.required]
     });
   }
 

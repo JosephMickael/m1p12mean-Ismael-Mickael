@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.prod';
 import { RendezVousModel } from '../models/rendezvous.model';
 
 @Injectable({

@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://garage-m1p12-mean.vercel.app/login'
+    apiUrl: 'https://garage-vert.up.railway.app/garage_api'
 }

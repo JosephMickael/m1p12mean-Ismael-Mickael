@@ -51,7 +51,7 @@ const getAllDevis = async (req, res) => {
              devis = await Devis.find({ mecanicien: mecaId }).populate(['client', 'mecanicien', 'services', 'pieces']);
         } else if (req.utilisateur.role == "manager") {
             devis = await Devis.find().populate(['client', 'mecanicien', 'services', 'pieces']);
-           // console.log("devis de manager", devis); 
+            //console.log("devis de manager", devis); 
         }
         res.status(200).json(devis);
     } catch (error) {

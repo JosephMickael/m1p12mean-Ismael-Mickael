@@ -78,6 +78,7 @@ export class LoginComponent {
             }
           },
           error: (error) => {
+            this.isLoading = false
             console.error('Erreur de connexion:', error);
             this.messageErreur = "Identifiants incorrects";
           }

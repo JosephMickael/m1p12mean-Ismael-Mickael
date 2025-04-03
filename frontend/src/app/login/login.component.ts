@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   standalone: true
@@ -15,6 +16,8 @@ export class LoginComponent {
   messageErreur: string | null = null;
   erreurEmail: string | null = null;
   erreurPassword: string | null = null;
+
+  isLoading: boolean = false
 
   // Formulaire de connexion
   loginForm = new FormGroup({
@@ -31,8 +34,8 @@ export class LoginComponent {
   ngOnInit() {
     // Initialisation du formulaire avec validation
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: ['defaultManager@gmail.com', [Validators.required, Validators.email]],
+      password: ['test', Validators.required]
     });
   }
 
@@ -41,6 +44,8 @@ export class LoginComponent {
     this.messageErreur = null;
     this.erreurEmail = null;
     this.erreurPassword = null;
+
+    this.isLoading = true
 
     if (this.loginForm.valid) {
       const email = this.loginForm.get('email')?.value;
@@ -53,6 +58,8 @@ export class LoginComponent {
             const lastLogin = new Date().toISOString(); // Date au format ISO
             localStorage.setItem('lastLogin', lastLogin);
             if (response.token && response.user) {
+
+              this.isLoading = false
               // Sauvegarde du token et des rôles
               this.authservice.setUserData(response.token, response.user.role);
 

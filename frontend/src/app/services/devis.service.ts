@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +12,13 @@ export class DevisService {
 
   // Création de l'en-tête avec le token
   private createHeader(): HttpHeaders {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
   // Récupérer les utilisateurs pour la gestion de devis
   getAllUserDevis(): Observable<any> {
-    const headers = this.createHeader(); 
+    const headers = this.createHeader();
     return this.http.get(`${environment.apiUrl}/get-utilisateur-devis`, { headers });
   }
 
@@ -58,8 +58,8 @@ export class DevisService {
     return this.http.delete(`${environment.apiUrl}/supprimer-devis/${id}`, { headers });
   }
 
-// //Envoyer devis vers mail 
-// sendDevisMail(): Observable<any> {
+  // //Envoyer devis vers mail 
+  // sendDevisMail(): Observable<any> {
 
-//}
+  //}
 }

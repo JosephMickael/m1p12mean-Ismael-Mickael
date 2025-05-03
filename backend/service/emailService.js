@@ -40,26 +40,26 @@ const sendDevisMail = async (email, subject, message, attachment) => {
 
 
   const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: email,
-      subject: subject,
-      text: message,
-      attachments:  [
-        {
-          filename: attachment.originalname,
-          content: attachment.buffer,  
-        }
-      ]
+    from: process.env.EMAIL_FROM,
+    to: email,
+    subject: subject,
+    text: message,
+    attachments: [
+      {
+        filename: attachment.originalname,
+        content: attachment.buffer,
+      }
+    ]
   };
 
   try {
-      await transporter.sendMail(mailOptions);
-      return { success: true };
+    await transporter.sendMail(mailOptions);
+    return { success: true };
   } catch (error) {
-      console.error("Erreur d'envoi d'e-mail :", error);
-      throw new Error("Erreur lors de l’envoi du mail");
+    console.error("Erreur d'envoi d'e-mail :", error);
+    throw new Error("Erreur lors de l’envoi du mail");
   }
 };
 
-module.exports = {sendEmailToClient, sendDevisMail};
+module.exports = { sendEmailToClient, sendDevisMail };
 

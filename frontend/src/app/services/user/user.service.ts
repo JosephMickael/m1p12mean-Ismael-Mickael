@@ -9,8 +9,6 @@ import { environment } from '../../environments/environment.prod';
 })
 export class UserService {
 
-  private apiUrl = "http://localhost:5001/garage_api"
-
   constructor(private http: HttpClient) { }
 
   private createHeader(): HttpHeaders {

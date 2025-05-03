@@ -22,14 +22,12 @@ const sendEmail = async (req, res) => {
     }
 }
 
-const sendDevisMailPost = async (req, res) =>  {
+const sendDevisMailPost = async (req, res) => {
     try {
         const { email, subject, message } = req.body;
         //console.log("ReqFiles ", req.file); 
 
         const attachment = req.file;
-        
-        
         const result = await emailService.sendDevisMail(email, subject, message, attachment);
 
         res.status(200).json({ message: "E-mail envoyé avec succès !" });

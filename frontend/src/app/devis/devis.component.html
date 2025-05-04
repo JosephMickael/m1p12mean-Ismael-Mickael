@@ -1,3 +1,4 @@
+<router-outlet></router-outlet>
 <div class="container mt-5 devis">
   <!-- Affichage pour les clients -->
   <div *ngIf="userRole == 'client'">
@@ -22,10 +23,11 @@
                   <th>Pièces</th>
                   <th>Prix TTC</th>
                   <th>Total général</th>
+                  <th>Paiement</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let d of devis">
+                <tr *ngFor="let d of devis" >
                   <td>{{ d.mecanicien?.nom }}</td>
                   <td>
                     <ul class="list-unstyled">
@@ -64,6 +66,18 @@
                     </ul>
                   </td>
                   <td>{{ d.totalGeneral | currency:'AR' }}</td>
+                  <td class="paiement">  
+                  <ng-container *ngIf="d.status == 'Validé'; else notValidated">
+                    <button class="btn btn-success d-flex align-items-center gap-2 btn-curtain" [routerLink]="['/client-page/payement', d._id, d.totalGeneral]">
+                      <i class="bi bi-credit-card"></i>Payer</button>
+                  </ng-container>
+                  
+                  <ng-template #notValidated>
+                    <button class="btn btn-secondary" disabled>
+                      En attente de validation
+                    </button>
+                  </ng-template>                
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -129,8 +143,7 @@
           <!-- Liste des pièces ajoutées -->
           <div class="container mt-5">
             <div class="d-flex align-items-center mb-4">
-              <span class="me-2" style="font-size: 1.5em;">🧩</span>
-              <h5 class="mb-0">Pièces du Devis</h5>
+              <h5 class="mb-0">Liste des Pièces ajoutées</h5>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered table-hover">

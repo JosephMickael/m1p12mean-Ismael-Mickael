@@ -1,0 +1,41 @@
+ #card-element {
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  color: #333;
+  padding: 15px;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+ .StripeElement--focus {
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+ .StripeElement--invalid {
+  border-color: #e74c3c;
+}
+span {
+background-color: #4e657c;
+border-radius: 15px;
+padding: 2px 5px 2px 5px;
+color: #f9f9f9;
+}
+button {
+  background-color: #4e657c;
+}
+.col-md-6 {
+  border: solid 1px #FFFF;
+  padding: 30px;
+  box-shadow: 1px 2px 34px 2px;
+  border-radius: 15px;
+}
+img{
+  border-radius: 15px;
+  
+}
+.row.justify-content-center {
+  margin: 30px;
+}

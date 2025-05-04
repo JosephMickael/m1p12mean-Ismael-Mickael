@@ -17,8 +17,10 @@ import { DevisComponent } from './devis/devis.component';
 import { ContactComponent } from './client-page/pages/contact/contact.component';
 import { PiecesComponent } from './piece/piece.component';
 import { MessagesComponent } from './manager-page/pages/messages/messages.component';
+import { PayementComponent } from './payement/payement.component';
 
 export const routes: Routes = [
+
     // Lorsque l'URL est vide, rediriger vers 'login'
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
@@ -60,6 +62,14 @@ export const routes: Routes = [
                 canActivate: [RoleGuard],
                 data: { role: 'client' }
             },
+            {   
+                path: 'payement/:id/:total', 
+                component: PayementComponent,
+                canActivate: [RoleGuard],
+                data: { role: 'client' }
+
+            }, 
+
         ]
     },
     {

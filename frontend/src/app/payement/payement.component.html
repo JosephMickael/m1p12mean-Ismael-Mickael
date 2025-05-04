@@ -1,0 +1,31 @@
+<div class="container mt-5">
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">
+              <i class="bi bi-credit-card-2-front-fill text-primary me-2"></i>
+              Paiement de <span>{{ total | number:'1.0-2'}}</span> AR
+            </h2>
+            <small class="text-muted">Montant minimum : 0.50 $</small>
+          </div>
+          <div>
+            <!-- <img  src="assets/images/card.jpg" alt="Logo Paiement" class="img-fluid mb-3" />  -->
+            <img  src="https://www.paymentscardsandmobile.com/wp-content/uploads/2022/01/American-Express-Visa-Mastercard-credit-cards.jpg" alt="Logo Paiement" class="img-fluid mb-3" /> 
+            
+        </div>
+                <form id="payment-form">
+        <div class="form-group mb-4">
+         
+          <div id="card-element">
+          </div>
+          <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-lock-fill me-2"></i> Payer
+          </button>
+      </form>
+    </div>
+  </div>
+</div>
+ 

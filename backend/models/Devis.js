@@ -39,7 +39,13 @@ const devisSchema = new mongoose.Schema({
     totalGeneral: { 
         type: Number, 
         default: 0 
-    }
+    },
+    paiement: {
+        type: String,
+        enum: ['Payé','En attente'],
+        default: 'En attente'
+    } 
+
 }); 
 
 module.exports = mongoose.model('Devis', devisSchema);

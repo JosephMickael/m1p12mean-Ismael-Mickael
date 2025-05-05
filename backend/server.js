@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const routes = require('../backend/routes/route')
+const routes = require('./routes/route')
 
 require('dotenv').config();
 
@@ -21,7 +21,7 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://garage-m1p12-mean.vercel.app');
+    res.setHeader('Access-Control-Allow-Origin', 'https://garage-m1p12mean-mickael-ismael.vercel.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 

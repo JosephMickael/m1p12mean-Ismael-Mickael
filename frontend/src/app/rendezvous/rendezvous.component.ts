@@ -45,6 +45,7 @@ export class RendezvousComponent implements OnInit {
   errorConfirmation: string = "";
   annulation: string = "";
   errorAnnulation: string = "";
+  today: string = ""; 
 
 
 
@@ -53,12 +54,15 @@ export class RendezvousComponent implements OnInit {
   ngOnInit(): void {
     this.getUserRoleFromToken();
     this.listAvailableRendezvous();
-    this.listMecaniciens();
+    this.listMecaniciens();  
     this.getStatusRendezVous();
     this.getRendezVous();
     if (this.userRole == 'mecanicien') {
       this.listAssignedRendezvous();
     }
+    const now = new Date(); 
+    this.today = now.toISOString().split('T')[0]; 
+
   }
 
   // Formatage date

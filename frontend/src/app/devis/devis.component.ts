@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { autoTable } from 'jspdf-autotable';
 import { EmailService } from '../services/email/email.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-devis',
@@ -18,7 +19,8 @@ import { EmailService } from '../services/email/email.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    PiecesComponent
+    PiecesComponent, 
+    RouterModule
   ],
   templateUrl: './devis.component.html',
   styleUrls: ['./devis.component.css']

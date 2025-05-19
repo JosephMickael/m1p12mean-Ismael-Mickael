@@ -1,24 +1,12 @@
 const Stripe = require('stripe'); 
 const Devis = require('../models/Devis'); 
 const axios = require('axios');
-require('dotenv').config();
 
-
-console.log("JWSECRET", process.env.JWT_SECRET); 
-console.log("XXXXXXXXXXXXXXXX", process.env.STRIPE_SECRET_KEY); 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const api_key = process.env.API_AXIOS_KEY; 
 const BASE_URL = `https://v6.exchangerate-api.com/v6/${api_key}/latest/USD`; 
 
-stripe.accounts.retrieve()
-  .then(account => {
-    console.log(' Clé Stripe valide. Compte :', account.id);
-  })
-  .catch(err => {
-    console.error(' Clé Stripe invalide ou expirée :', err.message);
-    process.exit(1); 
-  });
 
 
 const obtenirTaux = async (req, res) => {

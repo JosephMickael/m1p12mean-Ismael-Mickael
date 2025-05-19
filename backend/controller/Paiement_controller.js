@@ -1,7 +1,8 @@
 const Stripe = require('stripe'); 
 const Devis = require('../models/Devis'); 
 const axios = require('axios');
-const { error } = require('console');
+require('dotenv').config();
+
 
 console.log("JWSECRET", process.env.JWT_SECRET); 
 console.log("XXXXXXXXXXXXXXXX", process.env.STRIPE_SECRET_KEY); 

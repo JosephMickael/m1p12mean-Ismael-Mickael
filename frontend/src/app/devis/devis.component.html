@@ -1,18 +1,22 @@
 <router-outlet></router-outlet>
 <div class="container mt-5 devis">
+
+  <div *ngIf="isLoading" class="overlay">
+    <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 100px;">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+  </div>
   <!-- Affichage pour les clients -->
   <div *ngIf="userRole == 'client'">
     <!-- Liste des devis -->
-    <div *ngIf="isLoading" class="overlay">
-      <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 100px;">
-        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-          <span class="visually-hidden">Chargement...</span>
-        </div>
-      </div>
-    </div>
+   
       
     <div *ngIf="devis && devis.length && !isLoading">
       <div class="card border-0 shadow-sm mb-4">
+
+
         <div class="card-header bg-info text-white py-3">
           <h5 class="mb-0 d-flex align-items-center">
             <i class="bi bi-file-earmark-text me-2"></i>
@@ -278,11 +282,16 @@
 
   <!-- Affichage po ur les managers -->
   <div *ngIf="userRole == 'manager'">
+    
+   
 
     <!-- Liste des devis avec actions -->
-    <div *ngIf="devis && devis.length > 0; else noDevis">
+     <div *ngIf="!isLoading">
+    <div *ngIf="devis && devis.length > 0">
       <div class="card border-0 shadow-sm mb-4">
+
         <div class="card-header bg-info text-white py-3">
+
           <h5 class="mb-0 d-flex align-items-center">
             <i class="bi bi-file-earmark-text me-2"></i>
             Liste des Devis
@@ -355,13 +364,7 @@
       </div>
     </div>
 
-    <ng-template #noDevis>
-      <div class="card">
-        <div class="card-body text-center">
-          <h5>Aucun devis disponible</h5>
-        </div>
-      </div>
-    </ng-template>
+   
 
     <!-- Formulaire de modification de devis -->
     <div *ngIf="selectedDevis && showDevis" class="card mt-4">
@@ -446,6 +449,13 @@
             <button type="submit" class="btn btn-warning mt-3">Mettre à jour le devis</button>
           </div>
         </form>
+      </div>
+    </div>
+     </div>
+     <!-- Si la liste des devis est vide -->
+     <div *ngIf="!isLoading && devis.length === 0 ">
+      <div class="alert alert-warning" role="alert">
+        Aucun devis disponible.
       </div>
     </div>
   </div>

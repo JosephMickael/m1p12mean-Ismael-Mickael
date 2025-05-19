@@ -7,8 +7,8 @@ const path = require('path');
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: "587",
-  secure: false, 
+  port: process.env.SMTP_PORT,
+  secure: false, // Mettre true si port 465 (SSL)
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
@@ -19,7 +19,7 @@ const sendEmailToClient = async (clientEmail, subject, message) => {
   try {
     // Configuration du transporteur SMTP
     let mailOptions = {
-      from: "narivelotsilavina@gmail.com",
+      from: process.env.EMAIL_FROM,
       to: clientEmail,
       subject: subject,
       text: message,
@@ -40,7 +40,7 @@ const sendDevisMail = async (email, subject, message, attachment) => {
 
 
   const mailOptions = {
-    from: "narivelotsilavina@gmail.com",
+    from: process.env.EMAIL_FROM,
     to: email,
     subject: subject,
     text: message,

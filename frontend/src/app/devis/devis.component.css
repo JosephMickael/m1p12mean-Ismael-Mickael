@@ -59,17 +59,17 @@ tr {
   color: #ffff;
 }
 .form-group.mb-3.devisUser {
-width: max-content;
-height: 100%;
-background-color: #9A9A9A9A;
-padding: 1em;
-border-radius: 20px;
+  width: max-content;
+  height: 100%;
+  background-color: #9A9A9A9A;
+  padding: 1em;
+  border-radius: 20px;
 }
 .devis .mb-3 {
-background-color: aliceblue;
-border-radius: 5px;
-padding: 12px;
-box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.03);
+  background-color: aliceblue;
+  border-radius: 5px;
+  padding: 12px;
+  box-shadow: 0px 4px 6px 2px rgba(0, 0, 0, 0.03);
 
 }
 
@@ -96,12 +96,12 @@ border-radius: 5px;
 }
 
 .loading-indicator::after {
-content: '...';
-display: inline-block;
-overflow: hidden;
-vertical-align: bottom;
-animation: ellipsis steps(4,end) 900ms infinite;
-width: 0px;
+  content: '...';
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: ellipsis steps(4,end) 900ms infinite;
+  width: 0px;
 }
 
 @keyframes ellipsis {
@@ -112,88 +112,88 @@ to {
 
 
 .overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(0, 0, 0, 0.5); 
-backdrop-filter: blur(5px); 
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 1000; 
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 60%;
+  height: 60%;
+  backdrop-filter: blur(5px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-50%);
+  z-index: 1000; 
 }
 
 
 .centered-box {
-max-width: 80%; 
-text-align: center;
-padding: 2rem;
-background: white; 
+  max-width: 80%; 
+  text-align: center;
+  padding: 2rem;
+  background: white; 
 }
 
 
 .loading-indicator {
-font-size: 1.2rem;
-color: #333;
+  font-size: 1.2rem;
+  color: #333;
 }
 
 button.btn.btn-success.d-flex.align-items-center.gap-2 {
-position: relative;
-left: 50%;
-transform: translateX(-50%);
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .btn-curtain {
-position: relative;
-overflow: hidden;
-background-color: #198754;
-color: white;
-border: none;
-padding: 12px 24px;
-border-radius: 5px;
-cursor: pointer;
-font-size: 16px;
-z-index: 0;
+  position: relative;
+  overflow: hidden;
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 0;
 }
 
 
 .btn-curtain::before {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-backdrop-filter: blur(8px);
-background-color: rgba(255, 255, 255, 0.2); 
-transform: translateY(-100%);
-transition: transform 0.4s ease;
-z-index: 1;
-pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.2); 
+  transform: translateY(-100%);
+  transition: transform 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
 }
 
 
 .btn-curtain::after {
-content: "💰";
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -150%);
-font-size: 2em;
-transition: transform 0.4s ease;
-z-index: 2;
-pointer-events: none;
+  content: "💰";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -150%);
+  font-size: 2em;
+  transition: transform 0.4s ease;
+  z-index: 2;
+  pointer-events: none;
 }
 
 
 .btn-curtain:hover::before {
-transform: translateY(0);
+  transform: translateY(0);
 }
 
 .btn-curtain:hover::after {
-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .titre-devis{
   display: flex;

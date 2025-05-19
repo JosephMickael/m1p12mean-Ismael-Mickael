@@ -15,7 +15,7 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 const corsOptions = {
-    origin: process.env.CLIENT_PAGE,
+    origin: "https://garage-m1p12mean-mickael-ismael.vercel.app",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   };

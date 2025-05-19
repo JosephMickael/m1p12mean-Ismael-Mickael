@@ -3,6 +3,7 @@ const Devis = require('../models/Devis');
 const axios = require('axios');
 const { error } = require('console');
 
+console.log("JWSECRET", process.env.JWT_SECRET); 
 console.log("XXXXXXXXXXXXXXXX", process.env.STRIPE_SECRET_KEY); 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

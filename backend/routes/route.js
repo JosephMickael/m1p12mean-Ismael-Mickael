@@ -64,6 +64,7 @@ router.post('/send-devisMail', verifierAuthentification, upload.single('pdf'),  
 
 // Paiement 
 router.post('/payement', verifierAuthentification, paiementController.creersession); 
+router.get('/taux', verifierAuthentification, paiementController.obtenirTaux); 
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

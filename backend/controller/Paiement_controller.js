@@ -7,6 +7,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const api_key = process.env.API_AXIOS_KEY; 
 const BASE_URL = `https://v6.exchangerate-api.com/v6/${api_key}/latest/USD`; 
 
+stripe.accounts.retrieve()
+  .then(account => {
+    console.log(' Clé Stripe valide. Compte :', account.id);
+  })
+  .catch(err => {
+    console.error(' Clé Stripe invalide ou expirée :', err.message);
+    process.exit(1); 
+  });
+
 
 const obtenirTaux = async (req, res) => {
     axios.get(BASE_URL).then( response => {

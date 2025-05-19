@@ -22,4 +22,8 @@ export class PayementService {
     // const stripe = await ('pk_test_51RJFp4GaxXhvLQWgR4ZLKDOqlsEVdhuoaE4HeO0c9xAfv1RbYUQoXF10hyu25fon7Me7vNP3QEtAvZEzDDUOaOOK0042Ht4fgG')
     return this.http.post<any>(`${environment.apiUrl}/payement`, { devisId, currency } , { headers: this.headers})
   }
+
+  obtenirTaux(): any{
+    return this.http.get<any>(`${environment.apiUrl}/taux`, { headers: this.headers })
+  }
 }

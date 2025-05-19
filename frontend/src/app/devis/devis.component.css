@@ -195,3 +195,15 @@ transform: translateY(0);
 .btn-curtain:hover::after {
 transform: translate(-50%, -50%);
 }
+.titre-devis{
+  display: flex;
+}
+.close-button {
+  position: absolute;
+  right: 15px;
+  border-radius: 5px;
+  font-weight: 800;
+  top: 10px;
+  color: red;
+  border: none;
+}

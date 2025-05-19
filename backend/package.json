@@ -19,8 +19,8 @@
     "nodemon": "^3.1.9"
   },
   "engines": {
-  "node": "22.13.1"
-},
+    "node": "22.13.1"
+  },
   "devDependencies": {
     "axios": "^1.9.0",
     "bcrypt": "^5.1.1",

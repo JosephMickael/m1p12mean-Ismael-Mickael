@@ -3,6 +3,8 @@ const Devis = require('../models/Devis');
 const axios = require('axios');
 const { error } = require('console');
 
+console.log("XXXXXXXXXXXXXXXX", process.env.STRIPE_SECRET_KEY); 
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const api_key = process.env.API_AXIOS_KEY; 
 const BASE_URL = `https://v6.exchangerate-api.com/v6/${api_key}/latest/USD`; 

@@ -12,6 +12,8 @@ import jsPDF from "jspdf";
 import { autoTable } from 'jspdf-autotable';
 import { EmailService } from '../services/email/email.service';
 import { RouterModule } from '@angular/router';
+import { trigger, transition, style, animate, keyframes } from '@angular/animations';
+
 
 @Component({
   selector: 'app-devis',
@@ -20,10 +22,26 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     PiecesComponent, 
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './devis.component.html',
-  styleUrls: ['./devis.component.css']
+  styleUrls: ['./devis.component.css'],
+  animations: [
+    trigger('bounceIn', [
+      transition(':enter', [
+        animate('200ms ease-out', keyframes([
+          style({ opacity: 0, transform: 'scale(0.3)', offset: 0 }),
+          style({ opacity: 1, transform: 'scale(1.05)', offset: 0.5 }),
+          style({ transform: 'scale(0.9)', offset: 0.7 }),
+          style({ transform: 'scale(1)', offset: 1 })
+        ]))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0 }))
+      ])
+    ])
+  ]
+  
 })
 export class DevisComponent implements OnInit {
 
@@ -51,8 +69,9 @@ export class DevisComponent implements OnInit {
   errorMp: string = "";
   imp: any = {}; 
   successMail: string = ""; 
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   errorMessageMail: string = ""; 
+  showDevis: boolean = true; 
 
 
 
@@ -129,10 +148,13 @@ export class DevisComponent implements OnInit {
 
   // Récupérer tous les devis
   getAllDevis(): void {
+    this.isLoading = true; 
     this.devisService.getAllDevis().subscribe(
       (data: any) => {
         this.devis = data;
         this.selectedDevis = "";
+        setTimeout(() => { console.log('Pause')}, 5000); 
+        this.isLoading = false; 
       },
       (error) => {
         console.error('Erreur lors de la récupération des devis', error);
@@ -202,21 +224,35 @@ export class DevisComponent implements OnInit {
 
   // Valider un devis
   validerDevis(id: string): void {
-    this.devisService.validerDevis(id).subscribe(
-      (response) => {
-        console.log('Devis validé avec succès', response);
-        this.getAllDevis();
-      },
-      (error) => {
-        console.error('Erreur lors de la validation du devis', error);
+    Swal.fire({
+      html: 'Êtes-vous sûr de valider ce Devis',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Oui, valider',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.devisService.validerDevis(id).subscribe(
+          (response) => {
+            console.log('Devis validé avec succès', response);
+            this.getAllDevis();
+          },
+          (error) => {
+            console.error('Erreur lors de la validation du devis', error);
+          }
+        );
       }
-    );
+    })
+   
   }
 
   // Sélectionner un devis pour la modification
   selectDevis(devis: any): void {
+    this.showDevis = true; 
     this.selectedDevis = { ...devis };
-    console.log("valeur de selectedDevis", this.selectedDevis);
+    // console.log("valeur de selectedDevis", this.selectedDevis);
   }
 
   // Supprimer une pièce du devis
@@ -354,7 +390,16 @@ export class DevisComponent implements OnInit {
     this.isLoading = true;
     const { pdfFile } = this.imprimerDevis(devis);
   
-  
+    Swal.fire({
+      html: `Êtes-vous sûr d'envoyer le Devis à <strong style="color: green;">${email}</strong>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Oui, envoyer',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) { 
     this.emailService.sendDevisMail(email, subject, message, pdfFile).subscribe({
       next: () => {
         this.successMail = 'Email envoyé avec succès';
@@ -372,6 +417,16 @@ export class DevisComponent implements OnInit {
         console.log('Processus d\'envoi terminé.');
       },
     });
+  } else {
+    this.isLoading = false;       
+    }
+  }
+)}
+
+
+  //fermeture modification devis
+  close(): void {
+    this.showDevis = false;
   }
   
 }

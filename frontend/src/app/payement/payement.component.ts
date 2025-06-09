@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 
 registerLocaleData(localeFr);
 
-
+ 
 // interface StripePaymentIntentResponse {
 //   clientSecret: string;
 // }
@@ -21,16 +21,20 @@ registerLocaleData(localeFr);
   styleUrl: './payement.component.css'
 })
 
-
+ 
 export class PayementComponent implements AfterViewInit, OnInit{
   stripe: Stripe | null = null;
   devisId: string=''; 
   total: number=0; 
+  taux: number=0; 
 constructor (private payementservice: PayementService, private route: ActivatedRoute) {}
 
 ngOnInit() {
   this.devisId = this.route.snapshot.paramMap.get('id')!;
   this.total = Number(this.route.snapshot.paramMap.get('total'));
+  this.payementservice.obtenirTaux().subscribe( (data: any) => {
+    this.taux = data.taux; 
+  });
 }
 
 async ngAfterViewInit() {
@@ -46,7 +50,7 @@ async ngAfterViewInit() {
     
 
     const form = document.getElementById('payment-form')!;
-    form.addEventListener('submit', async (event) => {
+    form.addEventListener('submit', async (event) => { 
       event.preventDefault();
       const { error, paymentIntent } = await stripe!.confirmCardPayment(
         res.clientSecret,

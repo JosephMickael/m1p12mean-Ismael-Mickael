@@ -8,7 +8,7 @@ const upload = require('../middlewares/multer.middlware');
 const devisController = require('../controller/devis_controller');
 const contactController = require('../controller/Contact_controller')
 const emailController = require('../controller/Email_controller');
-const paiementController = require('../controller/Paiement_controller'); 
+const paiementController = require('../controller/Paiement_controller');
 
 
 // Rendezvous 
@@ -60,10 +60,11 @@ router.delete('/message/:messageId', verifierAuthentification, contactController
 
 // Envoi Email
 router.post('/send-email', verifierAuthentification, emailController.sendEmail);
-router.post('/send-devisMail', verifierAuthentification, upload.single('pdf'),  emailController.sendDevisMailPost); 
+router.post('/send-devisMail', verifierAuthentification, upload.single('pdf'), emailController.sendDevisMailPost);
 
 // Paiement 
-router.post('/payement', verifierAuthentification, paiementController.creersession); 
+router.post('/payement', verifierAuthentification, paiementController.creersession);
+router.get('/taux', verifierAuthentification, paiementController.obtenirTaux);
 
 const authenticationController = require('../controller/Auth_controller');
 router.post('/login', authenticationController.login)

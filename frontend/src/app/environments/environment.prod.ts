@@ -1,7 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://m1p12mean-ismael-mickael-i3aj.onrender.com'
-    // apiUrl: 'https://m1p12mean-ismael-mickael.onrender.com'
+    apiUrl: 'https://m1p12mean-ismael-mickael.onrender.com/garage_api'
 }
 // export const environment = {
 //     production: false,

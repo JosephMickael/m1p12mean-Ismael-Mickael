@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://garage-vert.up.railway.app/garage_api'
+    apiUrl: 'https://m1p12mean-ismael-mickael.onrender.com'
 }
 // export const environment = {
 //     production: false,

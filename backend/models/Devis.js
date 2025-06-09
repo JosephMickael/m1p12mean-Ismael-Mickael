@@ -10,42 +10,42 @@ const pieceSchema = new mongoose.Schema({
 });
 
 const servicesSchema = new mongoose.Schema({
-    description: {type: String, required: true}, 
-    coutServices: {type: Number, required: true} 
+    description: { type: String, required: true },
+    coutServices: { type: Number, required: true }
 })
 
 const devisSchema = new mongoose.Schema({
     client: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Utilisateur',
         required: true
     },
     mecanicien: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Utilisateur',
         required: true
     },
-    dateCreation: { 
-        type: Date, 
-        default: Date.now 
+    dateCreation: {
+        type: Date,
+        default: Date.now
     },
     status: {
-        type: String, 
-        enum: ['En attente', 'Validé', 'Refusé'], 
+        type: String,
+        enum: ['En attente', 'Validé', 'Refusé'],
         default: 'En attente'
-    }, 
+    },
     services: [servicesSchema],
-    pieces: [pieceSchema], 
-    totalGeneral: { 
-        type: Number, 
-        default: 0 
+    pieces: [pieceSchema],
+    totalGeneral: {
+        type: Number,
+        default: 0
     },
     paiement: {
         type: String,
-        enum: ['Payé','En attente'],
+        enum: ['Payé', 'En attente'],
         default: 'En attente'
-    } 
+    }
 
-}); 
+});
 
 module.exports = mongoose.model('Devis', devisSchema);

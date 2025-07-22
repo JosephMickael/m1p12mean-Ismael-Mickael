@@ -34,7 +34,7 @@ Clone the project
 
 ## Configuration
 
-1. Copier le fichier `.env.example` en `.env` :
+1. Copy the file `.env.example` to `.env` :
 
 ```bash
 cp backend/.env.example backend/.env

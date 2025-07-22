@@ -59,6 +59,8 @@ cp backend/.env.example backend/.env
   npm start
 ```
 
+## Tech Stack
+
 **Client:** Angular, Bootstrap
 
 **Server:** Node, Express

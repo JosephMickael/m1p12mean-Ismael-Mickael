@@ -15,13 +15,22 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 // Décocher mode prod
-const corsOptions = {
-    origin: process.env.CLIENT_PAGE,
+// const corsOptions = {
+//     origin: process.env.CLIENT_PAGE,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+// };
+
+app.use(cors({
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-};
+}));
 
-app.use(cors(corsOptions));
+console.log('Origine autorisée (CLIENT_PAGE) :', process.env.CLIENT_PAGE);
+
+
+// app.use(cors(corsOptions));
 
 // app.use(cors(corsOptions));
 

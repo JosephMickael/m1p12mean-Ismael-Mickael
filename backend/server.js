@@ -20,27 +20,33 @@ app.use(express.json())
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //     allowedHeaders: ['Content-Type', 'Authorization'],
 // };
-origin: (origin, callback) => {
-    const allowedOrigins = [
-        'https://m1p12mean-ismael-mickael.vercel.app',
-        'http://localhost:4200'
-    ];
+const corsOptions = {
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            'https://m1p12mean-ismael-mickael.vercel.app',
+            'http://localhost:4200'
+        ];
 
-    // Autorise aussi les requêtes sans origine (ex: curl, Vercel HEAD)
-    if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-    } else {
-        callback(new Error('Not allowed by CORS'));
-    }
-},
+        // Autorise aussi les requêtes sans origine
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
 
-    app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 app.use((req, res, next) => {
     console.log(`Reçu ${req.method} depuis ${req.headers.origin}`);
     next();
 });
+
 
 
 // app.use(cors(corsOptions));

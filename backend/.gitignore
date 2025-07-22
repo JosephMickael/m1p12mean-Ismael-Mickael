@@ -12,7 +12,7 @@ logs/
 *.log.*
 
 # Environment files
-# .env
+.env
 # .env.* 
 
 # OS files

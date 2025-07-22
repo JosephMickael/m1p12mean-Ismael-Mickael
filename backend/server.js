@@ -15,8 +15,27 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 // Décocher mode prod
+// const corsOptions = {
+//     origin: process.env.CLIENT_PAGE,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+// };
+
+// app.use(cors(corsOptions));
+
+const allowedOrigins = [
+    'http://localhost:4200',
+    'https://m1p12mean-ismael-mickael-8d4wbypuu-joseph-mickaels-projects.vercel.app'
+];
+
 const corsOptions = {
-    origin: process.env.CLIENT_PAGE,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };

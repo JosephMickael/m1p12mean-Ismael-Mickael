@@ -11,17 +11,28 @@ const app = express()
 const PORT = process.env.PORT || 5001
 console.log(process.env.MONGO_URI);
 
- 
+
 app.use(express.json())
 
-const corsOptions = {
+// Décocher mode prod
+/* const corsOptions = {
     origin: process.env.CLIENT_PAGE,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); */
 
+// Mode Dev uniquement
+app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true
+}));
+
+app.options('*', cors({
+    origin: 'http://localhost:4200',
+    credentials: true
+}));
 
 // Connexion à mongoose
 mongoose.connect(process.env.MONGO_URI, {

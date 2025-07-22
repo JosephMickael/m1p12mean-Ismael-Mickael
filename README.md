@@ -53,31 +53,12 @@ Install dependencies
 cp backend/.env.example backend/.env
 ```
 
-Start the server (each)
+2. Start the server (each)
 
 ```bash
   npm start
 ```
 
-
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file (backend)
-
-`MONGO_URI`
-
-`JWT_SECRET`
-
-`SMTP_HOST`
-
-`SMTP_PORT`
-
-`SMTP_USER`
-
-`SMTP_PASS`
-
-`EMAIL_FROM`
-## Tech Stack
 
 **Client:** Angular, Bootstrap
 

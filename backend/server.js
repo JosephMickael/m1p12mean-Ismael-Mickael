@@ -22,25 +22,8 @@ app.use(express.json())
 // };
 
 // app.use(cors(corsOptions));
-
-const allowedOrigins = [
-    'http://localhost:4200',
-    'https://m1p12mean-ismael-mickael.vercel.app'
-];
-
-const corsOptions = {
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
+app.options('*', cors());
 
 app.use((req, res, next) => {
     console.log('💡 Origin reçu:', req.headers.origin);

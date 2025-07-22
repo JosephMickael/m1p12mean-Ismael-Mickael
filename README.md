@@ -51,6 +51,7 @@ Install dependencies
 
 ```bash
 cp backend/.env.example backend/.env
+```
 
 Start the server (each)
 

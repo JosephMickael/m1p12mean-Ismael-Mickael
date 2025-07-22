@@ -47,13 +47,13 @@ cp backend/.env.example backend/.env
   cd backend
 ```
 
-3. Install dependencies
+3. Install dependencies (each directories)
 
 ```bash
   npm install
 ```
 
-4. Start the server (each)
+4. Start the server (each directories)
 
 ```bash
   npm start

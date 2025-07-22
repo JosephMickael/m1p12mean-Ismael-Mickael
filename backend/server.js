@@ -17,17 +17,15 @@ app.use(express.json())
 
 // Décocher mode prod
 const corsOptions = {
-    origin: process.env.CLIENT_PAGE,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: '*',
 };
 
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 // const corsOptions = {
 //     origin: (origin, callback) => {
 //         console.log("Requête CORS depuis :", origin);
@@ -49,7 +47,7 @@ app.use((req, res, next) => {
 // };
 
 app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions));
+// app.options('*', cors());
 
 app.use((req, res, next) => {
     console.log(`Reçu ${req.method} depuis ${req.headers.origin || 'AUCUN ORIGIN'}`);

@@ -15,32 +15,34 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 // Décocher mode prod
-const corsOptions = {
-    origin: process.env.CLIENT_PAGE,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-// app.use(cors(corsOptions));
-
-// const allowedOrigins = [
-//     'http://localhost:4200',
-//     'https://m1p12mean-ismael-mickael-8d4wbypuu-joseph-mickaels-projects.vercel.app'
-// ];
-
 // const corsOptions = {
-//     origin: function (origin, callback) {
-//         if (!origin || allowedOrigins.includes(origin)) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
+//     origin: process.env.CLIENT_PAGE,
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //     allowedHeaders: ['Content-Type', 'Authorization'],
 // };
 
+// app.use(cors(corsOptions));
+
+const allowedOrigins = [
+    'http://localhost:4200',
+    'https://m1p12mean-ismael-mickael.vercel.app'
+];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 app.use(cors(corsOptions));
+
+// app.use(cors(corsOptions));
 
 // Mode Dev uniquement
 // app.use(cors({

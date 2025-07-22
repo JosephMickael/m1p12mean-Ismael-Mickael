@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const routes = require('./routes/route');
 
+console.log("CLIENT_PAGE =", process.env.CLIENT_PAGE);
 
 require('dotenv').config();
 

@@ -23,6 +23,7 @@ app.use(express.json())
 // };
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log("Requête CORS depuis :", origin);
         const allowedOrigins = [
             'https://m1p12mean-mickael-ismael.vercel.app',
             'http://localhost:4200'

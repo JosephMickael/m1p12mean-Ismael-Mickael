@@ -13,6 +13,8 @@ logs/
 
 # Environment files
 .env
+.env
+!.env.example
 # .env.* 
 
 # OS files

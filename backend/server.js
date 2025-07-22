@@ -16,33 +16,40 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 // Décocher mode prod
-// const corsOptions = {
-//     origin: process.env.CLIENT_PAGE,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-// };
 const corsOptions = {
-    origin: (origin, callback) => {
-        console.log("Requête CORS depuis :", origin);
-        const allowedOrigins = [
-            'https://m1p12mean-mickael-ismael.vercel.app',
-            'http://localhost:4200'
-        ];
-
-        // Autorise aussi les requêtes sans origine
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: process.env.CLIENT_PAGE,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
 };
 
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+// const corsOptions = {
+//     origin: (origin, callback) => {
+//         console.log("Requête CORS depuis :", origin);
+//         const allowedOrigins = [
+//             'https://m1p12mean-mickael-ismael.vercel.app',
+//             'http://localhost:4200'
+//         ];
+
+//         // Autorise aussi les requêtes sans origine
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+// };
+
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
 app.use((req, res, next) => {
     console.log(`Reçu ${req.method} depuis ${req.headers.origin || 'AUCUN ORIGIN'}`);

@@ -45,6 +45,13 @@ Install dependencies
   npm install
 ```
 
+## Configuration
+
+1. Copier le fichier `.env.example` en `.env` :
+
+```bash
+cp backend/.env.example backend/.env
+
 Start the server (each)
 
 ```bash

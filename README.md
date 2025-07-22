@@ -32,19 +32,6 @@ Clone the project
   git clone https://github.com/JosephMickael/m1p12mean-Ismael-Mickael.git
 ```
 
-Go to the frontend & backend directories
-
-```bash
-  cd frontend
-  cd backend
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
 ## Configuration
 
 1. Copier le fichier `.env.example` en `.env` :
@@ -53,12 +40,24 @@ Install dependencies
 cp backend/.env.example backend/.env
 ```
 
-2. Start the server (each)
+2. Go to the frontend & backend directories
+
+```bash
+  cd frontend
+  cd backend
+```
+
+3. Install dependencies
+
+```bash
+  npm install
+```
+
+4. Start the server (each)
 
 ```bash
   npm start
 ```
-
 
 **Client:** Angular, Bootstrap
 

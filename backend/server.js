@@ -42,6 +42,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use((req, res, next) => {
+    console.log('💡 Origin reçu:', req.headers.origin);
+    next();
+});
+
 // app.use(cors(corsOptions));
 
 // Mode Dev uniquement

@@ -15,19 +15,35 @@ console.log(process.env.MONGO_URI);
 app.use(express.json())
 
 // Décocher mode prod
-// const corsOptions = {
-//     origin: process.env.CLIENT_PAGE,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-// };
-
-app.use(cors({
-    origin: '*',
+const corsOptions = {
+    origin: process.env.CLIENT_PAGE,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+};
+// const corsOptions = {
+//     origin: (origin, callback) => {
+//         const allowedOrigins = [
+//             'https://m1p12mean-mickael-ismael.vercel.app',
+//             'http://localhost:4200'
+//         ];
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+// };
 
-console.log('Origine autorisée (CLIENT_PAGE) :', process.env.CLIENT_PAGE);
+app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
+
+app.use((req, res, next) => {
+    console.log(`Reçu ${req.method} depuis ${req.headers.origin}`);
+    next();
+});
 
 
 // app.use(cors(corsOptions));

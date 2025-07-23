@@ -59,6 +59,14 @@ cp backend/.env.example backend/.env
   npm start
 ```
 
+## Logins par défaut
+**Manager:** micka@gmail.com / mdp: test
+
+**Mecanicien:** mickael@gmail.com / mdp: test
+
+**Manager:** josephmickael03@gmail.com / mdp: test
+
+
 ## Tech Stack
 
 **Client:** Angular, Bootstrap

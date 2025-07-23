@@ -64,7 +64,7 @@ cp backend/.env.example backend/.env
 
 **Mecanicien:** mickael@gmail.com / mdp: test
 
-**Manager:** josephmickael03@gmail.com / mdp: test
+**Client:** josephmickael03@gmail.com / mdp: test
 
 
 ## Tech Stack
